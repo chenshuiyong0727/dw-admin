@@ -1,17 +1,23 @@
-.DS_Store
-node_modules/
-dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-tests/**/coverage/
+# Compiled class file
+*.class
+*.classpath
 
-# Editor directories and files
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE Files #
+*.iml
 .idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-
+.idea/
+.project
+.settings
+target
+.DS_Store
