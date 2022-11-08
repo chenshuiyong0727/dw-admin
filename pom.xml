@@ -3,8 +3,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>hf.orgunit.plateform</groupId>
-  <artifactId>hf-orgunit-plateform</artifactId>
+  <groupId>dw.admin</groupId>
+  <artifactId>dw-admin</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
@@ -101,22 +101,22 @@
         <version>${jetcache.version}</version>
       </dependency>
       <dependency>
-        <groupId>hf.orgunit.plateform</groupId>
+        <groupId>dw.admin</groupId>
         <artifactId>common-service</artifactId>
         <version>${pro.version}</version>
       </dependency>
       <dependency>
-        <groupId>hf.orgunit.plateform</groupId>
+        <groupId>dw.admin</groupId>
         <artifactId>common-config</artifactId>
         <version>${pro.version}</version>
       </dependency>
       <!--     <dependency>
-             <groupId>hf.orgunit.plateform</groupId>
+             <groupId>dw.admin</groupId>
              <artifactId>auth-svc-com-beans</artifactId>
              <version>${pro.version}</version>
            </dependency>-->
       <dependency>
-        <groupId>hf.orgunit.plateform</groupId>
+        <groupId>dw.admin</groupId>
         <artifactId>op-system-beans</artifactId>
         <version>${pro.version}</version>
       </dependency>
@@ -131,7 +131,7 @@
         <version>${joda.time.version}</version>
       </dependency>
       <dependency>
-        <groupId>hf.orgunit.plateform</groupId>
+        <groupId>dw.admin</groupId>
         <artifactId>auth-common</artifactId>
         <version>${pro.version}</version>
       </dependency>
@@ -141,7 +141,7 @@
         <version>${commons.collections}</version>
       </dependency>
       <dependency>
-        <groupId>hf.orgunit.plateform</groupId>
+        <groupId>dw.admin</groupId>
         <artifactId>com-open-api</artifactId>
         <version>${pro.version}</version>
       </dependency>

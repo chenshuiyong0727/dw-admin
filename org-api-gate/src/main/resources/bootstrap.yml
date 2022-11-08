@@ -18,11 +18,11 @@ spring:
         namespace: ${nacos.orgnamespace}
       username: ${nacos.user}
       password: ${nacos.pwd}
-    sentinel:
-      transport:
-        dashboard: ${sentinel.dashboard}
-        port: 8087 #客户端端口
-      eager: true
+#    sentinel:
+#      transport:
+#        dashboard: ${sentinel.dashboard}
+#        port: 8087 #客户端端口
+#      eager: true
 
 feign:
   sentinel:
