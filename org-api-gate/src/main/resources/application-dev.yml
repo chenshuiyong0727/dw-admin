@@ -1,0 +1,94 @@
+#健康检查配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false
+
+#请求和响应GZIP压缩支持
+feign:
+  httpclient:
+    enabled: true
+  compression:
+    request:
+      enabled: true
+      mime-types: text/xml,application/xml,application/json
+      min-request-size: 2048
+    response:
+      enabled: true
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin
+      globalcors:
+        #支持跨域
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+      discovery:
+        locator:
+          lowerCaseServiceId: true
+          enabled: true
+      routes:
+        # =============运营系统========================
+        - id: org-op-system
+          uri: lb://org-op-system
+          predicates:
+            - Path=/gw/op/**
+          filters:
+            - StripPrefix=2
+            - Op #指向过滤器OpGatewayFilterFactory
+        # ============校验=========================
+        - id: check-org-op-system
+          uri: lb://org-op-system
+          predicates:
+            - Path=/check/op/auth/**
+          filters:
+            - StripPrefix=3
+        # ============平台登录=========================
+        - id: auth
+          uri: lb://auth-svc
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+            - Auth
+  redis:
+    host: ${redis.host}
+    password: ${redis.password}
+    port: ${redis.port}
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  penetrationProtect: false
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson
+      limit: 200
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      uri: redis://${redis.password}@${redis.host}:${redis.port}/0
+
+  # 自定义Jwt认证服务
+  #jwt:
+  #token-header: Authorization
+  #expire: 14400
+  #rsa-secret: xx1WET12^%3^(WE45
+
+config:
+  gate:
+    path: 'dev/'

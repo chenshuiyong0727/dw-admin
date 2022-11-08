@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.role.OpSysRoleRepository">
+
+  <select id="pageListOpRole" parameterType="com.hf.op.infrastructure.dto.role.QueryOpRoleListDto"
+    resultType="com.hf.op.infrastructure.dto.role.QueryOpRoleListDto">
+    SELECT
+    a.* ,b.system_name
+    FROM op_sys_role a
+    LEFT JOIN op_system b on a.system_id =b.id
+    WHERE 1=1
+    <if test="query.roleName != null and query.roleName != ''">
+      AND a.`role_name` like CONCAT('%',#{query.roleName},'%')
+    </if>
+    <if test="query.systemId != null ">
+      AND a.system_id = #{query.systemId}
+    </if>
+    <if test="query.updateTimeFrom != null and query.updateTimeFrom !=''">
+      AND a.update_time >= concat(#{query.updateTimeFrom, jdbcType=VARCHAR},' ', '00:00:00')
+    </if>
+    <if test="query.updateTimeTo != null and query.updateTimeTo !=''">
+      <![CDATA[
+                    AND a.update_time <= concat(#{query.updateTimeTo, jdbcType=VARCHAR},' ', '23:59:59')
+                ]]>
+    </if>
+    <if test="query.updateUserName != null and query.updateUserName !=''">
+      AND a.update_user_name LIKE concat('%',#{query.updateUserName, jdbcType=VARCHAR},'%')
+    </if>
+    <choose>
+      <when test="query.dataStatus != null">
+        AND a.data_status = #{query.dataStatus}
+      </when>
+      <otherwise>
+        AND a.data_status != -1
+      </otherwise>
+    </choose>
+    ORDER BY a.create_time DESC
+  </select>
+
+  <select id="getRoleFunctionsBySysRoleId" resultType="Long">
+    SELECT
+    osf.id
+    FROM
+    op_sys_role a
+    left join op_sys_role_function osrf on a.id = osrf.role_id and osrf.data_status = 1
+    left join op_sys_function osf on osrf.function_id = osf.id and osf.data_status = 1
+    <where>
+      a.id = #{sysRoleId}
+      and a.data_status = 1
+    </where>
+  </select>
+
+  <select id="getRoleFunctionsBySysRoleIdMini" resultType="Long">
+
+    SELECT t2.menuId from admin_authority_role t1
+    LEFT JOIN admin_authority t2 on  t1.authorityId = t2.authorityId
+    where   t2.menuId is not null
+    and t1.roleId = #{sysRoleId}
+
+    union ALL
+
+    SELECT t2.actionId from admin_authority_role t1
+    LEFT JOIN admin_authority t2 on  t1.authorityId = t2.authorityId
+    where   t2.actionId is not null
+    and t1.roleId = #{sysRoleId}
+  </select>
+
+  <select id="pageListOpRoleRelationUser"
+    parameterType="com.hf.op.infrastructure.dto.role.QueryRoleRelationUserListDto"
+    resultType="com.hf.op.infrastructure.dto.role.QueryRoleRelationUserListDto">
+        SELECT
+        osu.user_account AS userAccount,
+        osu.user_real_name AS userRealName,
+        osu.data_status AS dataStatus,
+        osu.create_time AS createTime,
+        osu.create_user_name AS createUserName
+        FROM op_sys_user osu
+        left join op_sys_user_role osur on osu.id = osur.sys_user_id
+        WHERE osur.role_id = #{query.roleId}
+        ORDER BY osu.create_time DESC
+    </select>
+
+  <select id="listTreeFunctions"
+    resultType="com.hf.op.infrastructure.dto.function.QueryOpFunctionsTreeListDto">
+    SELECT
+    id,
+    pid,
+    function_key AS functionKey,
+    system_id AS systemId,
+    function_name AS functionName,
+    route,
+    function_type AS functionType,
+    operation_type AS operationType,
+    location_path AS locationPath,
+    other_location_path AS otherLocationPath,
+    function_desc AS functionDesc,
+    function_label AS functionLabel,
+    sort
+    FROM op_sys_function
+    WHERE data_status = 1
+    <if test="systemId != null">
+      AND system_id = #{systemId}
+    </if>
+    <if test="sysRoleId != null">
+      and id in (
+      SELECT
+      osf.id
+      FROM
+      op_sys_role a
+      left join op_sys_role_function osrf on a.id = osrf.role_id and osrf.data_status = 1
+      left join op_sys_function osf on osrf.function_id = osf.id and osf.data_status = 1
+      <where>
+        a.id = #{sysRoleId}
+        and a.data_status = 1
+      </where>
+      )
+    </if>
+
+  </select>
+
+  <select id="listTreeFunctionsMini"
+    resultType="com.hf.op.infrastructure.dto.function.QueryOpFunctionsTreeListDto">
+    SELECT *
+    from (
+    SELECT
+    menuId id,
+    parentId pid,
+    menuCode functionKey,
+    3 AS systemId,
+    menuName functionName,
+    path route,
+    1 AS functionType,
+    IF (parentId = 0, 'node', 'query') AS operationType,
+    menuName functionDesc,
+    menuName functionLabel,
+    priority sort
+    FROM
+    admin_menu
+    where status = 1
+
+    UNION ALL
+    SELECT
+    actionId id,
+    menuId pid,
+    actionCode functionKey,
+    3 AS systemId,
+    actionName functionName,
+    NULL route,
+    1 AS functionType,
+    'query' AS operationType,
+    actionName functionDesc,
+    actionName functionLabel,
+    priority sort
+    FROM
+    admin_action
+    where status = 1
+
+    ) a
+    <if test="sysRoleId != null">
+      WHERE a.id in
+      (
+      SELECT t2.menuId from admin_authority_role t1
+      LEFT JOIN admin_authority t2 on t1.authorityId = t2.authorityId
+      where t2.menuId is not null
+      and t1.roleId = #{sysRoleId}
+
+      union ALL
+
+      SELECT t2.actionId from admin_authority_role t1
+      LEFT JOIN admin_authority t2 on t1.authorityId = t2.authorityId
+      where t2.actionId is not null
+      and t1.roleId = #{sysRoleId}
+      )
+    </if>
+  </select>
+
+  <select id="listDropDownRoles"
+    resultType="com.hf.op.infrastructure.dto.role.ListRoleDropDownListVo">
+    SELECT
+    id as roleId,
+    `role_name` as roleName
+    FROM op_sys_role
+    WHERE data_status = 1
+    <if test="systemId != null">
+      AND system_id = #{systemId}
+    </if>
+    /*
+    SELECT
+    a.id as roleId,
+    concat(b.system_name ,' - ',a.role_name) roleName
+    FROM op_sys_role a LEFT JOIN op_system b on a.system_id = b.id
+    WHERE a.data_status = 1*/
+  </select>
+
+  <select id="getOpSystemList"
+    resultType="com.hf.op.infrastructure.dto.role.ListSystemVo">
+        SELECT
+        id as systemId,
+        system_name as systemName,
+        system_url as systemUrl
+        FROM op_system
+        WHERE data_status = 1
+    </select>
+
+</mapper>

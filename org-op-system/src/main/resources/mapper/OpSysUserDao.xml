@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.user.OpSysUserRepository">
+
+  <resultMap id="RoleAuthorityMenu" type="com.hf.op.infrastructure.model.AuthorityMenu">
+    <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
+    <result column="authority" jdbcType="VARCHAR" property="authority"/>
+    <result column="menuId" property="menuId" jdbcType="VARCHAR"/>
+    <result column="menuCode" property="menuCode" jdbcType="VARCHAR"/>
+    <result column="menuName" property="menuName" jdbcType="VARCHAR"/>
+    <result column="icon" property="icon" jdbcType="VARCHAR"/>
+    <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
+    <result column="scheme" property="scheme" jdbcType="VARCHAR"/>
+    <result column="target" property="target" jdbcType="VARCHAR"/>
+    <result column="path" property="path" jdbcType="VARCHAR"/>
+    <result column="priority" property="priority" jdbcType="INTEGER"/>
+    <result column="menu_desc" property="menuDesc" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="TINYINT"/>
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    <collection property="actionList" column="{menuId=menuId,roleId=roleId}"
+      select="selectAuthorityAction"/>
+
+  </resultMap>
+  <resultMap id="AuthorityAction" type="com.hf.op.infrastructure.model.AuthorityAction">
+    <result column="actionId" property="actionId" jdbcType="VARCHAR"/>
+    <result column="actionCode" property="actionCode" jdbcType="VARCHAR"/>
+    <result column="actionName" property="actionName" jdbcType="VARCHAR"/>
+    <result column="menuId" property="menuId" jdbcType="VARCHAR"/>
+    <result column="priority" property="priority" jdbcType="INTEGER"/>
+    <result column="actionDesc" property="actionDesc" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="TINYINT"/>
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
+    <result column="authority" jdbcType="VARCHAR" property="authority"/>
+  </resultMap>
+
+  <resultMap id="Authority" type="com.hf.op.infrastructure.model.OpenAuthority">
+    <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
+    <result column="authority" jdbcType="VARCHAR" property="authority"/>
+    <result column="expireTime" jdbcType="TIMESTAMP" property="expireTime"/>
+    <result column="owner" jdbcType="VARCHAR" property="owner"/>
+  </resultMap>
+
+  <select id="getUserFunctionsBySysUserId" resultType="com.open.api.dto.FunctionDto">
+    SELECT DISTINCT
+    osf.id,
+    osf.function_key as functionKey,
+    osf.function_name as functionName,
+    osf.function_desc as functionDesc,
+    osf.route,
+    osf.sort,
+    osf.system_id as systemId,
+    osf.location_path as locationPath,
+    osf.other_location_path as otherLocationPath,
+    osf.operation_type as operationType,
+    osf.function_type as functionType,
+    osf.function_label as functionLabel
+    FROM op_sys_user a left join op_sys_user_role osur on a.id = osur.sys_user_id and
+    osur.data_status
+    = 1 join
+    op_sys_role_function osrf on osur.role_id = osrf.role_id and osrf.data_status = 1 left join
+    op_sys_function osf on
+    osrf.function_id = osf.id and osf.data_status = 1
+    <where>
+      a.id = #{sysUserId}
+      and a.data_status = 1
+    </where>
+  </select>
+
+  <select id="getUserFunctionsMiniBySysUserId" resultMap="RoleAuthorityMenu">
+      SELECT
+            a.authorityId,
+            a.authority,
+            a.`status`,
+            m.*,
+						rp.roleId,
+						rp.expireTime
+        FROM
+            admin_authority_role AS rp
+				LEFT JOIN op_sys_user_role osur ON osur.role_id = rp.roleId
+       INNER JOIN admin_authority AS a ON rp.authorityId = a.authorityId
+       INNER JOIN admin_menu AS m ON a.menuId = m.menuId
+        WHERE 1=1
+				 and	osur.sys_user_id = #{sysUserId}
+			and a.status = 1
+    </select>
+
+  <select id="selectAuthorityAction" resultMap="AuthorityAction">
+    SELECT
+    a.authorityId,
+    a.authority,
+    o.*
+    FROM
+    admin_authority AS a
+    INNER JOIN admin_action AS o ON a.actionId = o.actionId
+    <if test="roleId!=null">
+      INNER JOIN admin_authority_role AS ra ON ra.authorityId = a.authorityId
+    </if>
+    <where>
+      <if test="menuId!=null">
+        AND o.menuId = #{menuId}
+      </if>
+      <if test="roleId!=null">
+        AND ra.roleId = #{roleId}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectAuthorityByRole" resultMap="Authority">
+    SELECT
+        a.authorityId,
+        a.authority,
+        rp.expireTime,
+        'role' as owner
+    FROM
+        admin_authority_role AS rp
+    LEFT JOIN op_sys_user_role osur ON osur.role_id = rp.roleId
+
+        INNER JOIN admin_authority AS a ON rp.authorityId = a.authorityId
+    WHERE 1=1
+    and	osur.sys_user_id = #{sysUserId}
+    and a.status = 1
+    </select>
+
+  <select id="getCurListSystemVo" resultType="com.hf.op.infrastructure.dto.role.ListSystemVo">
+    SELECT
+    ost.id systemId,
+    ost.system_name systemName,
+    ost.system_url systemUrl,
+    IF(ost.data_status = 0,1,IF(a.systemId is null,0,1)) as isHaveRole
+/*    IF(a.systemId is null,0,1) as isHaveRole*/
+    FROM op_system ost
+    LEFT JOIN (
+    SELECT DISTINCT
+    osf.system_id as systemId
+    FROM op_sys_user a left join op_sys_user_role osur on a.id = osur.sys_user_id and
+    osur.data_status
+    = 1 join
+    op_sys_role_function osrf on osur.role_id = osrf.role_id and osrf.data_status = 1 left join
+    op_sys_function osf on
+    osrf.function_id = osf.id and osf.data_status = 1
+    <where>
+      a.id = #{sysUserId}
+      and a.data_status = 1
+    </where>
+    ) a on ost.id = a.systemId
+  </select>
+
+  <select id="getAllUserFunctions" resultType="com.open.api.dto.FunctionDto">
+    SELECT DISTINCT
+    osf.id,
+    osf.function_key as functionKey,
+    osf.function_name as functionName,
+    osf.function_desc as functionDesc,
+    osf.system_id systemId ,
+    osf.route,
+    osf.sort,
+    osf.location_path as locationPath,
+    osf.other_location_path as otherLocationPath,
+    osf.operation_type as operationType,
+    osf.function_type as functionType,
+    osf.function_label as functionLabel
+    FROM op_sys_function osf
+    <where>
+      and osf.data_status = 1
+    </where>
+  </select>
+  <select id="getUserFunctionEntitiesBySysUserId"
+    resultType="com.hf.op.domain.model.function.OpSysFunctionEntity">
+    SELECT
+    osf.*
+    FROM op_sys_user a join op_sys_user_role osur on a.id = osur.sys_user_id and osur.data_status
+    = 1 left join
+    op_sys_role_function osrf on osur.role_id = osrf.role_id and osrf.data_status = 1 left join
+    op_sys_function osf on
+    osrf.function_id = osf.id and osf.data_status = 1
+    <where>
+      a.id = #{sysUserId}
+      and a.data_status = 1
+    </where>
+  </select>
+
+  <select id="pageListOpUser" parameterType="com.hf.op.infrastructure.dto.user.QueryOpUserListDto"
+    resultType="com.hf.op.infrastructure.dto.user.QueryOpUserListDto">
+    SELECT
+    osu.id,
+    osu.user_id AS userId,
+    osu.user_account AS userAccount,
+    osu.user_real_name AS userRealName,
+    osu.department_id AS departmentId,
+    od.`name` AS departmentName,
+    osu.post_id AS postId,
+    op.`name` AS postName,
+    osu.gender,
+    osu.user_email AS userEmail,
+    osu.user_mobile AS userMobile,
+    osu.data_status AS dataStatus,
+    osu.update_time AS updateTime,
+    osu.update_user_name AS updateUserName,
+    t.roleNames
+    FROM op_sys_user osu
+    left join op_department od on osu.department_id = od.id and od.data_status = 1
+    left join op_post op on osu.post_id = op.id and op.data_status = 1
+    left join (
+    SELECT
+    osur.sys_user_id AS sysUserId,
+    GROUP_CONCAT( osr.role_name) AS roleNames
+    FROM op_sys_user_role osur
+    left join op_sys_role osr on osur.role_id = osr.id
+    WHERE osur.data_status = 1
+    GROUP BY osur.sys_user_id
+    ) t on t.sysUserId = osu.id
+    WHERE 1=1
+    <if test="query.userAccount != null and query.userAccount != ''">
+      AND osu.user_account like CONCAT('%',#{query.userAccount},'%')
+    </if>
+    <if test="query.userRealName != null and query.userRealName != ''">
+      AND osu.user_real_name like CONCAT('%',#{query.userRealName},'%')
+    </if>
+    <if test="query.departmentId != null">
+      AND osu.department_id = #{query.departmentId}
+    </if>
+    <if test="query.postId != null">
+      AND osu.post_id = #{query.postId}
+    </if>
+    <if test="query.gender != null">
+      AND osu.gender = #{query.gender}
+    </if>
+    <if test="query.postName != null and query.postName != ''">
+      AND op.name like CONCAT('%',#{query.postName},'%')
+    </if>
+    <if test="query.departmentName != null and query.departmentName != ''">
+      AND (
+      od.name like CONCAT('%',#{query.departmentName},'%')
+      or
+      od.level_one_department_name like CONCAT('%',#{query.departmentName},'%')
+      or
+      od.level_two_department_name  like CONCAT('%',#{query.departmentName},'%')
+      or
+      od.level_three_department_name like CONCAT('%',#{query.departmentName},'%')
+      or
+      od.level_four_department_name like CONCAT('%',#{query.departmentName},'%')
+      or
+      od.other_superior_department_name like CONCAT('%',#{query.departmentName},'%')
+      )
+    </if>
+    <if test="query.updateUserName != null and query.updateUserName != ''">
+      AND osu.update_user_name like CONCAT('%',#{query.updateUserName},'%')
+    </if>
+    <if test="query.updateTimeFrom != null and query.updateTimeFrom !=''">
+      AND osu.update_time >= concat(#{query.updateTimeFrom, jdbcType=VARCHAR},' ', '00:00:00')
+    </if>
+    <if test="query.updateTimeTo != null and query.updateTimeTo !=''">
+      <![CDATA[
+                    AND osu.update_time <= concat(#{query.updateTimeTo, jdbcType=VARCHAR},' ', '23:59:59')
+                ]]>
+    </if>
+    <choose>
+      <when test="query.dataStatus != null">
+        AND osu.data_status = #{query.dataStatus}
+      </when>
+      <otherwise>
+        AND osu.data_status != -1
+      </otherwise>
+    </choose>
+    ORDER BY osu.create_time DESC
+  </select>
+
+  <select id="getRoleIdsBySysUserId" resultType="com.hf.op.infrastructure.dto.role.ListSystemRoleVo">
+    SELECT
+    osr.id roleId,
+    osr.system_id systemId
+    FROM
+    op_sys_user a
+    left join op_sys_user_role osur on a.id = osur.sys_user_id and osur.data_status = 1
+    left join op_sys_role osr on osur.role_id = osr.id and osr.data_status = 1
+    <where>
+      a.id = #{sysUserId}
+      and a.data_status = 1
+    </where>
+  </select>
+
+  <select id="getOpSysUserAccountInfoById"
+    resultType="com.hf.op.infrastructure.dto.user.QueryUserAccountInfoDto">
+        SELECT
+        osu.id,
+        osu.user_account AS userAccount,
+        osu.user_real_name AS userRealName,
+        CONCAT_WS( ',',od.level_one_department_name, od.level_two_department_name, od.level_three_department_name,
+        od.level_four_department_name, od.other_superior_department) AS departmentName,
+        op.`name` AS postName,
+        osu.staff_type AS staffType,
+        osu.gender,
+        osu.user_email AS userEmail,
+        osu.user_mobile AS userMobile,
+        osu.data_status AS dataStatus,
+        t.roleNames
+        FROM op_sys_user osu
+        left join op_department od on osu.department_id = od.id and od.data_status = 1
+        left join op_post op on osu.post_id = op.id and op.data_status = 1
+        left join (
+        SELECT
+        osur.sys_user_id AS sysUserId,
+        GROUP_CONCAT( osr.role_name) AS roleNames
+        FROM op_sys_user_role osur
+        left join op_sys_role osr on osur.role_id = osr.id
+        WHERE osur.data_status = 1
+        GROUP BY osur.sys_user_id
+        ) t on t.sysUserId = osu.id
+        WHERE osu.user_id = #{sysUserId}
+    </select>
+
+  <select id="listUsersByDeptId" resultType="com.hf.op.infrastructure.dto.user.UserDropDownVo">
+        SELECT
+            user_id as userId,
+            user_real_name as userName
+        FROM op_sys_user
+        WHERE data_status = 1
+        AND department_id = #{deptId}
+    </select>
+
+</mapper>

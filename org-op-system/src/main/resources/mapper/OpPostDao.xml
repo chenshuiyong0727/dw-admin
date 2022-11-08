@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.oppost.OpPostRepository">
+
+  <select id="pageListOpPost" parameterType="com.hf.op.infrastructure.dto.post.QueryOpPostListDto"
+    resultType="com.hf.op.infrastructure.dto.post.QueryOpPostListDto">
+    SELECT
+    t1.id,
+    t1.name,
+    t1.description ,
+    t1.type ,
+    t1.department_id ,
+    t1.data_status ,
+    t1.update_time ,
+    t1.update_user_name
+    FROM
+    op_post t1
+    WHERE 1=1
+
+    <if test="query.name != null and query.name != ''">
+      AND t1.`name` like CONCAT('%',#{query.name},'%')
+    </if>
+    <if test="query.departmentId != null and query.departmentId != ''">
+      AND t1.`department_id` like CONCAT('%',#{query.departmentId},'%')
+    </if>
+    <if test="query.type != null and query.type != ''">
+      AND t1.`type` = #{query.type}
+    </if>
+    <if test="query.updateUserName != null and query.updateUserName != ''">
+      AND t1.update_user_name like CONCAT('%',#{query.updateUserName},'%')
+    </if>
+    <if test="query.updateTimeFrom != null and query.updateTimeFrom !=''">
+      AND t1.update_time >= concat(#{query.updateTimeFrom, jdbcType=VARCHAR},' ', '00:00:00')
+    </if>
+    <if test="query.updateTimeTo != null and query.updateTimeTo !=''">
+      <![CDATA[
+                    AND t1.update_time <= concat(#{query.updateTimeTo, jdbcType=VARCHAR},' ', '23:59:59')
+                ]]>
+    </if>
+    ORDER BY t1.create_time DESC
+  </select>
+
+  <select id="listDropDownPosts"
+    resultType="com.hf.op.infrastructure.dto.post.ListPostDropDownListVo">
+    SELECT
+    id as postId,
+    `name` as postName
+    FROM op_post
+    <where>data_status = 1
+      <if test="dto.departmentId != null and dto.departmentId != ''">
+        AND department_id  like CONCAT('%',#{dto.departmentId},'%')
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+
+</mapper>

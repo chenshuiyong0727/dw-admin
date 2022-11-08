@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: test
+  cloud:
+    nacos:
+      discovery:
+        metadata:
+          preserved.heart.beat.interval: 10000
+          preserved.heart.beat.timeout: 30000
+          preserved.ip.delete.timeout: 30000
+nacos:
+  address: 192.168.8.80:8848 #address: mg.nacos.cn:80,192.168.8.90:8848,0.0.0.0:8848
+  orgnamespace: org-csy
+  user: nacos
+  pwd: nacos
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN
+  config: classpath:logback-spring-dev.xml
+sentinel:
+  dashboard: 192.168.8.82:8088
+  port: 8087
+#redis:
+#  host: 127.0.0.1
+#  password: 123456
+#  port: 6379
+redis:
+  host: 192.168.8.81
+  password: hjjnRedis2021
+  port: 6379
+  #rocketmq:
+  #address: 192.168.8.81:9876
+  #mongo:
+  #uri: mongodb://hjjn:hjjnMongo%402021@192.168.8.82:27017/hjjn
+config:
+  base:
+    path: './common-config/src/main/resources'
+workerId: 1
+dataCenterId: 1
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml

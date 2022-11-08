@@ -1,0 +1,29 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  penetrationProtect: false
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson
+      limit: 200
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      uri: redis://${redis.password}@${redis.host}:${redis.port}/0
+
+
+
+

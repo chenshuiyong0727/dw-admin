@@ -1,0 +1,66 @@
+server:
+  port: 28001
+
+spring:
+  application:
+    name: org-op-system
+  main:
+    #允许存在多个Feign调用相同Service的接口
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      config:
+        server-addr: ${nacos.address}
+        namespace: ${nacos.orgnamespace}
+        shared-configs[0]:
+          data-id: token.properties
+          group: GROUP_SYS
+          refresh: true
+      discovery:
+        server-addr: ${nacos.address}
+        namespace: ${nacos.orgnamespace}
+      username: ${nacos.user}
+      password: ${nacos.pwd}
+    sentinel:
+      transport:
+        dashboard: ${sentinel.dashboard}
+        port: 8001 #客户端端口
+      eager: true
+
+feign:
+  sentinel:
+    enabled: true
+  client:
+    config:
+      default:
+        #建立连接所用的时间，适用于网络状况正常的情况下，两端连接所需要的时间
+        ConnectTimeOut: 5000
+        #指建立连接后从服务端读取到可用资源所用的时间
+        ReadTimeOut: 5000
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  penetrationProtect: false
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson
+      limit: 200
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      uri: redis://${redis.password}@${redis.host}:${redis.port}/0
+logging:
+  level:
+    com.hf.op: INFO
+    com.alibaba.nacos: WARN
+### xxl-sso
+xxl:
+  sso:
+    redis:
+      address: redis://xxl-sso:${redis.password}@${redis.host}:${redis.port}/0
+      #address: redis://xxl-sso:hjjnRedis2021@192.168.8.82:6379/0
+      expire:
+        minute: 360

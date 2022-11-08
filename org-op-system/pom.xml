@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>hf-orgunit-plateform</artifactId>
+    <groupId>hf.orgunit.plateform</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>org-op-system</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>hf.orgunit.plateform</groupId>
+      <artifactId>auth-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>hf.orgunit.plateform</groupId>
+      <artifactId>op-system-beans</artifactId>
+    </dependency>
+    <!-- xxl-sso-core -->
+    <dependency>
+      <groupId>com.xuxueli</groupId>
+      <artifactId>xxl-sso-core</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>org-op-system</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>com.hf.op.OpApplication</mainClass>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>${jib.version}</version>
+        <configuration>
+          <from>
+            <image>${jdk.image.path}</image>
+          </from>
+          <to>
+            <image>${warehouse.path}/${project.artifactId}:${image.version}</image>
+            <auth>
+              <username>${warehouse.name}</username>
+              <password>${warehouse.pwd}</password>
+            </auth>
+            <tags>
+              <tag>${pro.version}</tag>
+            </tags>
+          </to>
+          <allowInsecureRegistries>true</allowInsecureRegistries>
+          <container>
+            <mainClass>com.hf.op.OpApplication</mainClass>
+            <jvmFlags>
+              <jvmFlag>-Xms128m</jvmFlag>
+              <jvmFlag>-XX:PermSize=128M</jvmFlag>
+            </jvmFlags>
+            <environment>
+              <TZ>Asia/Shanghai</TZ>
+            </environment>
+          </container>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>${package.type}</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

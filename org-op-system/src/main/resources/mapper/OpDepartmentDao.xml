@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.department.OpDepartmentRepository">
+
+  <select id="pageListDepartments"
+    parameterType="com.hf.op.infrastructure.dto.department.QueryOpDeptListDto"
+    resultType="com.hf.op.infrastructure.dto.department.QueryOpDeptListDto">
+    SELECT
+    *
+    FROM op_department
+    WHERE 1=1
+    <if test="query.levelOneDepartment != null and query.levelOneDepartment != ''">
+      AND level_one_department = #{query.levelOneDepartment}
+    </if>
+    <if test="query.levelTwoDepartment != null and query.levelTwoDepartment != ''">
+      AND level_two_department = #{query.levelTwoDepartment}
+    </if>
+    <if test="query.levelThreeDepartment != null and query.levelThreeDepartment != ''">
+      AND level_three_department = #{query.levelThreeDepartment}
+    </if>
+    <if test="query.levelFourDepartment != null and query.levelFourDepartment != ''">
+      AND level_four_department = #{query.levelFourDepartment}
+    </if>
+    <choose>
+      <when test="query.dataStatus != null ">
+        AND data_status = #{query.dataStatus}
+      </when>
+      <otherwise>
+        AND data_status != -1
+      </otherwise>
+    </choose>
+    <if test="query.name != null and query.name != ''">
+      AND `name` like CONCAT('%',#{query.name},'%')
+    </if>
+    <if test="query.updateUserName != null and query.updateUserName != ''">
+      AND update_user_name like CONCAT('%',#{query.updateUserName},'%')
+    </if>
+    <if test="query.updateTimeFrom != null and query.updateTimeFrom !=''">
+      AND update_time >= concat(#{query.updateTimeFrom, jdbcType=VARCHAR},' ', '00:00:00')
+    </if>
+    <if test="query.updateTimeTo != null and query.updateTimeTo !=''">
+      <![CDATA[
+                    AND update_time <= concat(#{query.updateTimeTo, jdbcType=VARCHAR},' ', '23:59:59')
+                ]]>
+    </if>
+    ORDER BY create_time DESC
+  </select>
+
+  <select id="listTreeDepartments"
+    resultType="com.hf.op.infrastructure.dto.department.QueryOpDeptTreeListDto">
+        SELECT
+            id,
+            `name`,
+            `level`,
+            IFNULL(superior_department, 0) AS superiorDepartment,
+            1 as isDept
+        FROM op_department
+        WHERE data_status = 1
+    </select>
+
+  <select id="listDropDownDepartments"
+    resultType="com.hf.op.infrastructure.dto.department.ListDeptDropDownListVo">
+        SELECT
+            id as deptId,
+            `name` as deptName
+        FROM op_department
+        WHERE data_status = 1
+    </select>
+
+  <select id="listSysDict" resultType="com.hf.op.infrastructure.dto.ListSysDictVo">
+			SELECT
+				bsd.id,
+				bsdt.type_name AS typeName,
+				bsdt.type_value AS typeValue,
+				bsd.field_name AS fieldName,
+				bsd.field_value AS fieldValue,
+				bsd.sort
+			FROM
+				base_sys_dict_type bsdt
+		INNER JOIN base_sys_dict bsd ON bsdt.id = bsd.type_id
+		where 1=1
+    </select>
+</mapper>
