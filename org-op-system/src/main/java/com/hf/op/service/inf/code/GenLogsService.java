@@ -2,7 +2,7 @@ package com.hf.op.service.inf.code;
 
 
 import com.hf.common.infrastructure.resp.ResponseMsg;
-import com.hf.op.domain.model.code.GenLogsEntity;
+import com.hf.op.domain.model.dict.GenLogsEntity;
 import com.hf.op.infrastructure.dto.code.GenLogsDto;
 import javax.servlet.http.HttpServletResponse;
 

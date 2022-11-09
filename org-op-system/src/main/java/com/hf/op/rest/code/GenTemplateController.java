@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenTemplateController {
 
 
-  private GenTemplateServiceImpl service;
+  private GenTemplateServiceImpl genTemplateServiceImpl;
 
-  public GenTemplateController(GenTemplateServiceImpl service) {
-    this.service = service;
+  public GenTemplateController(GenTemplateServiceImpl genTemplateServiceImpl) {
+    this.genTemplateServiceImpl = genTemplateServiceImpl;
   }
 
   /**
@@ -38,7 +38,7 @@ public class GenTemplateController {
    */
   @GetMapping("/{id}")
   public ResponseMsg detail(@PathVariable(value = "id") Long id) {
-    return service.detail(id);
+    return genTemplateServiceImpl.detail(id);
   }
 
   /**
@@ -47,7 +47,7 @@ public class GenTemplateController {
   @GetMapping("")
   public ResponseMsg page(HttpServletRequest request) {
     GenTemplateDto dto = HfBeanUtil.populate(new GenTemplateDto(), request);
-    return service.page(dto);
+    return genTemplateServiceImpl.page(dto);
   }
 
   /**
@@ -55,7 +55,7 @@ public class GenTemplateController {
    */
   @PostMapping("")
   public ResponseMsg add(@RequestBody GenTemplateDto dto) {
-    return service.add(dto);
+    return genTemplateServiceImpl.add(dto);
   }
 
   /**
@@ -63,7 +63,7 @@ public class GenTemplateController {
    */
   @PutMapping("")
   public ResponseMsg update(@RequestBody GenTemplateDto dto) {
-    return service.update(dto);
+    return genTemplateServiceImpl.update(dto);
   }
 
   /**
@@ -71,7 +71,7 @@ public class GenTemplateController {
    */
   @PutMapping("/status")
   public ResponseMsg status(@RequestBody GenTemplateDto dto) {
-    return service.status(dto);
+    return genTemplateServiceImpl.status(dto);
   }
 
   /**
@@ -79,6 +79,6 @@ public class GenTemplateController {
    */
   @DeleteMapping("/{id}")
   public ResponseMsg remove(@PathVariable(value = "id") Long id) {
-    return service.remove(id);
+    return genTemplateServiceImpl.remove(id);
   }
 }

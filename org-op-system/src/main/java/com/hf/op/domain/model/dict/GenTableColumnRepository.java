@@ -1,11 +1,11 @@
-package com.hf.op.domain.model.code;
+package com.hf.op.domain.model.dict;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hf.op.infrastructure.dto.code.GenLogsDto;
-import com.hf.op.infrastructure.vo.code.GenLogsPageVo;
+import com.hf.op.infrastructure.dto.code.GenTableColumnDto;
+import com.hf.op.infrastructure.vo.code.GenTableColumnPageVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +17,13 @@ import org.springframework.stereotype.Repository;
  * @date 2022-08-23
  */
 @Repository
-public interface GenLogsRepository extends BaseMapper<GenLogsEntity> {
+public interface GenTableColumnRepository extends BaseMapper<GenTableColumnEntity> {
 
   /**
    * @description 查询标签列表
    * @method page
    * @date: 2022-08-23
    */
-  IPage<GenLogsPageVo> page(Page page, @Param("dto") GenLogsDto dto);
+  IPage<GenTableColumnPageVo> page(Page page, @Param("dto") GenTableColumnDto dto);
 
 }

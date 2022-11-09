@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenTemplateDetailController {
 
 
-  private GenTemplateDetailServiceImpl service;
+  private GenTemplateDetailServiceImpl genTemplateDetailServiceImpl;
 
-  public GenTemplateDetailController(GenTemplateDetailServiceImpl service) {
-    this.service = service;
+  public GenTemplateDetailController(GenTemplateDetailServiceImpl genTemplateDetailServiceImpl) {
+    this.genTemplateDetailServiceImpl = genTemplateDetailServiceImpl;
   }
 
   /**
@@ -38,7 +38,7 @@ public class GenTemplateDetailController {
    */
   @GetMapping("/{id}")
   public ResponseMsg detail(@PathVariable(value = "id") Long id) {
-    return service.detail(id);
+    return genTemplateDetailServiceImpl.detail(id);
   }
 
   /**
@@ -47,7 +47,7 @@ public class GenTemplateDetailController {
   @GetMapping("")
   public ResponseMsg page(HttpServletRequest request) {
     GenTemplateDetailDto dto = HfBeanUtil.populate(new GenTemplateDetailDto(), request);
-    return service.page(dto);
+    return genTemplateDetailServiceImpl.page(dto);
   }
 
   /**
@@ -55,7 +55,7 @@ public class GenTemplateDetailController {
    */
   @PostMapping("")
   public ResponseMsg add(@RequestBody GenTemplateDetailDto dto) {
-    return service.add(dto);
+    return genTemplateDetailServiceImpl.add(dto);
   }
 
   /**
@@ -63,7 +63,7 @@ public class GenTemplateDetailController {
    */
   @PutMapping("")
   public ResponseMsg update(@RequestBody GenTemplateDetailDto dto) {
-    return service.update(dto);
+    return genTemplateDetailServiceImpl.update(dto);
   }
 
   /**
@@ -71,7 +71,7 @@ public class GenTemplateDetailController {
    */
   @PutMapping("/status")
   public ResponseMsg status(@RequestBody GenTemplateDetailDto dto) {
-    return service.status(dto);
+    return genTemplateDetailServiceImpl.status(dto);
   }
 
   /**
@@ -79,6 +79,6 @@ public class GenTemplateDetailController {
    */
   @DeleteMapping("/{id}")
   public ResponseMsg remove(@PathVariable(value = "id") Long id) {
-    return service.remove(id);
+    return genTemplateDetailServiceImpl.remove(id);
   }
 }

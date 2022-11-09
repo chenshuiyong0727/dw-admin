@@ -38,10 +38,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "v1/demo")
 public class GenDemoController {
 
-  private GenDemoServiceImpl service;
+  private GenDemoServiceImpl genDemoServiceImpl;
 
-  public GenDemoController(GenDemoServiceImpl service) {
-    this.service = service;
+  public GenDemoController(GenDemoServiceImpl genDemoServiceImpl) {
+    this.genDemoServiceImpl = genDemoServiceImpl;
   }
 
   /**
@@ -49,7 +49,7 @@ public class GenDemoController {
    */
   @PostMapping("")
   public ResponseMsg add(@RequestBody GenDemoDto dto) {
-    return service.add(dto);
+    return genDemoServiceImpl.add(dto);
   }
 
   /**
@@ -57,7 +57,7 @@ public class GenDemoController {
    */
   @PutMapping("")
   public ResponseMsg update(@RequestBody GenDemoDto dto) {
-    return service.update(dto);
+    return genDemoServiceImpl.update(dto);
   }
 
   /**
@@ -65,7 +65,7 @@ public class GenDemoController {
    */
   @PutMapping("/status")
   public ResponseMsg status(@RequestBody GenDemoDto dto) {
-    return service.status(dto);
+    return genDemoServiceImpl.status(dto);
   }
 
   /**
@@ -74,7 +74,7 @@ public class GenDemoController {
   @GetMapping("")
   public ResponseMsg page(HttpServletRequest request) {
     GenDemoRqDto dto = HfBeanUtil.populate(new GenDemoRqDto(), request);
-    return service.page(dto);
+    return genDemoServiceImpl.page(dto);
   }
 
   /**
@@ -82,7 +82,7 @@ public class GenDemoController {
    */
   @GetMapping("/{id}")
   public ResponseMsg detail(@PathVariable(value = "id") Long id) {
-    return service.detail(id);
+    return genDemoServiceImpl.detail(id);
   }
 
   /**
@@ -90,7 +90,7 @@ public class GenDemoController {
    */
   @DeleteMapping("/{id}")
   public ResponseMsg remove(@PathVariable(value = "id") Long id) {
-    return service.remove(id);
+    return genDemoServiceImpl.remove(id);
   }
 
   /**
@@ -98,7 +98,7 @@ public class GenDemoController {
    */
   @PutMapping("/batch/remove")
   public ResponseMsg batchRemove(@RequestBody List<Long> ids) {
-    return new ResponseMsg(service.batchRemove(ids));
+    return new ResponseMsg(genDemoServiceImpl.batchRemove(ids));
   }
 
   /**
@@ -108,7 +108,7 @@ public class GenDemoController {
   public void export(HttpServletResponse response, HttpServletRequest request) {
     String res = HfBeanUtil.getJsonRequest(request);
     GenDemoRqDto dto = JSON.parseObject(res, GenDemoRqDto.class);
-    List<GenDemoExportDto> list = service.queryExportPage(dto);
+    List<GenDemoExportDto> list = genDemoServiceImpl.queryExportPage(dto);
     if (CollUtil.isNotEmpty(list)) {
       Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(),
           GenDemoExportDto.class, list);

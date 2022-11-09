@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenTableColumnController {
 
 
-  private GenTableColumnServiceImpl service;
+  private GenTableColumnServiceImpl genTableColumnServiceImpl;
 
-  public GenTableColumnController(GenTableColumnServiceImpl service) {
-    this.service = service;
+  public GenTableColumnController(GenTableColumnServiceImpl genTableColumnServiceImpl) {
+    this.genTableColumnServiceImpl = genTableColumnServiceImpl;
   }
 
   /**
@@ -38,7 +38,7 @@ public class GenTableColumnController {
    */
   @GetMapping("/{id}")
   public ResponseMsg detail(@PathVariable(value = "id") Long id) {
-    return service.detail(id);
+    return genTableColumnServiceImpl.detail(id);
   }
 
   /**
@@ -47,7 +47,7 @@ public class GenTableColumnController {
   @GetMapping("")
   public ResponseMsg page(HttpServletRequest request) {
     GenTableColumnDto dto = HfBeanUtil.populate(new GenTableColumnDto(), request);
-    return service.page(dto);
+    return genTableColumnServiceImpl.page(dto);
   }
 
   /**
@@ -55,7 +55,7 @@ public class GenTableColumnController {
    */
   @PostMapping("")
   public ResponseMsg add(@RequestBody GenTableColumnDto dto) {
-    return service.add(dto);
+    return genTableColumnServiceImpl.add(dto);
   }
 
   /**
@@ -63,7 +63,7 @@ public class GenTableColumnController {
    */
   @PutMapping("")
   public ResponseMsg update(@RequestBody GenTableColumnDto dto) {
-    return service.update(dto);
+    return genTableColumnServiceImpl.update(dto);
   }
 
   /**
@@ -71,7 +71,7 @@ public class GenTableColumnController {
    */
   @PutMapping("/status")
   public ResponseMsg status(@RequestBody GenTableColumnDto dto) {
-    return service.status(dto);
+    return genTableColumnServiceImpl.status(dto);
   }
 
   /**
@@ -79,6 +79,6 @@ public class GenTableColumnController {
    */
   @DeleteMapping("/{id}")
   public ResponseMsg remove(@PathVariable(value = "id") Long id) {
-    return service.remove(id);
+    return genTableColumnServiceImpl.remove(id);
   }
 }

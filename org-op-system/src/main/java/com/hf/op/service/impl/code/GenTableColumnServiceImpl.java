@@ -9,8 +9,8 @@ import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.service.BatchCrudService;
-import com.hf.op.domain.model.code.GenTableColumnEntity;
-import com.hf.op.domain.model.code.GenTableColumnRepository;
+import com.hf.op.domain.model.dict.GenTableColumnEntity;
+import com.hf.op.domain.model.dict.GenTableColumnRepository;
 import com.hf.op.infrastructure.dto.code.GenTableColumnDto;
 import com.hf.op.infrastructure.vo.code.GenTableColumnDetailVo;
 import com.hf.op.service.inf.code.GenTableColumnService;
@@ -31,10 +31,10 @@ public class GenTableColumnServiceImpl extends
     BatchCrudService<GenTableColumnRepository, GenTableColumnEntity> implements
     GenTableColumnService {
 
-  private GenTableColumnRepository repository;
+  private GenTableColumnRepository genTableColumnRepository;
 
-  public GenTableColumnServiceImpl(GenTableColumnRepository repository) {
-    this.repository = repository;
+  public GenTableColumnServiceImpl(GenTableColumnRepository genTableColumnRepository) {
+    this.genTableColumnRepository = genTableColumnRepository;
   }
 
   /**
@@ -50,7 +50,7 @@ public class GenTableColumnServiceImpl extends
     entity.setId(id);
     setCreateUser(entity);
     try {
-      repository.insert(entity);
+      genTableColumnRepository.insert(entity);
     } catch (Exception e) {
       log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -70,7 +70,7 @@ public class GenTableColumnServiceImpl extends
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
     try {
-      repository.updateById(entity);
+      genTableColumnRepository.updateById(entity);
     } catch (Exception e) {
       log.error("更新失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -86,7 +86,7 @@ public class GenTableColumnServiceImpl extends
    */
   @Override
   public ResponseMsg page(GenTableColumnDto dto) {
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
+    IPage ipage = genTableColumnRepository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -97,7 +97,7 @@ public class GenTableColumnServiceImpl extends
    */
   @Override
   public ResponseMsg detail(Long id) {
-    GenTableColumnEntity entity = repository.selectById(id);
+    GenTableColumnEntity entity = genTableColumnRepository.selectById(id);
     if (entity != null) {
       GenTableColumnDetailVo vo = new GenTableColumnDetailVo();
       BeanUtils.copyProperties(entity, vo);
@@ -121,7 +121,7 @@ public class GenTableColumnServiceImpl extends
     GenTableColumnEntity entity = new GenTableColumnEntity();
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genTableColumnRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", id));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -141,7 +141,7 @@ public class GenTableColumnServiceImpl extends
     GenTableColumnEntity entity = new GenTableColumnEntity();
     entity.setDataStatus(dto.getDataStatus());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genTableColumnRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", dto.getId()));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),

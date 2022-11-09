@@ -10,8 +10,8 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.service.BatchCrudService;
-import com.hf.op.domain.model.code.GenDemoEntity;
-import com.hf.op.domain.model.code.GenDemoRepository;
+import com.hf.op.domain.model.dict.GenDemoEntity;
+import com.hf.op.domain.model.dict.GenDemoRepository;
 import com.hf.op.infrastructure.dto.code.GenDemoDto;
 import com.hf.op.infrastructure.dto.code.GenDemoExportDto;
 import com.hf.op.infrastructure.dto.code.GenDemoRqDto;
@@ -35,10 +35,10 @@ public class GenDemoServiceImpl extends
     BatchCrudService<GenDemoRepository, GenDemoEntity> implements
     GenDemoService {
 
-  private GenDemoRepository repository;
+  private GenDemoRepository genDemoRepository;
 
-  public GenDemoServiceImpl(GenDemoRepository repository) {
-    this.repository = repository;
+  public GenDemoServiceImpl(GenDemoRepository genDemoRepository) {
+    this.genDemoRepository = genDemoRepository;
   }
 
 
@@ -49,7 +49,7 @@ public class GenDemoServiceImpl extends
    */
   @Override
   public ResponseMsg page(GenDemoRqDto dto) {
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
+    IPage ipage = genDemoRepository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -66,7 +66,7 @@ public class GenDemoServiceImpl extends
     entity.setId(id);
     setCreateUser(entity);
     try {
-      repository.insert(entity);
+      genDemoRepository.insert(entity);
     } catch (Exception e) {
       log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -86,7 +86,7 @@ public class GenDemoServiceImpl extends
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
     try {
-      repository.updateById(entity);
+      genDemoRepository.updateById(entity);
     } catch (Exception e) {
       log.error("更新失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -102,7 +102,7 @@ public class GenDemoServiceImpl extends
    */
   @Override
   public ResponseMsg detail(Long id) {
-    GenDemoEntity entity = repository.selectById(id);
+    GenDemoEntity entity = genDemoRepository.selectById(id);
     if (entity != null) {
       GenDemoDto dto = new GenDemoDto();
       BeanUtils.copyProperties(entity, dto);
@@ -126,7 +126,7 @@ public class GenDemoServiceImpl extends
     GenDemoEntity entity = new GenDemoEntity();
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genDemoRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(id);
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -147,7 +147,7 @@ public class GenDemoServiceImpl extends
     GenDemoEntity entity = new GenDemoEntity();
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genDemoRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(ids);
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -167,7 +167,7 @@ public class GenDemoServiceImpl extends
     GenDemoEntity entity = new GenDemoEntity();
     entity.setDataStatus(dto.getDataStatus());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genDemoRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(dto.getId());
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -181,11 +181,11 @@ public class GenDemoServiceImpl extends
   @Override
   public List<GenDemoExportDto> queryExportPage(GenDemoRqDto dto) {
     QueryWrapper<GenDemoEntity> entityQueryWrapper = new QueryWrapper();
-    int countByAccount = repository.selectCount(entityQueryWrapper);
+    int countByAccount = genDemoRepository.selectCount(entityQueryWrapper);
     if (countByAccount == 0) {
       return new ArrayList<GenDemoExportDto>();
     }
-    IPage ipage = repository.page(new Page(1L, countByAccount), dto);
+    IPage ipage = genDemoRepository.page(new Page(1L, countByAccount), dto);
     if (ipage == null || ipage.getTotal() == 0L) {
       return new ArrayList<GenDemoExportDto>();
     }

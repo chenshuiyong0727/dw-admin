@@ -9,8 +9,8 @@ import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.service.BatchCrudService;
-import com.hf.op.domain.model.code.GenTemplateEntity;
-import com.hf.op.domain.model.code.GenTemplateRepository;
+import com.hf.op.domain.model.dict.GenTemplateEntity;
+import com.hf.op.domain.model.dict.GenTemplateRepository;
 import com.hf.op.infrastructure.dto.code.GenTemplateDto;
 import com.hf.op.infrastructure.vo.code.GenTemplateDetailVo;
 import com.hf.op.service.inf.code.GenTemplateService;
@@ -31,10 +31,10 @@ public class GenTemplateServiceImpl extends
     BatchCrudService<GenTemplateRepository, GenTemplateEntity> implements
     GenTemplateService {
 
-  private GenTemplateRepository repository;
+  private GenTemplateRepository genTemplateRepository;
 
-  public GenTemplateServiceImpl(GenTemplateRepository repository) {
-    this.repository = repository;
+  public GenTemplateServiceImpl(GenTemplateRepository genTemplateRepository) {
+    this.genTemplateRepository = genTemplateRepository;
   }
 
   /**
@@ -50,7 +50,7 @@ public class GenTemplateServiceImpl extends
     entity.setId(id);
     setCreateUser(entity);
     try {
-      repository.insert(entity);
+      genTemplateRepository.insert(entity);
     } catch (Exception e) {
       log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -70,7 +70,7 @@ public class GenTemplateServiceImpl extends
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
     try {
-      repository.updateById(entity);
+      genTemplateRepository.updateById(entity);
     } catch (Exception e) {
       log.error("更新失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -86,7 +86,7 @@ public class GenTemplateServiceImpl extends
    */
   @Override
   public ResponseMsg page(GenTemplateDto dto) {
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
+    IPage ipage = genTemplateRepository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -97,7 +97,7 @@ public class GenTemplateServiceImpl extends
    */
   @Override
   public ResponseMsg detail(Long id) {
-    GenTemplateEntity entity = repository.selectById(id);
+    GenTemplateEntity entity = genTemplateRepository.selectById(id);
     if (entity != null) {
       GenTemplateDetailVo vo = new GenTemplateDetailVo();
       BeanUtils.copyProperties(entity, vo);
@@ -121,7 +121,7 @@ public class GenTemplateServiceImpl extends
     GenTemplateEntity entity = new GenTemplateEntity();
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genTemplateRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", id));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -141,7 +141,7 @@ public class GenTemplateServiceImpl extends
     GenTemplateEntity entity = new GenTemplateEntity();
     entity.setDataStatus(dto.getDataStatus());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genTemplateRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", dto.getId()));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),

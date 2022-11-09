@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.dict.GenDemoRepository">
+
+  <select id="page" resultType="com.hf.op.infrastructure.vo.code.GenDemoPageVo">
+    SELECT
+    *
+    FROM gen_demo a
+    <where>
+      a.data_status > -1
+      <if test="dto.ids != null and dto.ids.size() > 0">
+        AND a.id IN
+        <foreach collection="dto.ids" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="dto.opId != null and dto.opId != ''">
+        AND a.`op_id` = #{dto.opId}
+      </if>
+      <if test="dto.demoName != null and dto.demoName != ''">
+        AND a.demo_name LIKE CONCAT( '%', #{dto.demoName},'%')
+      </if>
+      <if test="dto.demoNumFrom != null and dto.demoNumFrom != '' ">
+        AND a.demo_num >= #{dto.demoNumFrom}
+      </if>
+      <if test="dto.demoNumTo != null and dto.demoNumTo != '' ">
+        AND #{dto.demoNumTo} >= a.demo_num
+      </if>
+
+      <if test="dto.demoType != null">
+        AND a.`demo_type` = #{dto.demoType}
+      </if>
+      <if test="dto.demoAmountFrom != null and dto.demoAmountFrom != '' ">
+        AND a.demo_amount >= #{dto.demoAmountFrom}
+      </if>
+      <if test="dto.demoAmountTo != null and dto.demoAmountTo != '' ">
+        AND #{dto.demoAmountTo} >= a.demo_amount
+      </if>
+
+      <if test="dto.demoTimeFrom != null and dto.demoTimeFrom != '' ">
+        AND DATE_FORMAT(a.`demo_time`,'%Y-%m-%d') >= #{dto.demoTimeFrom}
+      </if>
+      <if test="dto.demoTimeTo != null and dto.demoTimeTo != '' ">
+        AND #{dto.demoTimeTo} >= DATE_FORMAT(a.`demo_time`,'%Y-%m-%d')
+      </if>
+      <if test="dto.demoDateFrom != null and dto.demoDateFrom != '' ">
+        AND DATE_FORMAT(a.`demo_date`,'%Y-%m-%d') >= #{dto.demoDateFrom}
+      </if>
+      <if test="dto.demoDateTo != null and dto.demoDateTo != '' ">
+        AND #{dto.demoDateTo} >= DATE_FORMAT(a.`demo_date`,'%Y-%m-%d')
+      </if>
+      <if test="dto.demoText != null and dto.demoText != ''">
+        AND a.demo_text LIKE CONCAT( '%', #{dto.demoText},'%')
+      </if>
+      <if test="dto.dataStatus != null">
+        AND a.`data_status` = #{dto.dataStatus}
+      </if>
+      <if test="dto.createTimeFrom != null and dto.createTimeFrom != '' ">
+        AND DATE_FORMAT(a.`create_time`,'%Y-%m-%d') >= #{dto.createTimeFrom}
+      </if>
+      <if test="dto.createTimeTo != null and dto.createTimeTo != '' ">
+        AND #{dto.createTimeTo} >= DATE_FORMAT(a.`create_time`,'%Y-%m-%d')
+      </if>
+    </where>
+    ORDER BY a.update_time DESC
+  </select>
+
+</mapper>

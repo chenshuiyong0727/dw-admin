@@ -11,8 +11,8 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.service.BatchCrudService;
-import com.hf.op.domain.model.code.GenTemplateDetailEntity;
-import com.hf.op.domain.model.code.GenTemplateDetailRepository;
+import com.hf.op.domain.model.dict.GenTemplateDetailEntity;
+import com.hf.op.domain.model.dict.GenTemplateDetailRepository;
 import com.hf.op.infrastructure.dto.code.GenTemplateDetailDto;
 import com.hf.op.infrastructure.dto.code.gencode.GenTemplateDetailModel;
 import com.hf.op.infrastructure.generator.enums.DictType;
@@ -37,10 +37,10 @@ public class GenTemplateDetailServiceImpl extends
     BatchCrudService<GenTemplateDetailRepository, GenTemplateDetailEntity> implements
     GenTemplateDetailService {
 
-  private GenTemplateDetailRepository repository;
+  private GenTemplateDetailRepository genTemplateDetailRepository;
 
-  public GenTemplateDetailServiceImpl(GenTemplateDetailRepository repository) {
-    this.repository = repository;
+  public GenTemplateDetailServiceImpl(GenTemplateDetailRepository genTemplateDetailRepository) {
+    this.genTemplateDetailRepository = genTemplateDetailRepository;
   }
 
   /**
@@ -56,7 +56,7 @@ public class GenTemplateDetailServiceImpl extends
     entity.setId(id);
     setCreateUser(entity);
     try {
-      repository.insert(entity);
+      genTemplateDetailRepository.insert(entity);
     } catch (Exception e) {
       log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -76,7 +76,7 @@ public class GenTemplateDetailServiceImpl extends
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
     try {
-      repository.updateById(entity);
+      genTemplateDetailRepository.updateById(entity);
     } catch (Exception e) {
       log.error("更新失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -92,7 +92,7 @@ public class GenTemplateDetailServiceImpl extends
    */
   @Override
   public ResponseMsg page(GenTemplateDetailDto dto) {
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
+    IPage ipage = genTemplateDetailRepository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -103,7 +103,7 @@ public class GenTemplateDetailServiceImpl extends
    */
   @Override
   public ResponseMsg detail(Long id) {
-    GenTemplateDetailEntity entity = repository.selectById(id);
+    GenTemplateDetailEntity entity = genTemplateDetailRepository.selectById(id);
     if (entity != null) {
       GenTemplateDetailDetailVo vo = new GenTemplateDetailDetailVo();
       BeanUtils.copyProperties(entity, vo);
@@ -127,7 +127,7 @@ public class GenTemplateDetailServiceImpl extends
     GenTemplateDetailEntity entity = new GenTemplateDetailEntity();
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genTemplateDetailRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", id));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -147,7 +147,7 @@ public class GenTemplateDetailServiceImpl extends
     GenTemplateDetailEntity entity = new GenTemplateDetailEntity();
     entity.setDataStatus(dto.getDataStatus());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genTemplateDetailRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", dto.getId()));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -171,7 +171,7 @@ public class GenTemplateDetailServiceImpl extends
     if (DictType.DB_NAME.getValue().equals(dbName)) {
       queryWrapper.eq(GenTemplateDetailEntity::getDbName, dbName);
     }
-    List<GenTemplateDetailEntity> list = repository.selectList(queryWrapper);
+    List<GenTemplateDetailEntity> list = genTemplateDetailRepository.selectList(queryWrapper);
     List<GenTemplateDetailModel> res = ListBeanUtil.listCopy(list, GenTemplateDetailModel.class);
     return res;
   }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hf.op.domain.model.dict.GenTableColumnRepository">
+  <select id="page"
+    resultType="com.hf.op.infrastructure.vo.code.GenTableColumnPageVo">
+    SELECT
+    *
+    FROM gen_table_column a
+    <where>
+      a.data_status > -1
+      <if test="dto.id != null">
+        AND a.`id` = #{dto.id}
+      </if>
+      <if test="dto.createUserName != null and dto.createUserName != ''">
+        AND a.create_user_name LIKE CONCAT( '%', #{dto.createUserName},'%')
+      </if>
+      <if test="dto.updateUserName != null and dto.updateUserName != ''">
+        AND a.update_user_name LIKE CONCAT( '%', #{dto.updateUserName},'%')
+      </if>
+      <if test="dto.createTimeFrom != null">
+        AND DATE_FORMAT(a.create_time,'%Y-%m-%d') >= #{dto.createTimeFrom}
+      </if>
+      <if test="dto.createTimeTo != null">
+        AND #{dto.createTimeTo} >= DATE_FORMAT(a.create_time,'%Y-%m-%d')
+      </if>
+      <if test="dto.updateTimeFrom != null">
+        AND DATE_FORMAT(a.update_time,'%Y-%m-%d') >= #{dto.updateTimeFrom}
+      </if>
+      <if test="dto.updateTimeTo != null">
+        AND #{dto.updateTimeTo} >= DATE_FORMAT(a.update_time,'%Y-%m-%d')
+      </if>
+    </where>
+    ORDER BY a.create_time DESC
+  </select>
+
+</mapper>

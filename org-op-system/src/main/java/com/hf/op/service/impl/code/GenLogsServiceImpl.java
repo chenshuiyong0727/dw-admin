@@ -14,8 +14,8 @@ import com.hf.common.infrastructure.resp.GeneratorMsg;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.service.BatchCrudService;
-import com.hf.op.domain.model.code.GenLogsEntity;
-import com.hf.op.domain.model.code.GenLogsRepository;
+import com.hf.op.domain.model.dict.GenLogsEntity;
+import com.hf.op.domain.model.dict.GenLogsRepository;
 import com.hf.op.infrastructure.dto.code.GenLogsDto;
 import com.hf.op.infrastructure.dto.code.gencode.GenBuilderModel;
 import com.hf.op.infrastructure.dto.code.gencode.GenTableAndColumnModel;
@@ -44,15 +44,15 @@ public class GenLogsServiceImpl extends
     BatchCrudService<GenLogsRepository, GenLogsEntity> implements
     GenLogsService {
 
-  private GenLogsRepository repository;
+  private GenLogsRepository genLogsRepository;
 
   private GenTableServiceImpl genTableServiceImpl;
 
   private GenTemplateDetailServiceImpl genTemplateDetailServiceImpl;
 
-  public GenLogsServiceImpl(GenLogsRepository repository, GenTableServiceImpl genTableServiceImpl,
+  public GenLogsServiceImpl(GenLogsRepository genLogsRepository, GenTableServiceImpl genTableServiceImpl,
       GenTemplateDetailServiceImpl genTemplateDetailServiceImpl) {
-    this.repository = repository;
+    this.genLogsRepository = genLogsRepository;
     this.genTableServiceImpl = genTableServiceImpl;
     this.genTemplateDetailServiceImpl = genTemplateDetailServiceImpl;
   }
@@ -69,7 +69,7 @@ public class GenLogsServiceImpl extends
     BeanUtils.copyProperties(dto, entity);
     entity.setId(id);
     setCreateUser(entity);
-    repository.insert(entity);
+    genLogsRepository.insert(entity);
     return entity;
   }
 
@@ -84,7 +84,7 @@ public class GenLogsServiceImpl extends
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
     try {
-      repository.updateById(entity);
+      genLogsRepository.updateById(entity);
     } catch (Exception e) {
       log.error("更新失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -100,7 +100,7 @@ public class GenLogsServiceImpl extends
    */
   @Override
   public ResponseMsg page(GenLogsDto dto) {
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
+    IPage ipage = genLogsRepository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -111,7 +111,7 @@ public class GenLogsServiceImpl extends
    */
   @Override
   public ResponseMsg detail(Long id) {
-    GenLogsEntity entity = repository.selectById(id);
+    GenLogsEntity entity = genLogsRepository.selectById(id);
     if (entity != null) {
       GenLogsDetailVo vo = new GenLogsDetailVo();
       BeanUtils.copyProperties(entity, vo);
@@ -141,7 +141,7 @@ public class GenLogsServiceImpl extends
     LambdaQueryWrapper<GenLogsEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GenLogsEntity::getTableId, tableId);
     queryWrapper.orderBy(true, false, GenLogsEntity::getCreateTime);
-    List<GenLogsEntity> list = repository.selectList(queryWrapper);
+    List<GenLogsEntity> list = genLogsRepository.selectList(queryWrapper);
     if (CollectionUtils.isEmpty(list)) {
       return null;
     }
@@ -169,7 +169,7 @@ public class GenLogsServiceImpl extends
     GenLogsEntity entity = new GenLogsEntity();
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genLogsRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", id));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
@@ -189,7 +189,7 @@ public class GenLogsServiceImpl extends
     GenLogsEntity entity = new GenLogsEntity();
     entity.setDataStatus(dto.getDataStatus());
     setUpdateUser(entity);
-    if (repository.update(entity, queryWrapper) > 0) {
+    if (genLogsRepository.update(entity, queryWrapper) > 0) {
       return new ResponseMsg().setData(new HashMap().put("id", dto.getId()));
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),

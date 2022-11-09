@@ -1,4 +1,4 @@
-package com.hf.op.domain.model.code;
+package com.hf.op.domain.model.dict;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hf.common.infrastructure.entity.BaseEntity;

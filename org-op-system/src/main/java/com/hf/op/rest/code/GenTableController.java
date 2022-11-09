@@ -33,10 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenTableController {
 
 
-  private GenTableServiceImpl service;
+  private GenTableServiceImpl genTableServiceImpl;
 
-  public GenTableController(GenTableServiceImpl service) {
-    this.service = service;
+  public GenTableController(GenTableServiceImpl genTableServiceImpl) {
+    this.genTableServiceImpl = genTableServiceImpl;
   }
 
   /**
@@ -44,7 +44,7 @@ public class GenTableController {
    */
   @GetMapping("/{id}")
   public ResponseMsg detail(@PathVariable(value = "id") Long id) {
-    return service.detail(id);
+    return genTableServiceImpl.detail(id);
   }
 
   /**
@@ -53,7 +53,7 @@ public class GenTableController {
   @GetMapping("")
   public ResponseMsg page(HttpServletRequest request) {
     GenTableDto dto = HfBeanUtil.populate(new GenTableDto(), request);
-    return service.page(dto);
+    return genTableServiceImpl.page(dto);
   }
 
   /**
@@ -62,7 +62,7 @@ public class GenTableController {
   @GetMapping("getTables")
   public ResponseMsg getTables(HttpServletRequest request) {
     GenTableDto dto = HfBeanUtil.populate(new GenTableDto(), request);
-    return service.getTables(dto);
+    return genTableServiceImpl.getTables(dto);
   }
 
   /**
@@ -73,7 +73,7 @@ public class GenTableController {
     Assert.hasText(dto.getTableNames(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
     String[] tableNameArray = Convert.toStrArray(dto.getTableNames());
     Assert.notNull(tableNameArray, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
-    return service.importTables(tableNameArray);
+    return genTableServiceImpl.importTables(tableNameArray);
   }
 
   /**
@@ -82,7 +82,7 @@ public class GenTableController {
   @PutMapping("")
   public ResponseMsg update(@RequestBody GenTableAndColumnModel model) {
     Assert.notNull(model.getId(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
-    return service.update(model);
+    return genTableServiceImpl.update(model);
   }
 
   /**
@@ -90,7 +90,7 @@ public class GenTableController {
    */
   @PutMapping("/status")
   public ResponseMsg status(@RequestBody GenTableDto dto) {
-    return service.status(dto);
+    return genTableServiceImpl.status(dto);
   }
 
   /**
@@ -98,7 +98,7 @@ public class GenTableController {
    */
   @DeleteMapping("/{id}")
   public ResponseMsg remove(@PathVariable(value = "id") Long id) {
-    return service.remove(id);
+    return genTableServiceImpl.remove(id);
   }
 
   /**
@@ -109,7 +109,7 @@ public class GenTableController {
     Assert.notNull(list, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
     List<Long> ids = ListBeanUtil.toList(list, "id");
     Assert.notNull(ids, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
-    service.removeByIds(ids);
+    genTableServiceImpl.removeByIds(ids);
     return new ResponseMsg();
   }
 }

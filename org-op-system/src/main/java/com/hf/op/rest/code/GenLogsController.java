@@ -30,10 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenLogsController {
 
 
-  private GenLogsServiceImpl service;
+  private GenLogsServiceImpl genLogsServiceImpl;
 
-  public GenLogsController(GenLogsServiceImpl service) {
-    this.service = service;
+  public GenLogsController(GenLogsServiceImpl genLogsServiceImpl) {
+    this.genLogsServiceImpl = genLogsServiceImpl;
   }
 
   /**
@@ -41,7 +41,7 @@ public class GenLogsController {
    */
   @GetMapping("/{id}")
   public ResponseMsg detail(@PathVariable(value = "id") Long id) {
-    return service.detail(id);
+    return genLogsServiceImpl.detail(id);
   }
 
   /**
@@ -49,14 +49,14 @@ public class GenLogsController {
    */
   @GetMapping("/getByTableId/{tableId}")
   public ResponseMsg getByTableId(@PathVariable(value = "tableId") Long tableId) {
-    return service.getByTableId(tableId);
+    return genLogsServiceImpl.getByTableId(tableId);
   }
 
   @PostMapping("/create")
   public void export(HttpServletResponse response, HttpServletRequest request) {
     String res = HfBeanUtil.getJsonRequest(request);
     GenLogsDto dto = JSON.parseObject(res, GenLogsDto.class);
-    service.create(dto, response);
+    genLogsServiceImpl.create(dto, response);
   }
 
   /**
@@ -65,7 +65,7 @@ public class GenLogsController {
   @GetMapping("")
   public ResponseMsg page(HttpServletRequest request) {
     GenLogsDto dto = HfBeanUtil.populate(new GenLogsDto(), request);
-    return service.page(dto);
+    return genLogsServiceImpl.page(dto);
   }
 
   /**
@@ -73,7 +73,7 @@ public class GenLogsController {
    */
   @PostMapping("")
   public ResponseMsg add(@RequestBody GenLogsDto dto) {
-    return new ResponseMsg().setData(new HashMap().put("id", service.add(dto).getId()));
+    return new ResponseMsg().setData(new HashMap().put("id", genLogsServiceImpl.add(dto).getId()));
 
   }
 
@@ -82,7 +82,7 @@ public class GenLogsController {
    */
   @PutMapping("")
   public ResponseMsg update(@RequestBody GenLogsDto dto) {
-    return service.update(dto);
+    return genLogsServiceImpl.update(dto);
   }
 
   /**
@@ -90,7 +90,7 @@ public class GenLogsController {
    */
   @PutMapping("/status")
   public ResponseMsg status(@RequestBody GenLogsDto dto) {
-    return service.status(dto);
+    return genLogsServiceImpl.status(dto);
   }
 
   /**
@@ -98,6 +98,6 @@ public class GenLogsController {
    */
   @DeleteMapping("/{id}")
   public ResponseMsg remove(@PathVariable(value = "id") Long id) {
-    return service.remove(id);
+    return genLogsServiceImpl.remove(id);
   }
 }
