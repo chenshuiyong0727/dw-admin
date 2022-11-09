@@ -102,7 +102,6 @@ public class OpSysRoleServiceImpl extends CrudService implements OpSysRoleServic
     this.adminAuthorityRoleRepository = adminAuthorityRoleRepository;
     this.opSysUserRepository = opSysUserRepository;
   }
-
   @Override
   @Transactional(rollbackFor = Exception.class)
   public ResponseMsg<String> saveOpSysRole(OpSysRoleEntity saveOpSysRoleEntity) {
@@ -392,7 +391,6 @@ public class OpSysRoleServiceImpl extends CrudService implements OpSysRoleServic
     return new ResponseMsg(dtos);
   }
 
-
   private List<QueryOpFunctionsTreeListDto> getFuntionsTree(Integer systemId, Long parentId) {
     List<OpSysFunctionEntity> list = this.opSysFunctionEntitylist(systemId, parentId);
     if (CollectionUtils.isEmpty(list)) {
@@ -583,9 +581,7 @@ public class OpSysRoleServiceImpl extends CrudService implements OpSysRoleServic
 
   @Override
   public ResponseMsg updateKeyList(OpFunctionsDto dto) {
-    LambdaQueryWrapper<OpSysFunctionEntity> queryWrapper = new LambdaQueryWrapper();
-    queryWrapper.in(OpSysFunctionEntity::getId, dto.getIds());
-    List<OpSysFunctionEntity> list = opSysFunctionRepository.selectList(queryWrapper);
+    List<OpSysFunctionEntity> list = this.getOpSysFunctionEntityListByPids(dto.getIds());
     if (!CollectionUtils.isEmpty(list)) {
       for (OpSysFunctionEntity functionEntity : list) {
         int flag = 0;
@@ -648,6 +644,42 @@ public class OpSysRoleServiceImpl extends CrudService implements OpSysRoleServic
         }
       }
     }
-    return new ResponseMsg(dto);
+    return new ResponseMsg();
   }
+
+  private List<OpSysFunctionEntity> getOpSysFunctionEntityListByPids(List<Long> ids) {
+    LambdaQueryWrapper<OpSysFunctionEntity> queryWrapper = new LambdaQueryWrapper();
+    queryWrapper.in(OpSysFunctionEntity::getId, ids);
+    List<OpSysFunctionEntity> list = opSysFunctionRepository.selectList(queryWrapper);
+    if (CollectionUtils.isEmpty(list)){
+      return null;
+    }
+
+    List<OpSysFunctionEntity> menuList = opSysFunctionRepository.selectList(null);
+    for (Long id : ids) {
+      List<OpSysFunctionEntity> childMenu = this.treeMenuList(menuList ,id );
+      if (!CollectionUtils.isEmpty(childMenu)){
+        list.addAll(childMenu);
+      }
+    }
+    for (OpSysFunctionEntity opSysFunctionEntity : list) {
+      System.out.println(opSysFunctionEntity.getId());
+    }
+    return list;
+  }
+
+
+  public  List<OpSysFunctionEntity> treeMenuList( List<OpSysFunctionEntity> menuList , Long pid) {
+    List<OpSysFunctionEntity> childMenu = new ArrayList<OpSysFunctionEntity>();
+    for (OpSysFunctionEntity mu : menuList) {
+      //遍历出父id等于参数的id，add进子节点集合
+      if (mu.getPid().equals(pid)) {
+        //递归遍历下一级
+        treeMenuList(menuList , mu.getId());
+        childMenu.add(mu);
+      }
+    }
+    return childMenu;
+  }
+
 }
