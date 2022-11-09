@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.dict.GoodsBaseRepository">
+
+  <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsBasePageVo">
+    SELECT
+    *
+    FROM goods_base a
+    <where>
+      a.data_status > -1
+       <if test="dto.ids != null and dto.ids.size() > 0">
+        AND a.id IN
+        <foreach collection="dto.ids" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="dto.id != null and dto.id != ''">
+        AND a.id LIKE CONCAT( '%', #{dto.id},'%')
+      </if>
+      <if test="dto.type != null">
+        AND a.`type` = #{dto.type}
+      </if>
+      <if test="dto.actNo != null and dto.actNo != ''">
+        AND a.act_no LIKE CONCAT( '%', #{dto.actNo},'%')
+      </if>
+      <if test="dto.name != null and dto.name != ''">
+        AND a.name LIKE CONCAT( '%', #{dto.name},'%')
+      </if>
+      <if test="dto.brand != null and dto.brand != ''">
+        AND a.brand LIKE CONCAT( '%', #{dto.brand},'%')
+      </if>
+      <if test="dto.remark != null and dto.remark != ''">
+        AND a.remark LIKE CONCAT( '%', #{dto.remark},'%')
+      </if>
+    </where>
+    ORDER BY a.update_time DESC
+  </select>
+
+</mapper>
