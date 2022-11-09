@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.dict.BaseSysDictRepository">
+
+  <select id="listSysDict" resultType="com.hf.op.infrastructure.dto.ListSysDictVo">
+    SELECT
+	    bsd.id,
+	    bsdt.type_name AS typeName,
+	    bsdt.type_value AS typeValue,
+	    bsd.field_name AS fieldName,
+	    bsd.field_value AS fieldValue,
+	    bsd.sort
+    FROM
+	    base_sys_dict_type bsdt
+	INNER JOIN base_sys_dict bsd ON bsdt.id = bsd.type_id
+	WHERE bsdt.data_status > -1 and bsd.data_status > -1
+	ORDER BY bsd.type_id asc ,sort asc
+    </select>
+
+  <select id="listSysDictByTypeId" resultType="com.hf.op.infrastructure.dto.ListSysDictVo">
+    SELECT
+	    bsd.id,
+	    bsdt.type_name AS typeName,
+	    bsdt.type_value AS typeValue,
+	    bsd.field_name AS fieldName,
+	    bsd.field_value AS fieldValue,
+	    bsd.sort
+    FROM
+	    base_sys_dict_type bsdt
+	INNER JOIN base_sys_dict bsd ON bsdt.id = bsd.type_id
+	where  bsdt.data_status > -1 and bsd.data_status > -1 AND bsd.type_id = #{typeId}
+    </select>
+
+  <select id="listSysDictByTypeValue" resultType="com.hf.op.infrastructure.dto.ListSysDictVo">
+    SELECT
+	    bsd.id,
+	    bsdt.type_name AS typeName,
+	    bsdt.type_value AS typeValue,
+	    bsd.field_name AS fieldName,
+	    bsd.field_value AS fieldValue,
+	    bsd.sort
+    FROM
+	    base_sys_dict_type bsdt
+	INNER JOIN base_sys_dict bsd ON bsdt.id = bsd.type_id
+	where  bsdt.data_status > -1 and bsd.data_status > -1 AND bsdt.type_value = #{typeValue}
+    </select>
+
+
+</mapper>

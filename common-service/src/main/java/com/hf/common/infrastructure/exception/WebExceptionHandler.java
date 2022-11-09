@@ -46,6 +46,9 @@ public class WebExceptionHandler extends DefaultHandlerExceptionResolver {
       ret.err(ServerErrorConst.ERR_OTHER, e.getMessage());
     } else if (e instanceof UserTokenException) {
       ret.err(ServerErrorConst.ERR_TOKEN_EMPTY, e.getMessage());
+    } else if (e instanceof ServiceException) {
+      ServiceException se = (ServiceException) e;
+      ret.err(se.getCode(), e.getMessage());
     } else if (e instanceof ServerErrorException) {
       ret.err(((ServerErrorException) e).getThisErrorCode(),
           ((ServerErrorException) e).getThisMessage());

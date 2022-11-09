@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hf.op.domain.model.dict.BaseSysDictTypeRepository">
+  <select id="page"
+    resultType="com.hf.op.infrastructure.dto.ListSysDictTypePageVo">
+    SELECT
+    *
+    FROM base_sys_dict_type a
+    <where>
+      a.data_status > -1
+      <if test="dto.id != null">
+        AND a.`id` = #{dto.id}
+      </if>
+      <if test="dto.typeName != null and dto.typeName != ''">
+        AND a.type_name LIKE CONCAT( '%', #{dto.typeName},'%')
+      </if>
+      <if test="dto.typeValue != null and dto.typeValue != ''">
+        AND a.type_value LIKE CONCAT( '%', #{dto.typeValue},'%')
+      </if>
+    </where>
+    ORDER BY a.create_time DESC
+  </select>
+
+  <select id="dictPage"
+    resultType="com.hf.op.infrastructure.dto.ListSysDictVo">
+    SELECT
+    *
+    FROM base_sys_dict a
+    <where>
+      a.data_status > -1
+      <if test="dto.id != null">
+        AND a.`id` = #{dto.id}
+      </if>
+      <if test="dto.typeId != null">
+        AND a.`type_id` = #{dto.typeId}
+      </if>
+      <if test="dto.fieldName != null and dto.fieldName != ''">
+        AND a.field_name LIKE CONCAT( '%', #{dto.fieldName},'%')
+      </if>
+      <if test="dto.fieldValue != null and dto.fieldValue != ''">
+        AND a.field_value LIKE CONCAT( '%', #{dto.fieldValue},'%')
+      </if>
+    </where>
+    ORDER BY a.create_time DESC
+  </select>
+
+</mapper>

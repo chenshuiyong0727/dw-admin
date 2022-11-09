@@ -146,4 +146,6 @@ public interface CommonConstant {
   同步到小程序平台
  */
   final static String MINI_UPDATE_SSO_USER = "/ssoApi/updateUser";
+  final static String DEFAULT_DB_MYSQL = "mysql";
+
 }

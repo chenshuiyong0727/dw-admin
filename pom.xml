@@ -187,6 +187,52 @@
         <artifactId>jedis</artifactId>
         <version>${jedis.version}</version>
       </dependency>
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${validation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>${validator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>easyexcel</artifactId>
+        <version>${easyexcel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>${swagger-annotations.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.jfinal</groupId>
+        <artifactId>enjoy</artifactId>
+        <version>${enjoy.version}</version>
+      </dependency>
+      <!-- 导出 导入-->
+      <dependency>
+        <groupId>cn.afterturn</groupId>
+        <artifactId>easypoi-spring-boot-starter</artifactId>
+        <version>${easypoi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.afterturn</groupId>
+        <artifactId>easypoi-base</artifactId>
+        <version>${easypoi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.afterturn</groupId>
+        <artifactId>easypoi-web</artifactId>
+        <version>${easypoi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.afterturn</groupId>
+        <artifactId>easypoi-annotation</artifactId>
+        <version>${easypoi.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
@@ -246,6 +292,12 @@
     <hutool.version>5.8.0.M1</hutool.version>
     <xxl.sso.core.version>1.1.0</xxl.sso.core.version>
     <jedis.version>3.2.0</jedis.version>
+    <validator.version>6.1.5.Final</validator.version>
+    <validation.version>2.0.1.Final</validation.version>
+    <easyexcel.version>2.2.6</easyexcel.version>
+    <swagger-annotations.version>1.5.22</swagger-annotations.version>
+    <enjoy.version>4.9.06</enjoy.version>
+    <easypoi.version>4.3.0</easypoi.version>
     <!--打包-->
     <jdk.image.path>192.168.8.92:5000/hlw/openjdk:11.0.9</jdk.image.path>
 <!--    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>

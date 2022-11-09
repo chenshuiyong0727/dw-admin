@@ -8,14 +8,19 @@ import com.alicp.jetcache.anno.CreateCache;
 import com.hf.common.domain.UserInfo;
 import com.hf.common.domain.model.cache.user.CustomerInfo;
 import com.hf.common.infrastructure.constant.CommonConstant;
+import com.hf.common.infrastructure.dto.BaseDto;
+import com.hf.common.infrastructure.exception.ServiceException;
 import com.hf.common.infrastructure.global.cache.CommCacheConst;
 import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.infrastructure.util.ThreadLocalContext;
+import com.hf.common.infrastructure.util.ValidatorUtil;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -24,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -32,6 +38,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class ControllerAspect {
 
   private static final Logger log = LoggerFactory.getLogger(ControllerAspect.class);
+
+  private static final String POST_TYPE = "POST";
+
+  private static final String PUT_TYPE = "PUT";
 
   @CreateCache(name = CommCacheConst.BASE_KEY_ORG
       + "authCustomerAccount", cacheType = CacheType.BOTH)
@@ -46,7 +56,7 @@ public class ControllerAspect {
   }
 
   @Before("controllerCut()")
-  public void invokeBefore() {
+  public void invokeBefore(JoinPoint point) throws Throwable {
 
     //设置日志统一编号
     setTraceId();
@@ -55,6 +65,41 @@ public class ControllerAspect {
     setUserInfo();
 
     setOtherInfo();
+    // 验证参数
+    validation(point);
+  }
+
+  /**
+   * 切如 post 请求
+   *
+   * @param point point
+   */
+  public void validation(JoinPoint point) throws Throwable {
+    Object[] args = point.getArgs();
+    try {
+      RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+      ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+      if (sra == null) {
+        return;
+      }
+      HttpServletRequest request = sra.getRequest();
+      String method = request.getMethod();
+
+      // 只有 post 请求 才会去验证数据
+      if (POST_TYPE.equals(method) || PUT_TYPE.equals(method)) {
+        for (Object arg : args) {
+          // 参数校验
+          if (arg instanceof BaseDto) {
+            // 如果是内部调用 则不判断参数非法情况
+            ValidatorUtil.verify(arg);
+          }
+        }
+      }
+    } catch (ServiceException e) {
+      throw e;
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+    }
   }
 
   /**
