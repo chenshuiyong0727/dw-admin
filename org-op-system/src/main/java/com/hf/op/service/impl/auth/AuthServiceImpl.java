@@ -286,21 +286,6 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     }
     // 组织中台权限列表
     return res;
-    // 设置权限
- /*   SsoTokenHelper.putFunctions(sessionId, opFunctions);
-    // 判断用户有没有小程序权限
- *//*   for (ListSystemVo vo: systemList) {
-      if (ListSystemVo.SYSTEM_ID_MINI.equals(vo.getSystemId()) && CommonConstant.STATUS_NORMAL.equals(vo.getIsHaveRole())) {
-        miniFlag = true;
-        break;
-      }
-    }*//*
-    if (miniFlag) {
-      List<AuthorityMenu> authorityMenuList  =  this.getAuthorityMenu(sysUserId);
-      List<OpenAuthority> openAuthorities  =  this.findAuthorityByUser(sysUserId);
-      SsoTokenHelper.putAuthorityMenus(sessionId, authorityMenuList);
-      SsoTokenHelper.putOpenAuthoritys(sessionId, openAuthorities);
-    }*/
 
   }
 

@@ -66,6 +66,7 @@
     osrf.function_id = osf.id and osf.data_status = 1
     <where>
       a.id = #{sysUserId}
+      and osf.system_id = 2
       and a.data_status = 1
     </where>
   </select>
