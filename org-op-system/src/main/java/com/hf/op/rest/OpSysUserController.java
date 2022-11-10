@@ -1,16 +1,11 @@
 package com.hf.op.rest;
 
-import com.hf.common.infrastructure.constant.SsoConstant;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.op.domain.model.user.OpSysUserEntity;
 import com.hf.op.infrastructure.dto.user.QueryOpUserListDto;
 import com.hf.op.infrastructure.dto.user.UpdateUserPwdDto;
-import com.hf.op.infrastructure.util.SsoTokenHelper;
 import com.hf.op.service.inf.OpSysUserService;
-import com.open.api.resp.ApiRespCodeEnum;
-import com.xxl.sso.core.login.SsoTokenLoginHelper;
-import com.xxl.sso.core.user.XxlSsoUser;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -195,8 +190,8 @@ public class OpSysUserController {
 
     // logout, remove storeKey
     // 退出统一登录
-    String sessionId = request.getHeader(SsoConstant.SSO_SESSIONID);
-    SsoTokenHelper.logout(sessionId);
+//    String sessionId = request.getHeader(SsoConstant.SSO_SESSIONID);
+//    SsoTokenHelper.logout(sessionId);
 
     ResponseMsg result = opSysUserServiceImpl.logout(tokenAuth);
     return result;
@@ -207,19 +202,19 @@ public class OpSysUserController {
    *
    * @return 应用信息
    */
-  @RequestMapping(value = "logincheck", method = RequestMethod.POST)
-  public ResponseMsg logincheck(HttpServletRequest request) {
-    // logout, remove storeKey
-    // 退出统一登录
-    String sessionId = request.getHeader(SsoConstant.SSO_SESSIONID);
-    XxlSsoUser xxlUser = SsoTokenHelper.loginCheck(sessionId);
-    ResponseMsg result = new ResponseMsg();
-    if (xxlUser == null) {
-      return new ResponseMsg(ApiRespCodeEnum.SESSION_NOT_EXIST_OR_EXPIRE.getCode(),
-          ApiRespCodeEnum.SESSION_NOT_EXIST_OR_EXPIRE.getMsg());
-    }
-    return result;
-  }
+//  @RequestMapping(value = "logincheck", method = RequestMethod.POST)
+//  public ResponseMsg logincheck(HttpServletRequest request) {
+//    // logout, remove storeKey
+//    // 退出统一登录
+//    String sessionId = request.getHeader(SsoConstant.SSO_SESSIONID);
+//    XxlSsoUser xxlUser = SsoTokenHelper.loginCheck(sessionId);
+//    ResponseMsg result = new ResponseMsg();
+//    if (xxlUser == null) {
+//      return new ResponseMsg(ApiRespCodeEnum.SESSION_NOT_EXIST_OR_EXPIRE.getCode(),
+//          ApiRespCodeEnum.SESSION_NOT_EXIST_OR_EXPIRE.getMsg());
+//    }
+//    return result;
+//  }
 
 
   /**

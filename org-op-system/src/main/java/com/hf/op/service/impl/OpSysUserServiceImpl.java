@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
-import com.hf.common.infrastructure.constant.SsoConstant;
 import com.hf.common.infrastructure.global.cache.CommCacheConst;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.ListBeanUtil;
@@ -34,17 +33,12 @@ import com.hf.op.infrastructure.dto.user.QueryUserAccountInfoDto;
 import com.hf.op.infrastructure.dto.user.UpdateUserPwdDto;
 import com.hf.op.infrastructure.dto.user.UserDropDownVo;
 import com.hf.op.infrastructure.global.OpGlobalConst;
-import com.hf.op.infrastructure.model.AuthorityMenu;
-import com.hf.op.infrastructure.model.OpenAuthority;
 import com.hf.op.infrastructure.resp.OpRespCodeEnum;
-import com.hf.op.infrastructure.util.SsoTokenHelper;
 import com.hf.op.service.impl.auth.AuthServiceImpl;
 import com.hf.op.service.inf.OpSysUserRoleService;
 import com.hf.op.service.inf.OpSysUserService;
 import com.open.api.dto.FunctionDto;
-import com.open.api.resp.ApiRespCodeEnum;
 import com.xxl.sso.core.entity.ReturnT;
-import com.xxl.sso.core.user.XxlSsoUser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -117,25 +111,15 @@ public class OpSysUserServiceImpl extends CrudService implements OpSysUserServic
     return platformFunctions;
   }
 
-  @Override
-  public List<AuthorityMenu> getUserFunctionsMiniBySysUserId(Long sysUserId) {
-    if (null == sysUserId) {
-      return null;
-    }
-    List<AuthorityMenu> platformFunctions = opSysUserRepository
-        .getUserFunctionsMiniBySysUserId(sysUserId);
-    return platformFunctions;
-  }
-
-  @Override
-  public List<OpenAuthority> selectAuthorityByRole(Long sysUserId) {
-    if (null == sysUserId) {
-      return null;
-    }
-    List<OpenAuthority> platformFunctions = opSysUserRepository
-        .selectAuthorityByRole(sysUserId);
-    return platformFunctions;
-  }
+//  @Override
+//  public List<OpenAuthority> selectAuthorityByRole(Long sysUserId) {
+//    if (null == sysUserId) {
+//      return null;
+//    }
+//    List<OpenAuthority> platformFunctions = opSysUserRepository
+//        .selectAuthorityByRole(sysUserId);
+//    return platformFunctions;
+//  }
 
   @Override
   public List<ListSystemVo> getCurListSystemVo(Long sysUserId) {
@@ -160,25 +144,28 @@ public class OpSysUserServiceImpl extends CrudService implements OpSysUserServic
   @Override
   public void setAllUserFunctions() {
     List<FunctionDto> functionDtos = this.getAllUserFunctions();
-    if (!CollectionUtils.isEmpty(functionDtos)) {
-      List<Integer> systemIds = ListBeanUtil.toList(functionDtos, "systemId");
-      systemIds = systemIds.stream().distinct().collect(Collectors.toList());
-      Map<Integer, List<FunctionDto>> integerListMap = ListBeanUtil
-          .toMapList(functionDtos, systemIds, "systemId");
-      if (integerListMap == null) {
-        return;
-      }
-      for (Integer systemId : systemIds) {
-        List<FunctionDto> list = integerListMap.get(systemId);
-        if (SsoConstant.SYSTEM_ID_ORGUNIT.equals(systemId)) {
-          for (FunctionDto functionDto : list) {
-            allRoleCacheForFunctionKey.put(functionDto.getFunctionKey(), functionDto);
-          }
-        } else {
-          SsoTokenHelper.putFunctions(systemId, list);
-        }
-      }
+//    if (!CollectionUtils.isEmpty(functionDtos)) {
+//      List<Integer> systemIds = ListBeanUtil.toList(functionDtos, "systemId");
+//      systemIds = systemIds.stream().distinct().collect(Collectors.toList());
+//      Map<Integer, List<FunctionDto>> integerListMap = ListBeanUtil
+//          .toMapList(functionDtos, systemIds, "systemId");
+//      if (integerListMap == null) {
+//        return;
+//      }
+    for (FunctionDto functionDto : functionDtos) {
+      allRoleCacheForFunctionKey.put(functionDto.getFunctionKey(), functionDto);
     }
+//      for (Integer systemId : systemIds) {
+//        List<FunctionDto> list = integerListMap.get(systemId);
+//        if (SsoConstant.SYSTEM_ID_ORGUNIT.equals(systemId)) {
+//          for (FunctionDto functionDto : list) {
+//            allRoleCacheForFunctionKey.put(functionDto.getFunctionKey(), functionDto);
+//          }
+//        } else {
+//          SsoTokenHelper.putFunctions(systemId, list);
+//        }
+//      }
+//    }
   }
 
   @Override

@@ -18,13 +18,10 @@ import com.auth.common.infrastructure.util.jwt.JWTInfo;
 import com.auth.common.infrastructure.util.jwt.JwtTokenUtil;
 import com.auth.common.infrastructure.util.jwt.UserAuthUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.hf.common.infrastructure.constant.CommonConstant;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
-import com.hf.common.infrastructure.constant.SsoConstant;
-import com.hf.common.infrastructure.exception.BusinessException;
 import com.hf.common.infrastructure.global.cache.CommCacheConst;
 import com.hf.common.infrastructure.resp.BaseResponse;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
@@ -32,7 +29,6 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.AESUtil;
 import com.hf.common.infrastructure.util.HttpClientUtil;
-import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.MD5Utils;
 import com.hf.common.infrastructure.util.PasswordUtils;
 import com.hf.common.infrastructure.util.StringUtilLocal;
@@ -52,10 +48,7 @@ import com.hf.op.infrastructure.dto.auth.AuthLoginComDto;
 import com.hf.op.infrastructure.dto.auth.AuthRefreshTokenDto;
 import com.hf.op.infrastructure.dto.auth.AuthUserComDto;
 import com.hf.op.infrastructure.dto.role.ListSystemVo;
-import com.hf.op.infrastructure.model.AuthorityMenu;
-import com.hf.op.infrastructure.model.OpenAuthority;
 import com.hf.op.infrastructure.resp.OpRespCodeEnum;
-import com.hf.op.infrastructure.util.SsoTokenHelper;
 import com.hf.op.service.inf.OpSysUserService;
 import com.hf.op.service.inf.auth.AuthService;
 import com.open.api.dto.FunctionDto;
@@ -67,9 +60,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -217,7 +207,7 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String exp = sdf.format(new Date(Long.parseLong(userExp.concat("000"))));      // 时间戳转换成时间
     // SSO 统一用户登录
-    String sessionId = this.getSessionId(result.getSsoUserNo(), userAccount , ssoUserInfoResp );
+//    String sessionId = this.getSessionId(result.getSsoUserNo(), userAccount, ssoUserInfoResp);
     Map<String, Object> resp = new HashMap<>();
     resp.put("id", opUserEntity.getId());
     resp.put("userId", userId);
@@ -226,18 +216,18 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     resp.put("token", token);
     resp.put("refreshToken", result.getRefreshToken());
     resp.put("tokenExpireTime", exp);
-    List<FunctionDto> functionList = null;
-    try {
-      functionList = this
-          .getOrgunitFunctions(opFunctions, sessionId, opUserEntity.getId(), systemList);
-    } catch (BusinessException e) {
-      return new ResponseMsg(OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getCode(),
-          OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getMsg());
-    }
-    resp.put("functionList", functionList);
+//    List<FunctionDto> functionList = null;
+//    try {
+//      functionList = this
+//          .getOrgunitFunctions(opFunctions, sessionId, opUserEntity.getId(), systemList);
+//    } catch (BusinessException e) {
+//      return new ResponseMsg(OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getCode(),
+//          OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getMsg());
+//    }
+    resp.put("functionList", opFunctions);
     resp.put("systemList", systemList);
     /*统一登录标识*/
-    resp.put("sessionId", sessionId);
+//    resp.put("sessionId", sessionId);
     loginResult = this.setData(loginResult, resp);
     //记录登录日志
     this.insertLoginLog(userId, authLoginComDto.getLoginAccount());
@@ -245,49 +235,49 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     return loginResult;
   }
 
-  private List<FunctionDto> getOrgunitFunctions(List<FunctionDto> opFunctions, String sessionId,
-      Long sysUserId, List<ListSystemVo> systemList) {
-    List<Integer> ids = ListBeanUtil.toList(systemList, "systemId");
-    if (CollectionUtils.isEmpty(ids)) {
-      return opFunctions;
-    }
-    SsoTokenHelper.putSystemIdList(sessionId, ids);
-    Map<Integer, List<FunctionDto>> integerListMap = ListBeanUtil
-        .toMapList(opFunctions, ids, "systemId");
-    if (integerListMap == null) {
-      return opFunctions;
-    }
-    List<FunctionDto> res = new ArrayList<>();
-    List<OpenAuthority> openAuthorities = null;
-    for (ListSystemVo vo : systemList) {
-      // 小程序
-      if (SsoConstant.SYSTEM_ID_MINI.equals(vo.getSystemId())) {
-        openAuthorities = this.findAuthorityByUser(sysUserId);
-        if (CollectionUtils.isNotEmpty(openAuthorities)) {
-          List<AuthorityMenu> authorityMenuList = this.getAuthorityMenu(sysUserId);
-          vo.setIsHaveRole(CommonConstant.STATUS_NORMAL);
-          SsoTokenHelper.putAuthorityMenus(sessionId, authorityMenuList);
-          SsoTokenHelper.putOpenAuthoritys(sessionId, openAuthorities);
-        }
-      } else {
-        List<FunctionDto> list = integerListMap.get(vo.getSystemId());
-        SsoTokenHelper.putFunctions(vo.getSystemId(), sessionId, list);
-        if (SsoConstant.SYSTEM_ID_ORGUNIT.equals(vo.getSystemId())) {
-          res = list;
-          //JedisUtil.setStringValue(SsoConstant.SSO_CLENT_URL_KEY, vo.getSystemUrl(), SsoConstant.SSO_CLENT_URL_KEY_EX_TIME);
-        }
-      }
-    }
-    if (CollectionUtils.isEmpty(opFunctions) && CollectionUtils.isEmpty(openAuthorities)) {
-      throw new BusinessException(OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getMsg());
-    }
-    if (CollectionUtils.isEmpty(res)) {
-      res = new ArrayList<>();
-    }
-    // 组织中台权限列表
-    return res;
+//  private List<FunctionDto> getOrgunitFunctions(List<FunctionDto> opFunctions, String sessionId,
+//      Long sysUserId, List<ListSystemVo> systemList) {
+//    List<Integer> ids = ListBeanUtil.toList(systemList, "systemId");
+//    if (CollectionUtils.isEmpty(ids)) {
+//      return opFunctions;
+//    }
+//    SsoTokenHelper.putSystemIdList(sessionId, ids);
+//    Map<Integer, List<FunctionDto>> integerListMap = ListBeanUtil
+//        .toMapList(opFunctions, ids, "systemId");
+//    if (integerListMap == null) {
+//      return opFunctions;
+//    }
+//    List<FunctionDto> res = new ArrayList<>();
+//    List<OpenAuthority> openAuthorities = null;
+//    for (ListSystemVo vo : systemList) {
+//      // 小程序
+//      if (SsoConstant.SYSTEM_ID_MINI.equals(vo.getSystemId())) {
+//        openAuthorities = this.findAuthorityByUser(sysUserId);
+//        if (CollectionUtils.isNotEmpty(openAuthorities)) {
+//          List<AuthorityMenu> authorityMenuList = this.getAuthorityMenu(sysUserId);
+//          vo.setIsHaveRole(CommonConstant.STATUS_NORMAL);
+//          SsoTokenHelper.putAuthorityMenus(sessionId, authorityMenuList);
+//          SsoTokenHelper.putOpenAuthoritys(sessionId, openAuthorities);
+//        }
+//      } else {
+//        List<FunctionDto> list = integerListMap.get(vo.getSystemId());
+//        SsoTokenHelper.putFunctions(vo.getSystemId(), sessionId, list);
+//        if (SsoConstant.SYSTEM_ID_ORGUNIT.equals(vo.getSystemId())) {
+//          res = list;
+//          //JedisUtil.setStringValue(SsoConstant.SSO_CLENT_URL_KEY, vo.getSystemUrl(), SsoConstant.SSO_CLENT_URL_KEY_EX_TIME);
+//        }
+//      }
+//    }
+//    if (CollectionUtils.isEmpty(opFunctions) && CollectionUtils.isEmpty(openAuthorities)) {
+//      throw new BusinessException(OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getMsg());
+//    }
+//    if (CollectionUtils.isEmpty(res)) {
+//      res = new ArrayList<>();
+//    }
+//    // 组织中台权限列表
+//    return res;
 
-  }
+//}
 
   /**
    * @description
@@ -295,14 +285,17 @@ public class AuthServiceImpl extends CrudService implements AuthService {
    * @date: 2022/6/2 14:35
    * @author: chensy
    */
-  private String getSessionId(String ssoUserNo, String userAccount,SsoUserInfoResp ssoUserInfoResp) {
+  private String getSessionId(String ssoUserNo, String userAccount,
+      SsoUserInfoResp ssoUserInfoResp) {
     // 1、make xxl-sso user
     XxlSsoUser xxlUser = new XxlSsoUser();
     xxlUser.setUserid(ssoUserNo);
     xxlUser.setUsername(userAccount);
     xxlUser.setVersion(UUID.randomUUID().toString().replaceAll("-", ""));
     xxlUser.setExpireMinite(expire / 60);
-    Map<String, String> userMap = JSON.parseObject(JSON.toJSONString(ssoUserInfoResp), new TypeReference<Map<String, String>>() { });
+    Map<String, String> userMap = JSON
+        .parseObject(JSON.toJSONString(ssoUserInfoResp), new TypeReference<Map<String, String>>() {
+        });
     xxlUser.setPlugininfo(userMap);
     // 2、generate sessionId + storeKey
     String sessionId = SsoSessionIdHelper.makeSessionId(xxlUser);
@@ -313,33 +306,14 @@ public class AuthServiceImpl extends CrudService implements AuthService {
   }
 
 
-  private List<OpenAuthority> findAuthorityByUser(Long sysUserId) {
-    List<OpenAuthority> authorities = opSysUserServiceImpl.selectAuthorityByRole(sysUserId);
-    // 权限去重
-    HashSet h = new HashSet(authorities);
-    authorities.clear();
-    authorities.addAll(h);
-    return authorities;
-  }
-
-
-  private List<AuthorityMenu> getAuthorityMenu(Long sysUserId) {
-    List<AuthorityMenu> authorities = opSysUserServiceImpl
-        .getUserFunctionsMiniBySysUserId(sysUserId);
-    // 权限去重
-    HashSet h = new HashSet(authorities);
-    authorities.clear();
-    authorities.addAll(h);
-    //根据优先级从小到大排序
-    Collections.sort(authorities, new Comparator<AuthorityMenu>() {
-      @Override
-      public int compare(AuthorityMenu o1, AuthorityMenu o2) {
-        int i = o1.getPriority() - o2.getPriority();
-        return i;
-      }
-    });
-    return authorities;
-  }
+//  private List<OpenAuthority> findAuthorityByUser(Long sysUserId) {
+//    List<OpenAuthority> authorities = opSysUserServiceImpl.selectAuthorityByRole(sysUserId);
+//    // 权限去重
+//    HashSet h = new HashSet(authorities);
+//    authorities.clear();
+//    authorities.addAll(h);
+//    return authorities;
+//  }
 
 
   private void insertLoginLog(Long userId, String loginAccount) throws UnknownHostException {
@@ -717,6 +691,7 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     // 运营平台
     HttpClientUtil.postByJson(plateFormUrl + path, sendData, plateFormKey);
   }
+
   /**
    * 同步到门户后台
    */
@@ -761,7 +736,7 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     } catch (Exception e) {
       log.error("dataContent parse error:", e);
     }
-    log.info("dataContent ===  "  + dataContent);
+    log.info("dataContent ===  " + dataContent);
     String data = AESUtil.encryptWithKey(dataContent, key);
     apiDataRequestMsg.setData(data);
     String str =

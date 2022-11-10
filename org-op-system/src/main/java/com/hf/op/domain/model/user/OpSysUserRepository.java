@@ -9,8 +9,6 @@ import com.hf.op.infrastructure.dto.role.ListSystemVo;
 import com.hf.op.infrastructure.dto.user.QueryOpUserListDto;
 import com.hf.op.infrastructure.dto.user.QueryUserAccountInfoDto;
 import com.hf.op.infrastructure.dto.user.UserDropDownVo;
-import com.hf.op.infrastructure.model.AuthorityMenu;
-import com.hf.op.infrastructure.model.OpenAuthority;
 import com.open.api.dto.FunctionDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -32,12 +30,7 @@ public interface OpSysUserRepository extends BaseMapper<OpSysUserEntity> {
   /**
    * 通过系统内部用户编号获取用户权限列表
    */
-  List<AuthorityMenu> getUserFunctionsMiniBySysUserId(@Param("sysUserId") Long sysUserId);
-
-  /**
-   * 通过系统内部用户编号获取用户权限列表
-   */
-  List<OpenAuthority> selectAuthorityByRole(@Param("sysUserId") Long sysUserId);
+//  List<OpenAuthority> selectAuthorityByRole(@Param("sysUserId") Long sysUserId);
 
   /**
    * 通过接口得到系统分类列表

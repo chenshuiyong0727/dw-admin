@@ -6,8 +6,6 @@ import com.hf.op.domain.model.user.OpSysUserEntity;
 import com.hf.op.infrastructure.dto.role.ListSystemVo;
 import com.hf.op.infrastructure.dto.user.QueryOpUserListDto;
 import com.hf.op.infrastructure.dto.user.UpdateUserPwdDto;
-import com.hf.op.infrastructure.model.AuthorityMenu;
-import com.hf.op.infrastructure.model.OpenAuthority;
 import com.open.api.dto.FunctionDto;
 import java.util.List;
 
@@ -27,16 +25,11 @@ public interface OpSysUserService {
    * 通过系统用户编号获取用户权限列表
    */
   List<FunctionDto> getUserFunctionsBySysUserId(Long userId);
-
-  /**
-   * 通过系统用户编号获取用户权限列表
-   */
-  List<AuthorityMenu> getUserFunctionsMiniBySysUserId(Long userId);
-
-  /**
-   * 通过系统用户编号获取用户权限列表
-   */
-  List<OpenAuthority> selectAuthorityByRole(Long userId);
+//
+//  /**
+//   * 通过系统用户编号获取用户权限列表
+//   */
+//  List<OpenAuthority> selectAuthorityByRole(Long userId);
 
   /**
    * 获取所有用户权限列表

@@ -25,16 +25,16 @@ public interface OpSysRoleRepository extends BaseMapper<OpSysRoleEntity> {
    */
   IPage<QueryOpRoleListDto> pageListOpRole(Page<QueryOpRoleListDto> page,
       @Param("query") QueryOpRoleListDto queryOpPostListDto);
-
-  /**
-   * 通过角色编号获取角色权限列表
-   */
-  List<Long> getRoleFunctionsBySysRoleId(@Param("sysRoleId") Long sysRoleId);
-
-  /**
-   * 通过角色编号获取角色权限列表-小程序
-   */
-  List<Long> getRoleFunctionsBySysRoleIdMini(@Param("sysRoleId") Long sysRoleId);
+//
+//  /**
+//   * 通过角色编号获取角色权限列表
+//   */
+//  List<Long> getRoleFunctionsBySysRoleId(@Param("sysRoleId") Long sysRoleId);
+//
+//  /**
+//   * 通过角色编号获取角色权限列表-小程序
+//   */
+//  List<Long> getRoleFunctionsBySysRoleIdMini(@Param("sysRoleId") Long sysRoleId);
 
   /**
    * 根据条件获取角色关联用户列表
@@ -52,7 +52,7 @@ public interface OpSysRoleRepository extends BaseMapper<OpSysRoleEntity> {
   /**
    * 获取权限（树形）列表 小程序
    */
-  List<QueryOpFunctionsTreeListDto> listTreeFunctionsMini(@Param("sysRoleId") Long sysRoleId);
+//  List<QueryOpFunctionsTreeListDto> listTreeFunctionsMini(@Param("sysRoleId") Long sysRoleId);
 
   /**
    * 获取权限角色（下拉）列表

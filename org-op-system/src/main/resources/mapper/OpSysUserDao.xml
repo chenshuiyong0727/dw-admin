@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hf.op.domain.model.user.OpSysUserRepository">
-
+<!--
   <resultMap id="RoleAuthorityMenu" type="com.hf.op.infrastructure.model.AuthorityMenu">
     <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
     <result column="authority" jdbcType="VARCHAR" property="authority"/>
@@ -42,7 +42,7 @@
     <result column="authority" jdbcType="VARCHAR" property="authority"/>
     <result column="expireTime" jdbcType="TIMESTAMP" property="expireTime"/>
     <result column="owner" jdbcType="VARCHAR" property="owner"/>
-  </resultMap>
+  </resultMap>-->
 
   <select id="getUserFunctionsBySysUserId" resultType="com.open.api.dto.FunctionDto">
     SELECT DISTINCT
@@ -71,60 +71,24 @@
     </where>
   </select>
 
-  <select id="getUserFunctionsMiniBySysUserId" resultMap="RoleAuthorityMenu">
-      SELECT
-            a.authorityId,
-            a.authority,
-            a.`status`,
-            m.*,
-						rp.roleId,
-						rp.expireTime
-        FROM
-            admin_authority_role AS rp
-				LEFT JOIN op_sys_user_role osur ON osur.role_id = rp.roleId
-       INNER JOIN admin_authority AS a ON rp.authorityId = a.authorityId
-       INNER JOIN admin_menu AS m ON a.menuId = m.menuId
-        WHERE 1=1
-				 and	osur.sys_user_id = #{sysUserId}
-			and a.status = 1
-    </select>
+  <!--  <select id="getUserFunctionsMiniBySysUserId" resultMap="RoleAuthorityMenu">-->
+  <!--      SELECT-->
+  <!--            a.authorityId,-->
+  <!--            a.authority,-->
+  <!--            a.`status`,-->
+  <!--            m.*,-->
+  <!--						rp.roleId,-->
+  <!--						rp.expireTime-->
+  <!--        FROM-->
+  <!--            admin_authority_role AS rp-->
+  <!--				LEFT JOIN op_sys_user_role osur ON osur.role_id = rp.roleId-->
+  <!--       INNER JOIN admin_authority AS a ON rp.authorityId = a.authorityId-->
+  <!--       INNER JOIN admin_menu AS m ON a.menuId = m.menuId-->
+  <!--        WHERE 1=1-->
+  <!--				 and	osur.sys_user_id = #{sysUserId}-->
+  <!--			and a.status = 1-->
+  <!--    </select>-->
 
-  <select id="selectAuthorityAction" resultMap="AuthorityAction">
-    SELECT
-    a.authorityId,
-    a.authority,
-    o.*
-    FROM
-    admin_authority AS a
-    INNER JOIN admin_action AS o ON a.actionId = o.actionId
-    <if test="roleId!=null">
-      INNER JOIN admin_authority_role AS ra ON ra.authorityId = a.authorityId
-    </if>
-    <where>
-      <if test="menuId!=null">
-        AND o.menuId = #{menuId}
-      </if>
-      <if test="roleId!=null">
-        AND ra.roleId = #{roleId}
-      </if>
-    </where>
-  </select>
-
-  <select id="selectAuthorityByRole" resultMap="Authority">
-    SELECT
-        a.authorityId,
-        a.authority,
-        rp.expireTime,
-        'role' as owner
-    FROM
-        admin_authority_role AS rp
-    LEFT JOIN op_sys_user_role osur ON osur.role_id = rp.roleId
-
-        INNER JOIN admin_authority AS a ON rp.authorityId = a.authorityId
-    WHERE 1=1
-    and	osur.sys_user_id = #{sysUserId}
-    and a.status = 1
-    </select>
 
   <select id="getCurListSystemVo" resultType="com.hf.op.infrastructure.dto.role.ListSystemVo">
     SELECT
@@ -132,7 +96,7 @@
     ost.system_name systemName,
     ost.system_url systemUrl,
     IF(ost.data_status = 0,1,IF(a.systemId is null,0,1)) as isHaveRole
-/*    IF(a.systemId is null,0,1) as isHaveRole*/
+    /* IF(a.systemId is null,0,1) as isHaveRole*/
     FROM op_system ost
     LEFT JOIN (
     SELECT DISTINCT
@@ -239,7 +203,7 @@
       or
       od.level_one_department_name like CONCAT('%',#{query.departmentName},'%')
       or
-      od.level_two_department_name  like CONCAT('%',#{query.departmentName},'%')
+      od.level_two_department_name like CONCAT('%',#{query.departmentName},'%')
       or
       od.level_three_department_name like CONCAT('%',#{query.departmentName},'%')
       or
@@ -270,7 +234,8 @@
     ORDER BY osu.create_time DESC
   </select>
 
-  <select id="getRoleIdsBySysUserId" resultType="com.hf.op.infrastructure.dto.role.ListSystemRoleVo">
+  <select id="getRoleIdsBySysUserId"
+    resultType="com.hf.op.infrastructure.dto.role.ListSystemRoleVo">
     SELECT
     osr.id roleId,
     osr.system_id systemId
