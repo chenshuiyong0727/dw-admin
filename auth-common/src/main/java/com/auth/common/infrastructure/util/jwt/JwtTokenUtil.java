@@ -46,7 +46,7 @@ public class JwtTokenUtil {
    */
   private KeyConfiguration keyConfiguration;
 
-  public JwtTokenUtil(UserAuthConfig userAuthConfig,KeyConfiguration keyConfiguration) {
+  public JwtTokenUtil(UserAuthConfig userAuthConfig, KeyConfiguration keyConfiguration) {
     this.userAuthConfig = userAuthConfig;
     this.keyConfiguration = keyConfiguration;
   }
@@ -60,7 +60,7 @@ public class JwtTokenUtil {
       this.setKey();
     }
     userPriKey = keyConfiguration.getUserPriKey();
-    return JWTHelper.generateToken(jwtInfo,userPriKey, expire);
+    return JWTHelper.generateToken(jwtInfo, userPriKey, expire);
   }
 
   private void setKey() {

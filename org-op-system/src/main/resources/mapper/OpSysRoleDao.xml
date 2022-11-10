@@ -38,33 +38,33 @@
     ORDER BY a.create_time DESC
   </select>
 
-<!--  <select id="getRoleFunctionsBySysRoleId" resultType="Long">-->
-<!--    SELECT-->
-<!--    osf.id-->
-<!--    FROM-->
-<!--    op_sys_role a-->
-<!--    left join op_sys_role_function osrf on a.id = osrf.role_id and osrf.data_status = 1-->
-<!--    left join op_sys_function osf on osrf.function_id = osf.id and osf.data_status = 1-->
-<!--    <where>-->
-<!--      a.id = #{sysRoleId}-->
-<!--      and a.data_status = 1-->
-<!--    </where>-->
-<!--  </select>-->
+  <!--  <select id="getRoleFunctionsBySysRoleId" resultType="Long">-->
+  <!--    SELECT-->
+  <!--    osf.id-->
+  <!--    FROM-->
+  <!--    op_sys_role a-->
+  <!--    left join op_sys_role_function osrf on a.id = osrf.role_id and osrf.data_status = 1-->
+  <!--    left join op_sys_function osf on osrf.function_id = osf.id and osf.data_status = 1-->
+  <!--    <where>-->
+  <!--      a.id = #{sysRoleId}-->
+  <!--      and a.data_status = 1-->
+  <!--    </where>-->
+  <!--  </select>-->
 
-<!--  <select id="getRoleFunctionsBySysRoleIdMini" resultType="Long">-->
+  <!--  <select id="getRoleFunctionsBySysRoleIdMini" resultType="Long">-->
 
-<!--    SELECT t2.menuId from admin_authority_role t1-->
-<!--    LEFT JOIN admin_authority t2 on  t1.authorityId = t2.authorityId-->
-<!--    where   t2.menuId is not null-->
-<!--    and t1.roleId = #{sysRoleId}-->
+  <!--    SELECT t2.menuId from admin_authority_role t1-->
+  <!--    LEFT JOIN admin_authority t2 on  t1.authorityId = t2.authorityId-->
+  <!--    where   t2.menuId is not null-->
+  <!--    and t1.roleId = #{sysRoleId}-->
 
-<!--    union ALL-->
+  <!--    union ALL-->
 
-<!--    SELECT t2.actionId from admin_authority_role t1-->
-<!--    LEFT JOIN admin_authority t2 on  t1.authorityId = t2.authorityId-->
-<!--    where   t2.actionId is not null-->
-<!--    and t1.roleId = #{sysRoleId}-->
-<!--  </select>-->
+  <!--    SELECT t2.actionId from admin_authority_role t1-->
+  <!--    LEFT JOIN admin_authority t2 on  t1.authorityId = t2.authorityId-->
+  <!--    where   t2.actionId is not null-->
+  <!--    and t1.roleId = #{sysRoleId}-->
+  <!--  </select>-->
 
   <select id="pageListOpRoleRelationUser"
     parameterType="com.hf.op.infrastructure.dto.role.QueryRoleRelationUserListDto"
@@ -119,61 +119,61 @@
 
   </select>
 
-<!--  <select id="listTreeFunctionsMini"-->
-<!--    resultType="com.hf.op.infrastructure.dto.function.QueryOpFunctionsTreeListDto">-->
-<!--    SELECT *-->
-<!--    from (-->
-<!--    SELECT-->
-<!--    menuId id,-->
-<!--    parentId pid,-->
-<!--    menuCode functionKey,-->
-<!--    3 AS systemId,-->
-<!--    menuName functionName,-->
-<!--    path route,-->
-<!--    1 AS functionType,-->
-<!--    IF (parentId = 0, 'node', 'query') AS operationType,-->
-<!--    menuName functionDesc,-->
-<!--    menuName functionLabel,-->
-<!--    priority sort-->
-<!--    FROM-->
-<!--    admin_menu-->
-<!--    where status = 1-->
+  <!--  <select id="listTreeFunctionsMini"-->
+  <!--    resultType="com.hf.op.infrastructure.dto.function.QueryOpFunctionsTreeListDto">-->
+  <!--    SELECT *-->
+  <!--    from (-->
+  <!--    SELECT-->
+  <!--    menuId id,-->
+  <!--    parentId pid,-->
+  <!--    menuCode functionKey,-->
+  <!--    3 AS systemId,-->
+  <!--    menuName functionName,-->
+  <!--    path route,-->
+  <!--    1 AS functionType,-->
+  <!--    IF (parentId = 0, 'node', 'query') AS operationType,-->
+  <!--    menuName functionDesc,-->
+  <!--    menuName functionLabel,-->
+  <!--    priority sort-->
+  <!--    FROM-->
+  <!--    admin_menu-->
+  <!--    where status = 1-->
 
-<!--    UNION ALL-->
-<!--    SELECT-->
-<!--    actionId id,-->
-<!--    menuId pid,-->
-<!--    actionCode functionKey,-->
-<!--    3 AS systemId,-->
-<!--    actionName functionName,-->
-<!--    NULL route,-->
-<!--    1 AS functionType,-->
-<!--    'query' AS operationType,-->
-<!--    actionName functionDesc,-->
-<!--    actionName functionLabel,-->
-<!--    priority sort-->
-<!--    FROM-->
-<!--    admin_action-->
-<!--    where status = 1-->
+  <!--    UNION ALL-->
+  <!--    SELECT-->
+  <!--    actionId id,-->
+  <!--    menuId pid,-->
+  <!--    actionCode functionKey,-->
+  <!--    3 AS systemId,-->
+  <!--    actionName functionName,-->
+  <!--    NULL route,-->
+  <!--    1 AS functionType,-->
+  <!--    'query' AS operationType,-->
+  <!--    actionName functionDesc,-->
+  <!--    actionName functionLabel,-->
+  <!--    priority sort-->
+  <!--    FROM-->
+  <!--    admin_action-->
+  <!--    where status = 1-->
 
-<!--    ) a-->
-<!--    <if test="sysRoleId != null">-->
-<!--      WHERE a.id in-->
-<!--      (-->
-<!--      SELECT t2.menuId from admin_authority_role t1-->
-<!--      LEFT JOIN admin_authority t2 on t1.authorityId = t2.authorityId-->
-<!--      where t2.menuId is not null-->
-<!--      and t1.roleId = #{sysRoleId}-->
+  <!--    ) a-->
+  <!--    <if test="sysRoleId != null">-->
+  <!--      WHERE a.id in-->
+  <!--      (-->
+  <!--      SELECT t2.menuId from admin_authority_role t1-->
+  <!--      LEFT JOIN admin_authority t2 on t1.authorityId = t2.authorityId-->
+  <!--      where t2.menuId is not null-->
+  <!--      and t1.roleId = #{sysRoleId}-->
 
-<!--      union ALL-->
+  <!--      union ALL-->
 
-<!--      SELECT t2.actionId from admin_authority_role t1-->
-<!--      LEFT JOIN admin_authority t2 on t1.authorityId = t2.authorityId-->
-<!--      where t2.actionId is not null-->
-<!--      and t1.roleId = #{sysRoleId}-->
-<!--      )-->
-<!--    </if>-->
-<!--  </select>-->
+  <!--      SELECT t2.actionId from admin_authority_role t1-->
+  <!--      LEFT JOIN admin_authority t2 on t1.authorityId = t2.authorityId-->
+  <!--      where t2.actionId is not null-->
+  <!--      and t1.roleId = #{sysRoleId}-->
+  <!--      )-->
+  <!--    </if>-->
+  <!--  </select>-->
 
   <select id="listDropDownRoles"
     resultType="com.hf.op.infrastructure.dto.role.ListRoleDropDownListVo">

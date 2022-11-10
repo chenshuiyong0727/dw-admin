@@ -9,6 +9,7 @@ import lombok.ToString;
 
 /**
  * 商品基本信息 请求参数Dto
+ *
  * @author chensy
  * @date 2022-11-08 11:10:33
  */
@@ -16,42 +17,42 @@ import lombok.ToString;
 @ToString
 public class GoodsBaseRqDto extends BaseDto implements Serializable {
 
-	private static final long serialVersionUID = 5166013716067703519L;
+  private static final long serialVersionUID = 5166013716067703519L;
 
- /**
-  * 商品基本信息编号
-  */
+  /**
+   * 商品基本信息编号
+   */
   private Long id;
 
- /**
-  * 类型 ：1 鞋，2服 ，3配件
-  */
+  /**
+   * 类型 ：1 鞋，2服 ，3配件
+   */
   private Integer type;
 
- /**
-  * 货号
-  */
+  /**
+   * 货号
+   */
   private String actNo;
 
- /**
-  * 商品名称
-  */
+  /**
+   * 商品名称
+   */
   private String name;
 
- /**
-  * 品牌
-  */
+  /**
+   * 品牌
+   */
   private String brand;
 
- /**
-  * 备注
-  */
+  /**
+   * 备注
+   */
   private String remark;
 
 
-	/**
-	 * 编号集合
-	 */
+  /**
+   * 编号集合
+   */
   private List<Long> ids;
 
   /**

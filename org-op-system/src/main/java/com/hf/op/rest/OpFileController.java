@@ -22,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -101,7 +99,7 @@ public class OpFileController {
   }
 
   public String download(String urlStringObj) {
-    String path = null ;
+    String path = null;
     OutputStream os = null;
     InputStream is = null;
     try {
@@ -119,7 +117,7 @@ public class OpFileController {
       // 读取到的数据长度
       int len;
       // 路径
-      String filename = urlString.substring(urlString.lastIndexOf("/")) ;
+      String filename = urlString.substring(urlString.lastIndexOf("/"));
       SimpleDateFormat sdf = new SimpleDateFormat("/yyyy.MM.dd/");
       String format = sdf.format(new Date());
       String realPath = fileSavePath + format;
@@ -129,7 +127,7 @@ public class OpFileController {
       if (!sf.exists()) {
         sf.mkdirs();
       }
-      os = new FileOutputStream(sf.getPath() + filename );
+      os = new FileOutputStream(sf.getPath() + filename);
       // 开始读取
       while ((len = is.read(bs)) != -1) {
         os.write(bs, 0, len);
@@ -137,7 +135,7 @@ public class OpFileController {
       // 完毕，关闭所有链接
       os.close();
       is.close();
-      path = "/images" + format + filename.replace("/" ,"");
+      path = "/images" + format + filename.replace("/", "");
       System.out.println(path);
     } catch (Exception e) {
       e.printStackTrace();
@@ -169,8 +167,8 @@ public class OpFileController {
     String path = download(url);
     String url1 = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + path;
     System.out.println("url:" + url1);
-    Map<String,Object> map = new HashMap<>();
-    map.put("url",path);
+    Map<String, Object> map = new HashMap<>();
+    map.put("url", path);
     return new ResponseMsg().setData(map);
   }
 //
@@ -179,7 +177,6 @@ public class OpFileController {
 //  public ResponseMsg getImgUrl(@RequestParam(name = "actNo") String actNo) {
 //    return new ResponseMsg("https://pic.huohao8.com/20/1124/0314/b0_5866.jpg");
 //  }
-
 
 //  /**
 //   * 获取数据

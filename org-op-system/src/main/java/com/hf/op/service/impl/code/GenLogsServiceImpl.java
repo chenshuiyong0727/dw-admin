@@ -7,8 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
 import com.hf.common.infrastructure.exception.BusinessException;
-import com.hf.op.infrastructure.generator.strategy.create.CodeBuilder;
-import com.hf.op.infrastructure.generator.utils.GenTemplateUtil;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.GeneratorMsg;
 import com.hf.common.infrastructure.resp.ResponseMsg;
@@ -20,6 +18,8 @@ import com.hf.op.infrastructure.dto.code.GenLogsDto;
 import com.hf.op.infrastructure.dto.code.gencode.GenBuilderModel;
 import com.hf.op.infrastructure.dto.code.gencode.GenTableAndColumnModel;
 import com.hf.op.infrastructure.dto.code.gencode.GenTemplateDetailModel;
+import com.hf.op.infrastructure.generator.strategy.create.CodeBuilder;
+import com.hf.op.infrastructure.generator.utils.GenTemplateUtil;
 import com.hf.op.infrastructure.vo.code.GenLogsDetailVo;
 import com.hf.op.service.inf.code.GenLogsService;
 import java.util.HashMap;
@@ -50,7 +50,8 @@ public class GenLogsServiceImpl extends
 
   private GenTemplateDetailServiceImpl genTemplateDetailServiceImpl;
 
-  public GenLogsServiceImpl(GenLogsRepository genLogsRepository, GenTableServiceImpl genTableServiceImpl,
+  public GenLogsServiceImpl(GenLogsRepository genLogsRepository,
+      GenTableServiceImpl genTableServiceImpl,
       GenTemplateDetailServiceImpl genTemplateDetailServiceImpl) {
     this.genLogsRepository = genLogsRepository;
     this.genTableServiceImpl = genTableServiceImpl;

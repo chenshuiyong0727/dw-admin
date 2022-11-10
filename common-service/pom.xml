@@ -119,10 +119,10 @@
         <groupId>io.github.openfeign</groupId>
         <artifactId>feign-httpclient</artifactId>
       </dependency>-->
-      <dependency>
-        <groupId>de.siegmar</groupId>
-        <artifactId>logback-gelf</artifactId>
-      </dependency>
+    <dependency>
+      <groupId>de.siegmar</groupId>
+      <artifactId>logback-gelf</artifactId>
+    </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>

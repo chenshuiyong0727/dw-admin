@@ -56,7 +56,7 @@ public class WebExceptionHandler extends DefaultHandlerExceptionResolver {
       log.error(ExceptionUtils.getStackTrace(e));
       ret.err(ServerErrorConst.ERR_OTHER, ServerErrorConst.ERR_OTHER_MSG);
     }
-    log.error(e.getMessage() , e);
+    log.error(e.getMessage(), e);
     return ret;
   }
 

@@ -203,13 +203,14 @@ public class HttpClientUtil {
     }
     return encodeStr;
   }
-/*
-  public static void main(String[] args) throws IOException {
-    Map<String, String> headers = reqHeader(AppUtils.MINI_APP_INFO.getAppId(),
-        AppUtils.MINI_APP_INFO.getTocken());
-    String url = "http://localhost:28087/gw/op/v1/syncData/addAuthority";
 
-*//*    Map<String, Object> userTherapist = new HashMap<>();
+  /*
+    public static void main(String[] args) throws IOException {
+      Map<String, String> headers = reqHeader(AppUtils.MINI_APP_INFO.getAppId(),
+          AppUtils.MINI_APP_INFO.getTocken());
+      String url = "http://localhost:28087/gw/op/v1/syncData/addAuthority";
+
+  *//*    Map<String, Object> userTherapist = new HashMap<>();
     userTherapist.put("recom", 0);
     userTherapist.put("userId", "chens8");
     userTherapist.put("type", "1");
@@ -234,7 +235,7 @@ public class HttpClientUtil {
     userTherapist.put("ssoUserNo", "f308222613784e9dg7eace4fcf7a3f6d");
     Map<String, Object> param = new HashMap<>();
     param.put("userTherapist", userTherapist);
-    JSONObject object =  HttpClientUtil.postByMap(url, param, headers);
+    JSONObject object = HttpClientUtil.postByMap(url, param, headers);
     log.info("s ", object);
   }
 }

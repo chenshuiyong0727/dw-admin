@@ -62,7 +62,6 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -304,7 +303,6 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     SsoTokenLoginHelper.login(sessionId, xxlUser);
     return sessionId;
   }
-
 
 //  private List<OpenAuthority> findAuthorityByUser(Long sysUserId) {
 //    List<OpenAuthority> authorities = opSysUserServiceImpl.selectAuthorityByRole(sysUserId);

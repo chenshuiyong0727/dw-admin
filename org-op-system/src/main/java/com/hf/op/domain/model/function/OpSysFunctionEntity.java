@@ -87,5 +87,4 @@ public class OpSysFunctionEntity extends BaseEntity implements Serializable {
   private Integer systemId;
 
 
-
 }

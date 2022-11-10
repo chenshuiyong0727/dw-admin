@@ -24,10 +24,10 @@ redis:
   host: 127.0.0.1
   password: 123456
   port: 6379
-#redis:
-#  host: 192.168.8.81
-#  password: hjjnRedis2021
-#  port: 6379
+  #redis:
+  #  host: 192.168.8.81
+  #  password: hjjnRedis2021
+  #  port: 6379
   #rocketmq:
   #address: 192.168.8.81:9876
   #mongo:

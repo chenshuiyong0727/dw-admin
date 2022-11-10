@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @author chensy
- * @function  更新状态dto
+ * @function 更新状态dto
  * @date 2021/2/04
  */
 @Data
@@ -21,7 +21,7 @@ public class StatusDto {
   public Integer dataStatus = 1;
 
   /**
-  * 1 在售 0 下架
-  * */
+   * 1 在售 0 下架
+   */
   private Integer status;
 }

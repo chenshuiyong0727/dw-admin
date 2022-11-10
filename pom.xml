@@ -300,21 +300,21 @@
     <easypoi.version>4.3.0</easypoi.version>
     <!--打包-->
     <jdk.image.path>192.168.8.92:5000/hlw/openjdk:11.0.9</jdk.image.path>
-<!--    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>
-    <warehouse.name>cn-north-1@85TW39BONRM35H5A5ZJ7</warehouse.name>
-    <warehouse.pwd>814319e0f196fb18f1e0f048f27e23b822106a41bf7ce162b6dd762d718c9872</warehouse.pwd>
-    <image.version>1.0.11</image.version>-->
+    <!--    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>
+        <warehouse.name>cn-north-1@85TW39BONRM35H5A5ZJ7</warehouse.name>
+        <warehouse.pwd>814319e0f196fb18f1e0f048f27e23b822106a41bf7ce162b6dd762d718c9872</warehouse.pwd>
+        <image.version>1.0.11</image.version>-->
 
     <package.type>package</package.type>
     <!--测试包-->
-<!--&lt;!&ndash;    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>-->
-<!--    <warehouse.name>cn-north-1@LNSM509WTGK4PG097PN0</warehouse.name>-->
-<!--    <warehouse.pwd>db8c67428ab7ce4e619887a1f2513c6daecbc10ed4d9dc8b27f10b507d03b0b4</warehouse.pwd>-->
-<!--    <image.version>1.4.07</image.version>&ndash;&gt;-->
-<!--    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>-->
-<!--    <warehouse.name>cn-north-1@7JJ5ROSX1SM7J1QXO0BZ</warehouse.name>-->
-<!--    <warehouse.pwd>bb17616f804de04f162d318e7eae71556df7adfc450478825880f3234eb37d8e</warehouse.pwd>-->
-<!--    <image.version>1.5.0</image.version>-->
+    <!--&lt;!&ndash;    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>-->
+    <!--    <warehouse.name>cn-north-1@LNSM509WTGK4PG097PN0</warehouse.name>-->
+    <!--    <warehouse.pwd>db8c67428ab7ce4e619887a1f2513c6daecbc10ed4d9dc8b27f10b507d03b0b4</warehouse.pwd>-->
+    <!--    <image.version>1.4.07</image.version>&ndash;&gt;-->
+    <!--    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>-->
+    <!--    <warehouse.name>cn-north-1@7JJ5ROSX1SM7J1QXO0BZ</warehouse.name>-->
+    <!--    <warehouse.pwd>bb17616f804de04f162d318e7eae71556df7adfc450478825880f3234eb37d8e</warehouse.pwd>-->
+    <!--    <image.version>1.5.0</image.version>-->
     <warehouse.path>192.168.8.92:5000/hlw</warehouse.path>
     <warehouse.name></warehouse.name>
     <warehouse.pwd></warehouse.pwd>

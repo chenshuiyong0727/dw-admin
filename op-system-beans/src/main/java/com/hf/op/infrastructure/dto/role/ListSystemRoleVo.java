@@ -25,5 +25,4 @@ public class ListSystemRoleVo implements Serializable {
   private Long roleId;
 
 
-
 }

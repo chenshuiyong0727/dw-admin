@@ -125,7 +125,8 @@ public class QueryOpDeptListDto implements Serializable {
   @TableField(exist = false)
   private Integer pageNum;
 
-  public static String getDeptName(Map<Long, QueryOpDeptListDto> downListVoMap, String departmentId) {
+  public static String getDeptName(Map<Long, QueryOpDeptListDto> downListVoMap,
+      String departmentId) {
     QueryOpDeptListDto deptListDto = downListVoMap.get(Long.parseLong(departmentId));
     if (deptListDto == null) {
       return null;

@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@MapperScan({"com.hf.*","com.hf.op.domain.model.*", "com.hf.common.domain.*"})
+@MapperScan({"com.hf.*", "com.hf.op.domain.model.*", "com.hf.common.domain.*"})
 @EnableMethodCache(basePackages = {"com.auth.common",
     "com.service.base", "com.*.hf", "com.hf.*"})
 @PropertySource({"classpath:${spring.profiles.active}/database.properties"})

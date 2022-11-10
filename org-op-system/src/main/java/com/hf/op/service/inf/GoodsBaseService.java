@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * 商品基本信息 服务接口
+ *
  * @author chensy
  * @date 2022-11-08 11:10:33
  */
@@ -21,7 +22,7 @@ public interface GoodsBaseService {
    */
   ResponseMsg page(GoodsBaseRqDto dto);
 
-    /**
+  /**
    * @description 新增
    * @method add
    * @date: 2022-11-08 11:10:33

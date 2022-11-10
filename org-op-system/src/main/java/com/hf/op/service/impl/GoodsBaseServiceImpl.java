@@ -14,7 +14,6 @@ import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.service.BatchCrudService;
-import com.hf.op.domain.model.dict.BaseSysDictTypeEntity;
 import com.hf.op.domain.model.dict.GoodsBaseEntity;
 import com.hf.op.domain.model.dict.GoodsBaseRepository;
 import com.hf.op.infrastructure.dto.department.GoodsBaseDto;
@@ -89,7 +88,7 @@ public class GoodsBaseServiceImpl extends
 
   private void converDto(GoodsBaseDto dto) {
     String actNo = dto.getActNo();
-    if (StringUtilLocal.isEmpty(actNo)){
+    if (StringUtilLocal.isEmpty(actNo)) {
       throw new ServiceException(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
           "新增失败");
     }
@@ -113,6 +112,7 @@ public class GoodsBaseServiceImpl extends
     GoodsBaseEntity entity1 = repository.selectOne(wrapper);
     return entity1 == null;
   }
+
   /**
    * @description 更新
    * @method update

@@ -2,47 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hf.op.domain.model.user.OpSysUserRepository">
-<!--
-  <resultMap id="RoleAuthorityMenu" type="com.hf.op.infrastructure.model.AuthorityMenu">
-    <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
-    <result column="authority" jdbcType="VARCHAR" property="authority"/>
-    <result column="menuId" property="menuId" jdbcType="VARCHAR"/>
-    <result column="menuCode" property="menuCode" jdbcType="VARCHAR"/>
-    <result column="menuName" property="menuName" jdbcType="VARCHAR"/>
-    <result column="icon" property="icon" jdbcType="VARCHAR"/>
-    <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
-    <result column="scheme" property="scheme" jdbcType="VARCHAR"/>
-    <result column="target" property="target" jdbcType="VARCHAR"/>
-    <result column="path" property="path" jdbcType="VARCHAR"/>
-    <result column="priority" property="priority" jdbcType="INTEGER"/>
-    <result column="menu_desc" property="menuDesc" jdbcType="VARCHAR"/>
-    <result column="status" property="status" jdbcType="TINYINT"/>
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
-    <collection property="actionList" column="{menuId=menuId,roleId=roleId}"
-      select="selectAuthorityAction"/>
+  <!--
+    <resultMap id="RoleAuthorityMenu" type="com.hf.op.infrastructure.model.AuthorityMenu">
+      <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
+      <result column="authority" jdbcType="VARCHAR" property="authority"/>
+      <result column="menuId" property="menuId" jdbcType="VARCHAR"/>
+      <result column="menuCode" property="menuCode" jdbcType="VARCHAR"/>
+      <result column="menuName" property="menuName" jdbcType="VARCHAR"/>
+      <result column="icon" property="icon" jdbcType="VARCHAR"/>
+      <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
+      <result column="scheme" property="scheme" jdbcType="VARCHAR"/>
+      <result column="target" property="target" jdbcType="VARCHAR"/>
+      <result column="path" property="path" jdbcType="VARCHAR"/>
+      <result column="priority" property="priority" jdbcType="INTEGER"/>
+      <result column="menu_desc" property="menuDesc" jdbcType="VARCHAR"/>
+      <result column="status" property="status" jdbcType="TINYINT"/>
+      <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+      <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+      <collection property="actionList" column="{menuId=menuId,roleId=roleId}"
+        select="selectAuthorityAction"/>
 
-  </resultMap>
-  <resultMap id="AuthorityAction" type="com.hf.op.infrastructure.model.AuthorityAction">
-    <result column="actionId" property="actionId" jdbcType="VARCHAR"/>
-    <result column="actionCode" property="actionCode" jdbcType="VARCHAR"/>
-    <result column="actionName" property="actionName" jdbcType="VARCHAR"/>
-    <result column="menuId" property="menuId" jdbcType="VARCHAR"/>
-    <result column="priority" property="priority" jdbcType="INTEGER"/>
-    <result column="actionDesc" property="actionDesc" jdbcType="VARCHAR"/>
-    <result column="status" property="status" jdbcType="TINYINT"/>
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
-    <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
-    <result column="authority" jdbcType="VARCHAR" property="authority"/>
-  </resultMap>
+    </resultMap>
+    <resultMap id="AuthorityAction" type="com.hf.op.infrastructure.model.AuthorityAction">
+      <result column="actionId" property="actionId" jdbcType="VARCHAR"/>
+      <result column="actionCode" property="actionCode" jdbcType="VARCHAR"/>
+      <result column="actionName" property="actionName" jdbcType="VARCHAR"/>
+      <result column="menuId" property="menuId" jdbcType="VARCHAR"/>
+      <result column="priority" property="priority" jdbcType="INTEGER"/>
+      <result column="actionDesc" property="actionDesc" jdbcType="VARCHAR"/>
+      <result column="status" property="status" jdbcType="TINYINT"/>
+      <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+      <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+      <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
+      <result column="authority" jdbcType="VARCHAR" property="authority"/>
+    </resultMap>
 
-  <resultMap id="Authority" type="com.hf.op.infrastructure.model.OpenAuthority">
-    <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
-    <result column="authority" jdbcType="VARCHAR" property="authority"/>
-    <result column="expireTime" jdbcType="TIMESTAMP" property="expireTime"/>
-    <result column="owner" jdbcType="VARCHAR" property="owner"/>
-  </resultMap>-->
+    <resultMap id="Authority" type="com.hf.op.infrastructure.model.OpenAuthority">
+      <result column="authorityId" jdbcType="VARCHAR" property="authorityId"/>
+      <result column="authority" jdbcType="VARCHAR" property="authority"/>
+      <result column="expireTime" jdbcType="TIMESTAMP" property="expireTime"/>
+      <result column="owner" jdbcType="VARCHAR" property="owner"/>
+    </resultMap>-->
 
   <select id="getUserFunctionsBySysUserId" resultType="com.open.api.dto.FunctionDto">
     SELECT DISTINCT

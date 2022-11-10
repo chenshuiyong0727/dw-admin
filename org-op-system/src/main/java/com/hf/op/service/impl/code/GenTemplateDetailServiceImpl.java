@@ -92,7 +92,8 @@ public class GenTemplateDetailServiceImpl extends
    */
   @Override
   public ResponseMsg page(GenTemplateDetailDto dto) {
-    IPage ipage = genTemplateDetailRepository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
+    IPage ipage = genTemplateDetailRepository
+        .page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 

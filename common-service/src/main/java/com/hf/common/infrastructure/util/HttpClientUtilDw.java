@@ -199,7 +199,7 @@ public class HttpClientUtilDw {
     s = s.replaceAll(" ", "");
     s = s.replaceAll("\n", "");
     s = s.replaceAll("\r", "");
-    if (s.contains("搜索到<spanclass=\"c-red\">0</span>个")){
+    if (s.contains("搜索到<spanclass=\"c-red\">0</span>个")) {
       System.out.println("未找到");
       return null;
     }
@@ -224,7 +224,7 @@ public class HttpClientUtilDw {
     //  System.out.println(s.length());
     s = s.replaceAll("\n", "");
     s = s.replaceAll("\r", "");
-    if (s.contains("搜索到<spanclass=\"c-red\">0</span>个")){
+    if (s.contains("搜索到<spanclass=\"c-red\">0</span>个")) {
       System.out.println("未找到");
       return;
     }
