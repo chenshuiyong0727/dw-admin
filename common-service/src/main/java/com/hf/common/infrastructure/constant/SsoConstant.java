@@ -47,13 +47,4 @@ public interface SsoConstant {
    * 系统编号 组织
    */
   public static final Integer SYSTEM_ID_ORGUNIT = 2;
-  /**
-   * 系统编号 小程序
-   */
-  public static final Integer SYSTEM_ID_MINI = 3;
-
-  /**
-   *
-   */
-  public static final Integer SYSTEM_ID_MINI1 = 1440 * 60 * 3;
 }

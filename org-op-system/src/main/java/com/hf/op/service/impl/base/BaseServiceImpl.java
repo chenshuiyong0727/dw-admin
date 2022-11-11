@@ -164,14 +164,14 @@ public class BaseServiceImpl extends CrudService implements BaseService {
    */
   @Override
   public ResponseMsg removeDictType(Long id) {
-    LambdaQueryWrapper<BaseSysDictTypeEntity> queryWrapper = new LambdaQueryWrapper();
-    queryWrapper.eq(BaseSysDictTypeEntity::getId, id)
-        .between(BaseSysDictTypeEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
-            DataStatusEnum.ENABLE.getCode());
-    BaseSysDictTypeEntity entity = new BaseSysDictTypeEntity();
-    entity.setDataStatus(DataStatusEnum.DELETE.getCode());
-    setUpdateUser(entity);
-    if (baseSysDictTypeRepository.update(entity, queryWrapper) > 0) {
+//    LambdaQueryWrapper<BaseSysDictTypeEntity> queryWrapper = new LambdaQueryWrapper();
+//    queryWrapper.eq(BaseSysDictTypeEntity::getId, id)
+//        .between(BaseSysDictTypeEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
+//            DataStatusEnum.ENABLE.getCode());
+//    BaseSysDictTypeEntity entity = new BaseSysDictTypeEntity();
+//    entity.setDataStatus(DataStatusEnum.DELETE.getCode());
+//    setUpdateUser(entity);
+    if (baseSysDictTypeRepository.deleteById(id) > 0) {
       refreshDist();
       return new ResponseMsg().setData(new HashMap().put("id", id));
     }
@@ -320,14 +320,14 @@ public class BaseServiceImpl extends CrudService implements BaseService {
    */
   @Override
   public ResponseMsg removeDictDetail(Long id) {
-    LambdaQueryWrapper<BaseSysDictEntity> queryWrapper = new LambdaQueryWrapper();
-    queryWrapper.eq(BaseSysDictEntity::getId, id)
-        .between(BaseSysDictEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
-            DataStatusEnum.ENABLE.getCode());
-    BaseSysDictEntity entity = new BaseSysDictEntity();
-    entity.setDataStatus(DataStatusEnum.DELETE.getCode());
-    setUpdateUser(entity);
-    if (baseSysDictRepository.update(entity, queryWrapper) > 0) {
+//    LambdaQueryWrapper<BaseSysDictEntity> queryWrapper = new LambdaQueryWrapper();
+//    queryWrapper.eq(BaseSysDictEntity::getId, id)
+//        .between(BaseSysDictEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
+//            DataStatusEnum.ENABLE.getCode());
+//    BaseSysDictEntity entity = new BaseSysDictEntity();
+//    entity.setDataStatus(DataStatusEnum.DELETE.getCode());
+//    setUpdateUser(entity);
+    if (baseSysDictRepository.deleteById(id) > 0) {
       refreshDist();
       return new ResponseMsg().setData(new HashMap().put("id", id));
     }

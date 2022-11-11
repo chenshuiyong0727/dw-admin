@@ -65,7 +65,18 @@
   <!--    where   t2.actionId is not null-->
   <!--    and t1.roleId = #{sysRoleId}-->
   <!--  </select>-->
-
+  <select id="getRoleFunctionsBySysRoleId" resultType="Long">
+    SELECT
+    osf.id
+    FROM
+    op_sys_role a
+    left join op_sys_role_function osrf on a.id = osrf.role_id and osrf.data_status = 1
+    left join op_sys_function osf on osrf.function_id = osf.id and osf.data_status = 1
+    <where>
+      a.id = #{sysRoleId}
+      and a.data_status = 1
+    </where>
+  </select>
   <select id="pageListOpRoleRelationUser"
     parameterType="com.hf.op.infrastructure.dto.role.QueryRoleRelationUserListDto"
     resultType="com.hf.op.infrastructure.dto.role.QueryRoleRelationUserListDto">

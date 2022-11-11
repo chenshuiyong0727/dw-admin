@@ -29,7 +29,7 @@ public interface OpSysRoleRepository extends BaseMapper<OpSysRoleEntity> {
 //  /**
 //   * 通过角色编号获取角色权限列表
 //   */
-//  List<Long> getRoleFunctionsBySysRoleId(@Param("sysRoleId") Long sysRoleId);
+  List<Long> getRoleFunctionsBySysRoleId(@Param("sysRoleId") Long sysRoleId);
 //
 //  /**
 //   * 通过角色编号获取角色权限列表-小程序

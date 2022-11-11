@@ -27,7 +27,7 @@ public class GoodsBaseRqDto extends BaseDto implements Serializable {
   /**
    * 类型 ：1 鞋，2服 ，3配件
    */
-  private Integer type;
+  private String type;
 
   /**
    * 货号

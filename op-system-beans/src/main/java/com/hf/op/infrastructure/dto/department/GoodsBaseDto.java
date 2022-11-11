@@ -28,8 +28,7 @@ public class GoodsBaseDto extends BaseDto implements Serializable {
   @Validator({
       ValidatorType.IS_NOT_NULL
   })
-  @ValidatorLenMax(3)
-  private Integer type;
+  private String type;
 
   /**
    * 货号

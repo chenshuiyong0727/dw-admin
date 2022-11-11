@@ -22,12 +22,6 @@ public class GoodsBaseExportDto implements Serializable {
   private Long id;
 
   /**
-   * 类型 ：1 鞋，2服 ，3配件
-   */
-  @Excel(name = "类型 ：1 鞋，2服 ，3配件", replace = {"鞋_1", "服_2", "配_3"})
-  private Integer type;
-
-  /**
    * 货号
    */
   @Excel(name = "货号")
