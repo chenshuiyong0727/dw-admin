@@ -5,6 +5,7 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.op.infrastructure.dto.department.GoodsBaseDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseRqDto;
+import com.hf.op.infrastructure.dto.role.QueryOpRoleListDto;
 import java.util.List;
 
 /**
@@ -68,4 +69,9 @@ public interface GoodsBaseService {
    * @date: 2022-11-08 11:10:33
    */
   List<GoodsBaseExportDto> queryExportPage(GoodsBaseRqDto dto);
+
+  /**
+   * 权限角色（下拉）列表
+   */
+  ResponseMsg listDropDownSizes(GoodsBaseDto dto);
 }

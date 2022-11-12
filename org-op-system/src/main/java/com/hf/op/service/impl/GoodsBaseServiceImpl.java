@@ -16,16 +16,22 @@ import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.service.BatchCrudService;
 import com.hf.op.domain.model.dict.GoodsBaseEntity;
 import com.hf.op.domain.model.dict.GoodsBaseRepository;
+import com.hf.op.domain.model.user.OpSysUserRepository;
 import com.hf.op.infrastructure.dto.department.GoodsBaseDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseRqDto;
+import com.hf.op.infrastructure.dto.role.ListGoodsSizeVo;
+import com.hf.op.infrastructure.resp.OpRespCodeEnum;
 import com.hf.op.infrastructure.vo.GoodsBasePageVo;
+import com.hf.op.infrastructure.vo.GoodsSizeListVo;
 import com.hf.op.service.inf.GoodsBaseService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 商品基本信息 服务接口实现
@@ -39,9 +45,16 @@ public class GoodsBaseServiceImpl extends
     BatchCrudService<GoodsBaseRepository, GoodsBaseEntity> implements
     GoodsBaseService {
 
+  private GoodsBaseSizeServiceImpl goodsBaseSizeServiceImpl;
+
   private GoodsBaseRepository repository;
 
-  public GoodsBaseServiceImpl(GoodsBaseRepository repository) {
+  private OpSysUserRepository opSysUserRepository;
+
+  public GoodsBaseServiceImpl(GoodsBaseRepository repository,
+      OpSysUserRepository opSysUserRepository, GoodsBaseSizeServiceImpl goodsBaseSizeServiceImpl) {
+    this.opSysUserRepository = opSysUserRepository;
+    this.goodsBaseSizeServiceImpl = goodsBaseSizeServiceImpl;
     this.repository = repository;
   }
 
@@ -82,6 +95,9 @@ public class GoodsBaseServiceImpl extends
       log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
           "新增失败");
+    }
+    if (!CollectionUtils.isEmpty(dto.getSizeList())) {
+      goodsBaseSizeServiceImpl.addList(id, dto.getSizeList());
     }
     return new ResponseMsg().setData(id);
   }
@@ -137,6 +153,9 @@ public class GoodsBaseServiceImpl extends
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
           "更新失败");
     }
+    if (!CollectionUtils.isEmpty(dto.getSizeList())) {
+      goodsBaseSizeServiceImpl.addList(dto.getId(), dto.getSizeList());
+    }
     return new ResponseMsg().setData(dto.getId());
   }
 
@@ -147,11 +166,32 @@ public class GoodsBaseServiceImpl extends
    */
   @Override
   public ResponseMsg detail(Long id) {
+    ResponseMsg result = new ResponseMsg();
     GoodsBaseEntity entity = repository.selectById(id);
     if (entity != null) {
       GoodsBaseDto dto = new GoodsBaseDto();
       BeanUtils.copyProperties(entity, dto);
-      return new ResponseMsg().setData(dto);
+      List<ListGoodsSizeVo> vos = opSysUserRepository.getSizeIdsByGoodsId(id);
+      if (CollectionUtils.isEmpty(vos)) {
+        return new ResponseMsg(OpRespCodeEnum.USER_ROLES_NOT_EXIST.getCode(),
+            OpRespCodeEnum.USER_ROLES_NOT_EXIST.getMsg());
+      }
+      List<List<String>> systemAndRoleIds = new ArrayList<>();
+      for (ListGoodsSizeVo vo : vos) {
+        if (vo == null || vo.getId() == null || StringUtilLocal.isEmpty(vo.getType())) {
+          continue;
+        }
+        List<String> types = Arrays.asList(vo.getType().split(","));
+        for (String type :types) {
+          List<String> list = new ArrayList<>();
+          list.add(type);
+          list.add(vo.getId().toString());
+          systemAndRoleIds.add(list);
+        }
+      }
+      dto.setSizeListList(systemAndRoleIds);
+      result = setData(result, dto);
+      return result;
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "查询失败");
@@ -238,4 +278,15 @@ public class GoodsBaseServiceImpl extends
     List<GoodsBaseExportDto> dtos = ListBeanUtil.listCopy(list, GoodsBaseExportDto.class);
     return dtos;
   }
+
+
+  @Override
+  public ResponseMsg listDropDownSizes(GoodsBaseDto dto) {
+    List<GoodsSizeListVo> listRoleDropDownListVos = repository
+        .listDropDownSizes(dto.getType());
+    ResponseMsg result = new ResponseMsg();
+    result = setData(result, listRoleDropDownListVos);
+    return result;
+  }
+
 }

@@ -21,7 +21,7 @@ public enum DictType {
   /**
    * 字典
    */
-  DB_NAME("db_name", "hf_portal", "op"),
+  DB_NAME("db_name", "orgunit_op", "op"),
 
   /**
    * 显示类型

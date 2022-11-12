@@ -249,6 +249,20 @@
     </where>
   </select>
 
+  <select id="getSizeIdsByGoodsId"
+    resultType="com.hf.op.infrastructure.dto.role.ListGoodsSizeVo">
+    SELECT
+    c.id ,
+    c.type
+    FROM
+    goods_base a
+    left join goods_base_size b on a.id = b.goods_id
+    left join goods_size c on c.id = b.size_id
+    <where>
+      a.id = #{goodsId}
+    </where>
+  </select>
+
   <select id="getOpSysUserAccountInfoById"
     resultType="com.hf.op.infrastructure.dto.user.QueryUserAccountInfoDto">
         SELECT

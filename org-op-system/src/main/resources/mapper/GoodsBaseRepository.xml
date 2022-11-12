@@ -37,4 +37,14 @@
     ORDER BY a.update_time DESC
   </select>
 
+  <select id="listDropDownSizes"
+    resultType="com.hf.op.infrastructure.vo.GoodsSizeListVo">
+    SELECT
+     *
+    FROM goods_size
+    WHERE 1 = 1
+    <if test="type != null">
+      AND type LIKE CONCAT( '%', #{type},'%')
+    </if>
+  </select>
 </mapper>

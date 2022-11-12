@@ -1,11 +1,13 @@
 package com.hf.op.infrastructure.dto.department;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.hf.common.infrastructure.dto.BaseDto;
 import com.hf.common.infrastructure.validator.Validator;
 import com.hf.common.infrastructure.validator.ValidatorLenMax;
 import com.hf.common.infrastructure.validator.annotation.ValidatorType;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 import lombok.ToString;
 
@@ -24,7 +26,6 @@ public class GoodsBaseDto extends BaseDto implements Serializable {
   /**
    * 类型 ：1 鞋，2服 ，3配件
    */
-  @ApiModelProperty(value = "类型 ：1 鞋，2服 ，3配件")
   @Validator({
       ValidatorType.IS_NOT_NULL
   })
@@ -70,5 +71,10 @@ public class GoodsBaseDto extends BaseDto implements Serializable {
   @ApiModelProperty(value = "备注")
   @ValidatorLenMax(512)
   private String remark;
-
+  /**
+   */
+  private List<Long> sizeList;
+  /**
+   */
+  private List<List<String>> sizeListList;
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.op.domain.model.function.OpSysFunctionEntity;
+import com.hf.op.infrastructure.dto.role.ListGoodsSizeVo;
 import com.hf.op.infrastructure.dto.role.ListSystemRoleVo;
 import com.hf.op.infrastructure.dto.role.ListSystemVo;
 import com.hf.op.infrastructure.dto.user.QueryOpUserListDto;
@@ -52,6 +53,11 @@ public interface OpSysUserRepository extends BaseMapper<OpSysUserEntity> {
    * 通过系统用户编号获取角色列表
    */
   List<ListSystemRoleVo> getRoleIdsBySysUserId(@Param("sysUserId") Long sysUserId);
+
+  /**
+   * 通过系统用户编号获取角色列表
+   */
+  List<ListGoodsSizeVo> getSizeIdsByGoodsId(@Param("goodsId") Long goodsId);
 
   /**
    * 通过系统内部用户编号获取用户账号信息
