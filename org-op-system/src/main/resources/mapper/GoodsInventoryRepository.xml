@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hf.op.domain.model.dict.GoodsInventoryRepository">
+
+  <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
+    SELECT
+    *
+    FROM goods_inventory a
+    <where>
+      a.data_status > -1
+       <if test="dto.ids != null and dto.ids.size() > 0">
+        AND a.id IN
+        <foreach collection="dto.ids" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="dto.id != null and dto.id != ''">
+        AND a.id LIKE CONCAT( '%', #{dto.id},'%')
+      </if>
+      <if test="dto.goodsId != null and dto.goodsId != ''">
+        AND a.goods_id LIKE CONCAT( '%', #{dto.goodsId},'%')
+      </if>
+      <if test="dto.sizeId != null and dto.sizeId != ''">
+        AND a.size_id LIKE CONCAT( '%', #{dto.sizeId},'%')
+      </if>
+      <if test="dto.inventoryFrom != null and dto.inventoryFrom != '' ">
+        AND a.inventory >= #{dto.inventoryFrom}
+      </if>
+      <if test="dto.inventoryTo != null and dto.inventoryTo != '' ">
+        AND #{dto.inventoryTo} >= a.inventory
+      </if>
+
+      <if test="dto.createTimeFrom != null and dto.createTimeFrom != '' ">
+        AND DATE_FORMAT(a.`create_time`,'%Y-%m-%d') >= #{dto.createTimeFrom}
+      </if>
+      <if test="dto.createTimeTo != null and dto.createTimeTo != '' ">
+        AND #{dto.createTimeTo} >= DATE_FORMAT(a.`create_time`,'%Y-%m-%d')
+      </if>
+      <if test="dto.updateTimeFrom != null and dto.updateTimeFrom != '' ">
+        AND DATE_FORMAT(a.`update_time`,'%Y-%m-%d') >= #{dto.updateTimeFrom}
+      </if>
+      <if test="dto.updateTimeTo != null and dto.updateTimeTo != '' ">
+        AND #{dto.updateTimeTo} >= DATE_FORMAT(a.`update_time`,'%Y-%m-%d')
+      </if>
+    </where>
+    ORDER BY a.update_time DESC
+  </select>
+
+</mapper>
