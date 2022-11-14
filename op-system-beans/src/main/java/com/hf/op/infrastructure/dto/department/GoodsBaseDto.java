@@ -1,10 +1,10 @@
 package com.hf.op.infrastructure.dto.department;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.hf.common.infrastructure.dto.BaseDto;
 import com.hf.common.infrastructure.validator.Validator;
 import com.hf.common.infrastructure.validator.ValidatorLenMax;
 import com.hf.common.infrastructure.validator.annotation.ValidatorType;
+import com.hf.op.infrastructure.dto.role.ListGoodsSizeVo;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.List;
@@ -77,4 +77,5 @@ public class GoodsBaseDto extends BaseDto implements Serializable {
   /**
    */
   private List<List<String>> sizeListList;
+  private List<ListGoodsSizeVo> sizeVoList;
 }

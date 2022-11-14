@@ -253,6 +253,7 @@
     resultType="com.hf.op.infrastructure.dto.role.ListGoodsSizeVo">
     SELECT
     c.id ,
+    c.size,
     c.type
     FROM
     goods_base a

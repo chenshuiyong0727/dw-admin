@@ -11,6 +11,7 @@ import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.DictRespEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.ListBeanUtil;
+import com.hf.common.infrastructure.util.ListDistinctUtil;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.service.BatchCrudService;
@@ -189,6 +190,8 @@ public class GoodsBaseServiceImpl extends
           systemAndRoleIds.add(list);
         }
       }
+      vos = ListDistinctUtil.distinct(vos);
+      dto.setSizeVoList(vos);
       dto.setSizeListList(systemAndRoleIds);
       result = setData(result, dto);
       return result;
@@ -196,6 +199,7 @@ public class GoodsBaseServiceImpl extends
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "查询失败");
   }
+
 
   /**
    * @description 移除数据

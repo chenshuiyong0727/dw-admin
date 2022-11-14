@@ -15,6 +15,11 @@ public class ListGoodsSizeVo implements Serializable {
   private static final long serialVersionUID = 4674227803203128918L;
 
   /**
+   * 尺码
+   */
+  private String size;
+
+  /**
    * 系统编号
    */
   private String type;
