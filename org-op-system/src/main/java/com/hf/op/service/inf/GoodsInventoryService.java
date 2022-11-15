@@ -20,6 +20,7 @@ public interface GoodsInventoryService {
    * @date: 2022-11-12 20:10:34
    */
   ResponseMsg page(GoodsInventoryRqDto dto);
+  ResponseMsg pageGoods(GoodsInventoryRqDto dto);
 
     /**
    * @description 新增

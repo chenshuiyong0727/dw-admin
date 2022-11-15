@@ -2,10 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hf.op.domain.model.dict.GoodsInventoryRepository">
 
-  <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
+  <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsBasePageVo">
+    SELECT b.* from
+      (
+      SELECT
+      goods_id ,
+      count(inventory)  inventory
+      FROM goods_inventory a
+      GROUP BY goods_id
+      ) a
+      LEFT JOIN
+    goods_base b on a.goods_id = b.id
+    <where>
+      a.inventory > 0
+      <if test="dto.keyword != null and dto.keyword != ''">
+        AND (
+            b.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
+          or
+            a.goods_id in
+            (
+            SELECT goods_id from goods_inventory t1
+            LEFT JOIN goods_size t2 on t1.size_id =t2.id
+            where t2.size like  CONCAT( '%', #{dto.keyword},'%')
+            )
+         )
+      </if>
+    </where>
+    ORDER BY b.update_time DESC
+  </select>
+
+  <select id="pageGoods" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
     SELECT
-    *
+    c.size,
+    a.*
     FROM goods_inventory a
+    LEFT JOIN goods_size c on a.size_id = c.id
     <where>
       a.data_status > -1
        <if test="dto.ids != null and dto.ids.size() > 0">

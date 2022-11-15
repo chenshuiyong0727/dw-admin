@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryRqDto;
+import com.hf.op.infrastructure.vo.GoodsBasePageVo;
 import com.hf.op.infrastructure.vo.GoodsInventoryPageVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,7 @@ public interface GoodsInventoryRepository  extends BaseMapper<GoodsInventoryEnti
    * @method page
    * @date:  2022-11-12 20:10:34
    */
-  IPage<GoodsInventoryPageVo> page(Page page, @Param("dto") GoodsInventoryRqDto dto);
+  IPage<GoodsBasePageVo> page(Page page, @Param("dto") GoodsInventoryRqDto dto);
+  IPage<GoodsInventoryPageVo> pageGoods(Page page, @Param("dto") GoodsInventoryRqDto dto);
 
 }

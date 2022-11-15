@@ -1,6 +1,5 @@
 package com.hf.op.infrastructure.dto.department;
 
-import java.time.LocalDateTime;
 import com.hf.common.infrastructure.dto.BaseDto;
 import java.io.Serializable;
 import java.util.List;
@@ -63,6 +62,10 @@ public class GoodsInventoryRqDto extends BaseDto implements Serializable {
   * 更新时间 结束
   */
   private String updateTimeTo;
+
+ /**
+  */
+  private String keyword;
 
 
 	/**

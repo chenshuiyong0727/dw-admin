@@ -55,6 +55,11 @@ public class GoodsInventoryServiceImpl extends
     IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
+  @Override
+  public ResponseMsg pageGoods(GoodsInventoryRqDto dto){
+    IPage ipage = repository.pageGoods(new Page(dto.getPageNum(), dto.getPageSize()),dto);
+    return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
+  }
 
   /**
    * @description 新增

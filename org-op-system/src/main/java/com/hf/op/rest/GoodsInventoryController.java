@@ -88,6 +88,16 @@ public class  GoodsInventoryController {
     GoodsInventoryRqDto dto = HfBeanUtil.populate(new GoodsInventoryRqDto(),request);
     return service.page(dto);
   }
+  /**
+   * 获取数据列表
+   * @param request
+   * @return
+   */
+	@GetMapping("/pageGoods")
+  public ResponseMsg pageGoods(HttpServletRequest request){
+    GoodsInventoryRqDto dto = HfBeanUtil.populate(new GoodsInventoryRqDto(),request);
+    return service.pageGoods(dto);
+  }
 
   /**
    * 获取数据
