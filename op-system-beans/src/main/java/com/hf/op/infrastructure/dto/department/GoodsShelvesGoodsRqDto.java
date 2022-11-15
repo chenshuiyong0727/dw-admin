@@ -31,7 +31,7 @@ public class GoodsShelvesGoodsRqDto  implements Serializable {
 	/**
 	 * 数量
 	 */
-	private BigDecimal num;
+	private Integer num;
 
 	/**
 	 * 上架价格

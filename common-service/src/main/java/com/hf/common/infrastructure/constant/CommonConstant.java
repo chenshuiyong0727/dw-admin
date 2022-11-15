@@ -8,6 +8,20 @@ package com.hf.common.infrastructure.constant;
 public interface CommonConstant {
 
   /**
+   * 默认正确
+   */
+  public final static Integer DEFAULT_YES = 1;
+
+  /**
+   * 默认异常
+   */
+  public final static Integer DEFAULT_ERROR = -1;
+
+  /**
+   * 默认错误
+   */
+  public final static Integer DEFAULT_NO = 0;
+  /**
    * 成功
    */
   public final static Integer GW_SUCCESS = 1;

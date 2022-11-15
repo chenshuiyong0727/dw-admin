@@ -1,9 +1,10 @@
-package com.hf.op.service;
+package com.hf.op.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hf.common.infrastructure.constant.CommonConstant;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
 import com.hf.common.infrastructure.dto.StatusDto;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
@@ -41,7 +42,10 @@ public class GoodsInventoryServiceImpl extends
 
   private GoodsInventoryRepository repository;
 
-	public GoodsInventoryServiceImpl(GoodsInventoryRepository repository){
+  private GoodsOrderServiceImpl goodsOrderServiceImpl;
+
+	public GoodsInventoryServiceImpl(GoodsInventoryRepository repository,GoodsOrderServiceImpl goodsOrderServiceImpl){
+	    this.goodsOrderServiceImpl = goodsOrderServiceImpl;
 	    this.repository = repository;
 	}
 
@@ -69,8 +73,12 @@ public class GoodsInventoryServiceImpl extends
    */
   @Override
   public ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto){
+    if (CommonConstant.DEFAULT_YES.equals(dto.getType())){
+      return goodsOrderServiceImpl.addList(dto);
+    }
     return new ResponseMsg();
   }
+
   @Override
   public ResponseMsg add(GoodsInventoryDto dto){
 //    Long id = createId();
