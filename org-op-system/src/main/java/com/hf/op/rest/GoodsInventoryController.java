@@ -4,19 +4,23 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSON;
 import com.hf.common.infrastructure.dto.StatusDto;
 import com.hf.common.infrastructure.resp.ResponseMsg;
+import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.HfBeanUtil;
-import com.alibaba.fastjson.JSON;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryRqDto;
 import com.hf.op.service.GoodsInventoryServiceImpl;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
-import java.util.List;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +29,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
-import java.net.URLEncoder;
 
 /**
  * 商品库存 控制器
@@ -51,6 +53,8 @@ public class  GoodsInventoryController {
    */
 	@PostMapping("")
   public ResponseMsg add(@RequestBody GoodsInventoryDto dto){
+    Assert.notNull(dto, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+    Assert.notNull(dto.getSizeDtos(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
     return service.add(dto);
   }
 

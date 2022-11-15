@@ -1,9 +1,9 @@
 package com.hf.op.domain.model.dict;
 
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hf.common.infrastructure.entity.BaseEntity;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.ToString;
 
@@ -33,5 +33,13 @@ public class GoodsInventoryEntity extends BaseEntity implements Serializable {
     * 库存
     */
     private Integer inventory;
+    /**
+     * 库存
+     */
+    private BigDecimal price;
 
+    /**
+     * 库存
+     */
+    private BigDecimal dwPrice;
 }
