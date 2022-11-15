@@ -22,6 +22,12 @@
           #{item}
         </foreach>
       </if>
+       <if test="dto.statusArray != null and dto.statusArray.size() > 0">
+        AND a.status IN
+        <foreach collection="dto.statusArray" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
       <if test="dto.id != null and dto.id != ''">
         AND a.id LIKE CONCAT( '%', #{dto.id},'%')
       </if>

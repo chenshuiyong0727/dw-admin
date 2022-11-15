@@ -94,6 +94,16 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
   */
   private String createTimeFrom;
 
+  /**
+  * 创建时间 开始
+  */
+  private String statusList;
+
+  /**
+   * 创建时间 开始
+   */
+  private List<String> statusArray;
+
  /**
   * 创建时间 结束
   */
@@ -108,7 +118,6 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
   * 更新时间 结束
   */
   private String updateTimeTo;
-
 
 	/**
 	 * 编号集合

@@ -13,6 +13,7 @@ import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.OrderNoUtils;
 import com.hf.common.infrastructure.util.PageUtil;
+import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.service.BatchCrudService;
 import com.hf.op.domain.model.dict.GoodsOrderEntity;
 import com.hf.op.domain.model.dict.GoodsOrderRepository;
@@ -23,6 +24,7 @@ import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsOrderPageVo;
 import com.hf.op.service.inf.GoodsOrderService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -74,6 +76,10 @@ public class GoodsOrderServiceImpl extends
    */
   @Override
   public ResponseMsg page(GoodsOrderRqDto dto){
+    if(StringUtilLocal.isNotEmpty(dto.getStatusList())){
+      List<String> list = Arrays.asList(dto.getStatusList().split(","));
+      dto.setStatusArray(list);
+    }
     IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
