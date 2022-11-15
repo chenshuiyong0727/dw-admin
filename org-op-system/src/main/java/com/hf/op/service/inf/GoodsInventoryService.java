@@ -5,6 +5,8 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryRqDto;
+import com.hf.op.infrastructure.dto.department.GoodsInventorySizeDto;
+import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import java.util.List;
 
 /**
@@ -28,13 +30,14 @@ public interface GoodsInventoryService {
    * @date: 2022-11-12 20:10:34
    */
   ResponseMsg add(GoodsInventoryDto dto);
+  ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto);
 
   /**
    * @description 更新
    * @method update
    * @date: 2022-11-12 20:10:34
    */
-  ResponseMsg update(GoodsInventoryDto dto);
+  ResponseMsg update(GoodsInventorySizeDto dto);
 
   /**
    * @description 获取详情

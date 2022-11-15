@@ -12,6 +12,8 @@ import com.hf.common.infrastructure.util.HfBeanUtil;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryRqDto;
+import com.hf.op.infrastructure.dto.department.GoodsInventorySizeDto;
+import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.service.GoodsInventoryServiceImpl;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -51,6 +53,18 @@ public class  GoodsInventoryController {
    * @param dto
    * @return
    */
+	@PostMapping("/shelvesGoods")
+  public ResponseMsg shelvesGoods(@RequestBody GoodsShelvesGoodsRqDto dto){
+    Assert.notNull(dto, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+    Assert.notNull(dto.getInventoryId(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+    return service.shelvesGoods(dto);
+  }
+
+  /**
+   * 新增数据
+   * @param dto
+   * @return
+   */
 	@PostMapping("")
   public ResponseMsg add(@RequestBody GoodsInventoryDto dto){
     Assert.notNull(dto, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
@@ -64,7 +78,7 @@ public class  GoodsInventoryController {
    * @return
    */
 	@PutMapping("")
-  public ResponseMsg update(@RequestBody GoodsInventoryDto dto){
+  public ResponseMsg update(@RequestBody GoodsInventorySizeDto dto){
     return service.update(dto);
   }
 

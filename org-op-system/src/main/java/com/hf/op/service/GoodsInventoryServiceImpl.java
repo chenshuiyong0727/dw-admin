@@ -18,6 +18,7 @@ import com.hf.op.infrastructure.dto.department.GoodsInventoryDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventoryRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventorySizeDto;
+import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsInventoryPageVo;
 import com.hf.op.service.inf.GoodsInventoryService;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class GoodsInventoryServiceImpl extends
 
   /**
    * @description 分页
-   * @method page
+   * @method page 手续费
    * @date: 2022-11-12 20:10:34
    */
   @Override
@@ -66,6 +67,10 @@ public class GoodsInventoryServiceImpl extends
    * @method add
    * @date: 2022-11-12 20:10:34
    */
+  @Override
+  public ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto){
+    return new ResponseMsg();
+  }
   @Override
   public ResponseMsg add(GoodsInventoryDto dto){
 //    Long id = createId();
@@ -102,7 +107,7 @@ public class GoodsInventoryServiceImpl extends
    * @date: 2022-11-12 20:10:34
    */
   @Override
-  public ResponseMsg update(GoodsInventoryDto dto){
+  public ResponseMsg update(GoodsInventorySizeDto dto){
     GoodsInventoryEntity entity = new GoodsInventoryEntity();
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
