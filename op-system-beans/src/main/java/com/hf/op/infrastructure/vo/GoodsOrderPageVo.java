@@ -18,6 +18,14 @@ public class GoodsOrderPageVo extends BaseDto implements Serializable {
 
 		private static final long serialVersionUID = 4402013775514598570L;
 
+    private String actNo;
+
+    private String imgUrl;
+
+    private String size;
+
+    private String address;
+
     /**
     * 订单号
     */

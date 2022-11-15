@@ -11,6 +11,7 @@ import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.ListBeanUtil;
+import com.hf.common.infrastructure.util.OrderNoUtils;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.service.BatchCrudService;
 import com.hf.op.domain.model.dict.GoodsOrderEntity;
@@ -55,7 +56,7 @@ public class GoodsOrderServiceImpl extends
       GoodsOrderEntity entity = new GoodsOrderEntity();
       entity.setId(id);
       entity.setStatus(OderStatusEnum.GALLERY.getOderStatus());
-      entity.setOrderNo("" + createId());
+      entity.setOrderNo(OrderNoUtils.getFreeOrderId());
       entity.setInventoryId(dto.getInventoryId());
       entity.setShelvesPrice(dto.getShelvesPrice());
       setCreateUser(entity);

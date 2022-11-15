@@ -4,8 +4,16 @@
 
   <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsOrderPageVo">
     SELECT
-    *
+    c.act_no,
+    c.img_url,
+    d.size,
+    e.address,
+    a.*
     FROM goods_order a
+    LEFT JOIN goods_inventory b on a.inventory_id = b.id
+    LEFT JOIN goods_base c on b.goods_id = c.id
+    LEFT JOIN goods_size d on b.size_id = d.id
+    LEFT JOIN goods_address e on a.address_id = e.id
     <where>
       a.data_status > -1
        <if test="dto.ids != null and dto.ids.size() > 0">
