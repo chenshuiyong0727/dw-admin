@@ -6,6 +6,7 @@
     SELECT
     c.act_no,
     c.img_url,
+    b.price,
     d.size,
     e.address,
     a.*
@@ -85,6 +86,19 @@
       </if>
       <if test="dto.updateTimeTo != null and dto.updateTimeTo != '' ">
         AND #{dto.updateTimeTo} >= DATE_FORMAT(a.`update_time`,'%Y-%m-%d')
+      </if>
+
+      <if test="dto.sellTimeFrom != null and dto.sellTimeFrom != '' ">
+        AND DATE_FORMAT(a.`sell_time`,'%Y-%m-%d') >= #{dto.sellTimeFrom}
+      </if>
+      <if test="dto.sellTimeTo != null and dto.sellTimeTo != '' ">
+        AND #{dto.sellTimeTo} >= DATE_FORMAT(a.`sell_time`,'%Y-%m-%d')
+      </if>
+      <if test="dto.successTimeFrom != null and dto.successTimeFrom != '' ">
+        AND DATE_FORMAT(a.`success_time`,'%Y-%m-%d') >= #{dto.successTimeFrom}
+      </if>
+      <if test="dto.successTimeTo != null and dto.successTimeTo != '' ">
+        AND #{dto.successTimeTo} >= DATE_FORMAT(a.`success_time`,'%Y-%m-%d')
       </if>
     </where>
     ORDER BY a.update_time DESC

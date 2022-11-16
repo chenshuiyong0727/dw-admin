@@ -3,6 +3,7 @@ package com.hf.op.infrastructure.vo;
 import com.hf.common.infrastructure.dto.BaseDto;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.ToString;
 
@@ -25,6 +26,7 @@ public class GoodsOrderPageVo extends BaseDto implements Serializable {
     private String size;
 
     private String address;
+    private BigDecimal price;
 
     /**
     * 订单号
@@ -47,6 +49,11 @@ public class GoodsOrderPageVo extends BaseDto implements Serializable {
     private BigDecimal shelvesPrice;
 
     /**
+    * 补贴价
+    */
+    private BigDecimal subsidiesPrice;
+
+    /**
     * 运费
     */
     private BigDecimal freight;
@@ -64,11 +71,12 @@ public class GoodsOrderPageVo extends BaseDto implements Serializable {
     /**
     * 地址编号
     */
-    private Long addressId;
+    private Integer addressId;
 
     /**
     * 运单编号
     */
-    private Long waybillNo;
-
+    private String waybillNo;
+    public LocalDateTime sellTime ;
+    public LocalDateTime successTime ;
 }

@@ -7,6 +7,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.hf.common.infrastructure.dto.StatusDto;
 import com.hf.common.infrastructure.resp.ResponseMsg;
+import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.HfBeanUtil;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderExportDto;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +44,19 @@ public class  GoodsOrderController {
 
   public GoodsOrderController(GoodsOrderServiceImpl service){
     this.service = service;
+  }
+
+  /**
+   * 出售
+   * @param dto
+   * @return
+   */
+	@PostMapping("/sellGoods")
+  public ResponseMsg sellGoods(@RequestBody GoodsOrderDto dto){
+    Assert.notNull(dto, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+    Assert.notNull(dto.getId(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+    Assert.notNull(dto.getStatus(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+    return service.sellGoods(dto);
   }
 
   /**

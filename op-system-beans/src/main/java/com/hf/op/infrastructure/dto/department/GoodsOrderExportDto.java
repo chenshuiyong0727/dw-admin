@@ -51,7 +51,10 @@ public class GoodsOrderExportDto implements Serializable {
     */
   @Excel(name = "运费")
   private BigDecimal freight;
-
+  /**
+   * 补贴价
+   */
+  private BigDecimal subsidiesPrice;
   /**
     * 手续费
     */
@@ -74,8 +77,9 @@ public class GoodsOrderExportDto implements Serializable {
     * 运单编号
     */
   @Excel(name = "运单编号")
-  private Long waybillNo;
-
+  private String waybillNo;
+  public LocalDateTime sellTime ;
+  public LocalDateTime successTime ;
   /**
     * 创建时间
     */

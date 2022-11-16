@@ -30,6 +30,7 @@ public interface GoodsOrderService {
    * @date: 2022-11-15 17:39:00
    */
   ResponseMsg add(GoodsOrderDto dto);
+  ResponseMsg sellGoods(GoodsOrderDto dto);
 
   /**
    * @description 更新

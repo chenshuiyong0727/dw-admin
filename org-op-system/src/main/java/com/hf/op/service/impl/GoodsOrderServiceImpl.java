@@ -23,6 +23,7 @@ import com.hf.op.infrastructure.dto.department.GoodsOrderRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsOrderPageVo;
 import com.hf.op.service.inf.GoodsOrderService;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,6 +90,26 @@ public class GoodsOrderServiceImpl extends
    * @method add
    * @date: 2022-11-15 17:39:00
    */
+  @Override
+  public ResponseMsg sellGoods(GoodsOrderDto dto){
+    // 修改订单状态
+    this.statusOrder(dto.getId(),dto.getStatus());
+    dto.setSellTime(LocalDateTime.now());
+    return this.update(dto);
+  }
+
+  private void statusOrder(Long id , Integer status){
+    if (id == null || status == null) {
+      return;
+    }
+    LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
+    queryWrapper.eq(GoodsOrderEntity::getId, id);
+    GoodsOrderEntity entity = new GoodsOrderEntity();
+    entity.setStatus(status);
+    setUpdateUser(entity);
+    repository.update(entity, queryWrapper);
+  }
+
   @Override
   public ResponseMsg add(GoodsOrderDto dto){
     Long id = createId();

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.hf.common.infrastructure.entity.BaseEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.ToString;
 
@@ -43,7 +44,10 @@ public class GoodsOrderEntity extends BaseEntity implements Serializable {
     * 运费
     */
     private BigDecimal freight;
-
+    /**
+     * 补贴价
+     */
+    private BigDecimal subsidiesPrice;
     /**
     * 手续费
     */
@@ -62,6 +66,8 @@ public class GoodsOrderEntity extends BaseEntity implements Serializable {
     /**
     * 运单编号
     */
-    private Long waybillNo;
+    private String waybillNo;
 
+    public LocalDateTime sellTime ;
+    public LocalDateTime successTime ;
 }

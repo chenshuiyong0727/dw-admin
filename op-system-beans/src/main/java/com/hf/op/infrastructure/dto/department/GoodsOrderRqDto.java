@@ -87,12 +87,22 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
  /**
   * 运单编号
   */
-  private Long waybillNo;
-
+  private String waybillNo;
   /**
   * 创建时间 开始
   */
   private String createTimeFrom;
+  /**
+  * 创建时间 开始
+  */
+  private String sellTimeFrom;
+  /**
+  * 创建时间 开始
+  */
+  private String successTimeFrom;
+
+ private String sellTimeTo;
+ private String successTimeTo;
 
   /**
   * 创建时间 开始
