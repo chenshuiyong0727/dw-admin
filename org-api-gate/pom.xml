@@ -94,7 +94,7 @@
         </configuration>
         <executions>
           <execution>
-            <phase>${package.type}</phase>
+<!--            <phase>${package.type}</phase>-->
             <goals>
               <goal>build</goal>
             </goals>

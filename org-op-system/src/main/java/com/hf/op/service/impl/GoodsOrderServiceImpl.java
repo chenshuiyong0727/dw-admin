@@ -94,7 +94,12 @@ public class GoodsOrderServiceImpl extends
   public ResponseMsg sellGoods(GoodsOrderDto dto){
     // 修改订单状态
     this.statusOrder(dto.getId(),dto.getStatus());
-    dto.setSellTime(LocalDateTime.now());
+    if (OderStatusEnum.WAITDELIVER.getOderStatus().equals(dto.getStatus())) {
+      dto.setSellTime(LocalDateTime.now());
+    }
+    if (OderStatusEnum.SUCCESSFUL.getOderStatus().equals(dto.getStatus())) {
+      dto.setSuccessTime(LocalDateTime.now());
+    }
     return this.update(dto);
   }
 

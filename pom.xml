@@ -336,7 +336,7 @@
     <!--    <warehouse.name>cn-north-1@7JJ5ROSX1SM7J1QXO0BZ</warehouse.name>-->
     <!--    <warehouse.pwd>bb17616f804de04f162d318e7eae71556df7adfc450478825880f3234eb37d8e</warehouse.pwd>-->
     <!--    <image.version>1.5.0</image.version>-->
-    <warehouse.path>114.132.243.79:5000/hlw</warehouse.path>
+    <warehouse.path>114.132.243.79:5000</warehouse.path>
     <warehouse.name></warehouse.name>
     <warehouse.pwd></warehouse.pwd>
     <image.version>1.0</image.version>
