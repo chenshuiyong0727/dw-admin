@@ -246,10 +246,11 @@ public class OpFileController {
   @PostMapping(value = "/uploadFileMinio")
   public ResponseMsg uploadFileMinio( MultipartFile file,
       @ApiParam(value = "类型：GUNI全局唯一，CUST自定义静态资源")
-      @RequestParam(name = "actNo", required = false) String actNo,
-      @RequestParam(name = "filename", required = false) String fileName) {
+      @RequestParam(name = "actNo", required = false) String actNo)
+//      ,@RequestParam(name = "fileName", required = false) String fileName)
+  {
     try {
-      fileName = StringUtilLocal.isNotEmpty(actNo) ? actNo + fileType : fileName;
+      String fileName = StringUtilLocal.isNotEmpty(actNo) ? actNo + fileType : System.currentTimeMillis() + fileType;
       String filePath = MinioFSClient.uploadFileNormal(fileName, file.getInputStream());
       String url = fileUrl + filePath;
       log.info(filePath);

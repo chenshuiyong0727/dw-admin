@@ -10,7 +10,7 @@ spring:
           preserved.ip.delete.timeout: 30000
 nacos:
 #  address: 127.0.0.1:8848
-  address: 192.168.8.70:8848
+  address: 114.132.243.79:8848
   orgnamespace: org-csy
   user: nacos
   pwd: nacos
@@ -26,7 +26,7 @@ logging:
 #  password: 123456
 #  port: 6379
 redis:
-  host: 192.168.8.70
+  host: 114.132.243.79
   password:
   port: 6379
   #rocketmq:
