@@ -25,6 +25,7 @@
       <groupId>com.xuxueli</groupId>
       <artifactId>xxl-sso-core</artifactId>
     </dependency>
+
   </dependencies>
 
   <build>

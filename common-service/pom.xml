@@ -111,14 +111,15 @@
       <groupId>com.jfinal</groupId>
       <artifactId>enjoy</artifactId>
     </dependency>
-    <!--  <dependency>
-        <groupId>com.oracle.database.jdbc</groupId>
-        <artifactId>ojdbc8</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>io.github.openfeign</groupId>
-        <artifactId>feign-httpclient</artifactId>
-      </dependency>-->
+    <!-- minio -->
+    <dependency>
+      <groupId>io.minio</groupId>
+      <artifactId>minio</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jodd</groupId>
+      <artifactId>jodd-core</artifactId>
+    </dependency>
     <dependency>
       <groupId>de.siegmar</groupId>
       <artifactId>logback-gelf</artifactId>
