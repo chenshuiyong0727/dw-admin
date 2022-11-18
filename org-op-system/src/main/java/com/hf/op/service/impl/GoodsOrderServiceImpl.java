@@ -81,6 +81,9 @@ public class GoodsOrderServiceImpl extends
       List<String> list = Arrays.asList(dto.getStatusList().split(","));
       dto.setStatusArray(list);
     }
+    if (StringUtilLocal.isNotEmpty(dto.getKeyword())){
+      dto.setKeyword(dto.getKeyword().toUpperCase());
+    }
     IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }

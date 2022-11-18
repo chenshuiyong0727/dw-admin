@@ -42,7 +42,10 @@ public class GoodsOrderDto extends BaseDto implements Serializable {
 	  * 运费
 	  */
 	  private BigDecimal freight;
-
+	/**
+	 * 利润
+	 */
+	private BigDecimal profits;
 		/**
 		 * 补贴价
 		 */

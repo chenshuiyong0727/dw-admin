@@ -45,7 +45,10 @@ public class GoodsOrderExportDto implements Serializable {
     */
   @Excel(name = "原售价")
   private BigDecimal shelvesPrice;
-
+  /**
+   * 利润
+   */
+  private BigDecimal profits;
   /**
     * 运费
     */

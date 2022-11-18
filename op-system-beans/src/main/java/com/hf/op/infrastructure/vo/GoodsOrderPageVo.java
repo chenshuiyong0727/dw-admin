@@ -57,7 +57,10 @@ public class GoodsOrderPageVo extends BaseDto implements Serializable {
     * 运费
     */
     private BigDecimal freight;
-
+    /**
+     * 利润
+     */
+    private BigDecimal profits;
     /**
     * 手续费
     */

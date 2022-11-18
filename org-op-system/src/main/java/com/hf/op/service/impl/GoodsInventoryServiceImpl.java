@@ -12,6 +12,7 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.PageUtil;
+import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.service.BatchCrudService;
 import com.hf.op.domain.model.dict.GoodsInventoryEntity;
 import com.hf.op.domain.model.dict.GoodsInventoryRepository;
@@ -57,6 +58,9 @@ public class GoodsInventoryServiceImpl extends
    */
   @Override
   public ResponseMsg page(GoodsInventoryRqDto dto){
+    if (StringUtilLocal.isNotEmpty(dto.getKeyword())){
+      dto.setKeyword(dto.getKeyword().toUpperCase());
+    }
     IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
