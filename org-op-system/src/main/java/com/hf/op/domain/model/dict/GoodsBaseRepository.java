@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.op.infrastructure.dto.department.GoodsBaseRqDto;
-import com.hf.op.infrastructure.dto.role.ListRoleDropDownListVo;
 import com.hf.op.infrastructure.vo.GoodsBasePageVo;
 import com.hf.op.infrastructure.vo.GoodsSizeListVo;
 import java.util.List;
@@ -29,4 +28,6 @@ public interface GoodsBaseRepository extends BaseMapper<GoodsBaseEntity> {
   IPage<GoodsBasePageVo> page(Page page, @Param("dto") GoodsBaseRqDto dto);
 
   List<GoodsSizeListVo> listDropDownSizes(@Param("type") String type);
+
+  List<Long> list1(@Param("actNo") String actNo);
 }

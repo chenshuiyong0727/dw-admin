@@ -10,6 +10,7 @@ import com.hf.common.infrastructure.exception.ServiceException;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.DictRespEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
+import com.hf.common.infrastructure.util.HttpClientUtilDw;
 import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.ListDistinctUtil;
 import com.hf.common.infrastructure.util.PageUtil;
@@ -18,6 +19,7 @@ import com.hf.common.service.BatchCrudService;
 import com.hf.op.domain.model.dict.GoodsBaseEntity;
 import com.hf.op.domain.model.dict.GoodsBaseRepository;
 import com.hf.op.domain.model.user.OpSysUserRepository;
+import com.hf.op.infrastructure.config.MinioFSClient;
 import com.hf.op.infrastructure.dto.department.GoodsBaseDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseRqDto;
@@ -26,9 +28,14 @@ import com.hf.op.infrastructure.resp.OpRespCodeEnum;
 import com.hf.op.infrastructure.vo.GoodsBasePageVo;
 import com.hf.op.infrastructure.vo.GoodsSizeListVo;
 import com.hf.op.service.inf.GoodsBaseService;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -46,6 +53,7 @@ public class GoodsBaseServiceImpl extends
     BatchCrudService<GoodsBaseRepository, GoodsBaseEntity> implements
     GoodsBaseService {
 
+  public static final String fileType = ".jpg";
   private GoodsBaseSizeServiceImpl goodsBaseSizeServiceImpl;
 
   private GoodsBaseRepository repository;
@@ -293,4 +301,62 @@ public class GoodsBaseServiceImpl extends
     return result;
   }
 
+
+  @SneakyThrows
+  @Override
+  public void t2() {
+    List<GoodsBaseEntity> list  = repository.selectList(null);
+    for (GoodsBaseEntity entity :list) {
+      List<Long> sizeIds = repository.list1(entity.getActNo());
+      goodsBaseSizeServiceImpl.addList(entity.getId(), sizeIds);
+    }
+  }
+
+  @SneakyThrows
+  @Override
+  public void init() {
+    List<GoodsBaseEntity> list  = repository.selectList(null);
+    for (int i = 0; i < list.size(); i++) {
+      GoodsBaseEntity entity = list.get(i);
+      String url = HttpClientUtilDw.getData(entity.getActNo());
+      if (StringUtilLocal.isEmpty(url)) {
+        continue;
+      }
+      String path = downloadAndUpdate(url,entity.getActNo());
+      entity.setImgUrl(path);
+      Thread.sleep(300L);
+    }
+    this.saveOrUpdateBatch(list);
+  }
+
+  public String downloadAndUpdate(String urlStringObj,String  actNo) {
+    String path = null;
+    OutputStream os = null;
+    InputStream is = null;
+    try {
+      String urlString = urlStringObj;
+      // 构造URL
+      URL url = new URL(urlString);
+      // 打开连接
+      URLConnection con = url.openConnection();
+      //设置请求超时为5s
+      con.setConnectTimeout(5 * 1000);
+      path = MinioFSClient.uploadFileNormal(actNo + fileType, con.getInputStream());
+      System.out.println(path);
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (null != os) {
+          os.close();
+        }
+        if (null != is) {
+          is.close();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return path;
+  }
 }

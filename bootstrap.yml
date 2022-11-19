@@ -9,9 +9,10 @@ spring:
           preserved.heart.beat.timeout: 30000
           preserved.ip.delete.timeout: 30000
 nacos:
-#  address: 127.0.0.1:8848
   address: 114.132.243.79:8848
-  orgnamespace: public
+  orgnamespace: org-csy
+#  address: 127.0.0.1:8848
+#  orgnamespace: org-csy
   user: nacos
   pwd: nacos
 logging:
@@ -27,7 +28,7 @@ logging:
 #  port: 6379
 redis:
   host: 114.132.243.79
-  password:
+  password: csy123456
   port: 6379
   #rocketmq:
   #address: 192.168.8.81:9876

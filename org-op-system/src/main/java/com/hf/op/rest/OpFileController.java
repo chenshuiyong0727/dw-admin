@@ -6,6 +6,7 @@ import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.util.HttpClientUtilDw;
 import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.op.infrastructure.config.MinioFSClient;
+import com.hf.op.service.impl.GoodsBaseServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.File;
@@ -54,7 +55,9 @@ public class OpFileController {
   @Value("${minio.fileUrl}")
   private String fileUrl;
 
-  public OpFileController() {
+  private GoodsBaseServiceImpl service;
+  public OpFileController(GoodsBaseServiceImpl service) {
+    this.service = service;
   }
 
   @ApiOperation(value = "文件上传", notes = "无")
@@ -180,6 +183,21 @@ public class OpFileController {
     return new ResponseMsg().setData(map);
   }
 
+  /**
+   * Login
+   */
+  @RequestMapping("/t1")
+  @ResponseBody
+  public Integer t1() {
+    service.init();
+    return 1 ;
+  }
+  @RequestMapping("/t2")
+  @ResponseBody
+  public Integer t2() {
+    service.t2();
+    return 1 ;
+  }
 
 
   public String downloadAndUpdate(String urlStringObj,String  actNo) {

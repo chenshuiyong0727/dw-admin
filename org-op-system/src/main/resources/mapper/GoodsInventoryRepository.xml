@@ -28,7 +28,7 @@
          )
       </if>
     </where>
-    ORDER BY b.update_time DESC
+    ORDER BY b.update_time DESC , id desc
   </select>
 
   <select id="pageGoods" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
@@ -46,13 +46,13 @@
         </foreach>
       </if>
       <if test="dto.id != null and dto.id != ''">
-        AND a.id LIKE CONCAT( '%', #{dto.id},'%')
+        AND a.id = #{dto.id}
       </if>
       <if test="dto.goodsId != null and dto.goodsId != ''">
-        AND a.goods_id LIKE CONCAT( '%', #{dto.goodsId},'%')
+        AND a.goods_id  = #{dto.goodsId}
       </if>
       <if test="dto.sizeId != null and dto.sizeId != ''">
-        AND a.size_id LIKE CONCAT( '%', #{dto.sizeId},'%')
+        AND a.size_id  = #{dto.sizeId}
       </if>
       <if test="dto.inventoryFrom != null and dto.inventoryFrom != '' ">
         AND a.inventory >= #{dto.inventoryFrom}

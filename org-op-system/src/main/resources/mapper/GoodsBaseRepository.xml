@@ -47,4 +47,12 @@
       AND type LIKE CONCAT( '%', #{type},'%')
     </if>
   </select>
+
+  <select id="list1"
+    resultType="java.lang.Long">
+      SELECT DISTINCT(t2.id) size_id from goods_import_01  t1
+      LEFT JOIN goods_size t2
+      on t1.size =t2.size
+      where ( UPPER(act_no))= #{actNo}
+  </select>
 </mapper>
