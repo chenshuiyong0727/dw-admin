@@ -25,10 +25,12 @@ import com.hf.op.infrastructure.vo.GoodsInventoryPageVo;
 import com.hf.op.service.inf.GoodsInventoryService;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 商品库存 服务接口实现
@@ -69,6 +71,22 @@ public class GoodsInventoryServiceImpl extends
     IPage ipage = repository.pageGoods(new Page(dto.getPageNum(), dto.getPageSize()),dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
+
+
+  @SneakyThrows
+  @Override
+  public void t3() {
+    List<GoodsInventoryPageVo> list  = repository.list1();
+    if (!CollectionUtils.isEmpty(list)){
+      for (GoodsInventoryPageVo vo : list) {
+        GoodsInventoryEntity entity = new GoodsInventoryEntity();
+        entity.setId(vo.getId());
+        entity.setInventory(vo.getInventory());
+        repository.updateById(entity);
+      }
+    }
+  }
+
 
   /**
    * @description 新增

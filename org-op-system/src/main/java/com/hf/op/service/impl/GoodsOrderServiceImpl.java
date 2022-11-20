@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
-import com.hf.common.infrastructure.constant.OderStatusEnum;
+import com.hf.common.infrastructure.constant.OrderStatusEnum;
 import com.hf.common.infrastructure.dto.StatusDto;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
@@ -58,7 +58,7 @@ public class GoodsOrderServiceImpl extends
       Long id = createId();
       GoodsOrderEntity entity = new GoodsOrderEntity();
       entity.setId(id);
-      entity.setStatus(OderStatusEnum.GALLERY.getOderStatus());
+      entity.setStatus(OrderStatusEnum.GALLERY.getOderStatus());
       entity.setOrderNo(OrderNoUtils.getFreeOrderId());
       entity.setInventoryId(dto.getInventoryId());
       entity.setShelvesPrice(dto.getShelvesPrice());
@@ -97,10 +97,10 @@ public class GoodsOrderServiceImpl extends
   public ResponseMsg sellGoods(GoodsOrderDto dto){
     // 修改订单状态
     this.statusOrder(dto.getId(),dto.getStatus());
-    if (OderStatusEnum.WAITDELIVER.getOderStatus().equals(dto.getStatus())) {
+    if (OrderStatusEnum.WAITDELIVER.getOderStatus().equals(dto.getStatus())) {
       dto.setSellTime(LocalDateTime.now());
     }
-    if (OderStatusEnum.SUCCESSFUL.getOderStatus().equals(dto.getStatus())) {
+    if (OrderStatusEnum.SUCCESSFUL.getOderStatus().equals(dto.getStatus())) {
       dto.setSuccessTime(LocalDateTime.now());
     }
     return this.update(dto);

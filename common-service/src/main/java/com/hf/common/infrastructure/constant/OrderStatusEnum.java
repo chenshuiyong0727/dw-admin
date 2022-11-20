@@ -7,7 +7,7 @@ package com.hf.common.infrastructure.constant;
  * @function
  * @date 2022/4/19
  **/
-public enum OderStatusEnum {
+public enum OrderStatusEnum {
 
 //  下架	1
 //  已上架	2
@@ -42,13 +42,13 @@ public enum OderStatusEnum {
    */
   private String describe;
 
-  OderStatusEnum(Integer status, String describe) {
+  OrderStatusEnum(Integer status, String describe) {
     this.status = status;
     this.describe = describe;
   }
 
   public static String queryByOderStatus(Integer status) {
-    for (OderStatusEnum value : OderStatusEnum.values()) {
+    for (OrderStatusEnum value : OrderStatusEnum.values()) {
       if (value.status.equals(status)) {
         return value.describe;
       }
@@ -57,7 +57,7 @@ public enum OderStatusEnum {
   }
 
   public static Integer queryByOderStatus(String describe) {
-    for (OderStatusEnum value : OderStatusEnum.values()) {
+    for (OrderStatusEnum value : OrderStatusEnum.values()) {
       if (value.describe.equals(describe)) {
         return value.status;
       }

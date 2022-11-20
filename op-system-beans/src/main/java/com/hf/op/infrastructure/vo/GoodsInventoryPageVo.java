@@ -34,6 +34,15 @@ public class GoodsInventoryPageVo extends BaseDto implements Serializable {
     private Integer inventory;
 
     /**
+    * 成功数
+    */
+    private Integer successCount;
+    /**
+    * 上架数
+    */
+    private Integer galleryCount;
+
+    /**
      * 尺码
      */
     private String size;

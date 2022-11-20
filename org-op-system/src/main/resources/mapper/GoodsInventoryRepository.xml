@@ -9,12 +9,20 @@
       goods_id ,
       count(inventory)  inventory
       FROM goods_inventory a
-      GROUP BY goods_id
+       where 1=1
+    <if test="dto.inventoryTo != null and dto.inventoryTo == 0 ">
+         and a.inventory = 0
+    </if>
+    <if test="dto.inventoryTo != null and dto.inventoryTo == 1 ">
+         and a.inventory > 0
+    </if>
+
+         GROUP BY goods_id
       ) a
       LEFT JOIN
     goods_base b on a.goods_id = b.id
     <where>
-      a.inventory > 0
+         1=1
       <if test="dto.keyword != null and dto.keyword != ''">
         AND (
             b.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
@@ -34,9 +42,20 @@
   <select id="pageGoods" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
     SELECT
     c.size,
+    IFNULL(d.success_count,0) success_count,
+    IFNULL(e.gallery_count,0) gallery_count,
     a.*
     FROM goods_inventory a
     LEFT JOIN goods_size c on a.size_id = c.id
+    LEFT JOIN (
+    select inventory_id ,count(1) success_count from goods_order where
+    `status` = 7 group BY inventory_id
+    ) d on d.inventory_id = a.id
+    LEFT JOIN (
+    select inventory_id ,count(1) gallery_count from goods_order where
+    `status` != 7
+    group BY inventory_id
+    ) e on e.inventory_id = a.id
     <where>
       a.data_status > -1
        <if test="dto.ids != null and dto.ids.size() > 0">
@@ -76,5 +95,15 @@
     </where>
     ORDER BY a.update_time DESC
   </select>
-
+  <select id="list1" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
+    SELECT
+    a.id,
+    a.success_count,
+    b.inventory - a.success_count inventory
+     from (
+    select inventory_id id,count(1) success_count from goods_order where
+    `status` = 7 group BY inventory_id
+    ) a
+    LEFT JOIN goods_inventory b on a.id =b.id
+  </select>
 </mapper>

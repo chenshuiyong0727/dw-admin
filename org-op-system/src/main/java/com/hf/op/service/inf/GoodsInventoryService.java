@@ -31,6 +31,7 @@ public interface GoodsInventoryService {
    */
   ResponseMsg add(GoodsInventoryDto dto);
   ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto);
+  void t3();
 
   /**
    * @description 更新

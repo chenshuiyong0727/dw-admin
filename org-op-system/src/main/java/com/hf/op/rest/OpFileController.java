@@ -7,6 +7,7 @@ import com.hf.common.infrastructure.util.HttpClientUtilDw;
 import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.op.infrastructure.config.MinioFSClient;
 import com.hf.op.service.impl.GoodsBaseServiceImpl;
+import com.hf.op.service.impl.GoodsInventoryServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.File;
@@ -56,7 +57,10 @@ public class OpFileController {
   private String fileUrl;
 
   private GoodsBaseServiceImpl service;
-  public OpFileController(GoodsBaseServiceImpl service) {
+
+  private GoodsInventoryServiceImpl  goodsInventoryServiceImpl;
+  public OpFileController(GoodsBaseServiceImpl service,GoodsInventoryServiceImpl  goodsInventoryServiceImpl) {
+    this.goodsInventoryServiceImpl = goodsInventoryServiceImpl;
     this.service = service;
   }
 
@@ -186,16 +190,22 @@ public class OpFileController {
   /**
    * Login
    */
-  @RequestMapping("/t1")
+//  @RequestMapping("/t1")
+//  @ResponseBody
+//  public Integer t1() {
+//    service.init();
+//    return 1 ;
+//  }
+//  @RequestMapping("/t2")
+//  @ResponseBody
+//  public Integer t2() {
+//    service.t2();
+//    return 1 ;
+//  }
+  @RequestMapping("/t3")
   @ResponseBody
-  public Integer t1() {
-    service.init();
-    return 1 ;
-  }
-  @RequestMapping("/t2")
-  @ResponseBody
-  public Integer t2() {
-    service.t2();
+  public Integer t3() {
+    goodsInventoryServiceImpl.t3();
     return 1 ;
   }
 
