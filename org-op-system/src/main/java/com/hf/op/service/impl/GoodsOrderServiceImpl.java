@@ -15,6 +15,8 @@ import com.hf.common.infrastructure.util.OrderNoUtils;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.infrastructure.util.StringUtilLocal;
 import com.hf.common.service.BatchCrudService;
+import com.hf.op.domain.model.dict.GoodsInventoryEntity;
+import com.hf.op.domain.model.dict.GoodsInventoryRepository;
 import com.hf.op.domain.model.dict.GoodsOrderEntity;
 import com.hf.op.domain.model.dict.GoodsOrderRepository;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDto;
@@ -34,6 +36,7 @@ import org.springframework.util.Assert;
 
 /**
  * 商品订单信息 服务接口实现
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
@@ -45,12 +48,16 @@ public class GoodsOrderServiceImpl extends
 
   private GoodsOrderRepository repository;
 
-  public GoodsOrderServiceImpl(GoodsOrderRepository repository){
+  private GoodsInventoryRepository goodsInventoryRepository;
+
+  public GoodsOrderServiceImpl(GoodsOrderRepository repository,
+      GoodsInventoryRepository goodsInventoryRepository) {
     this.repository = repository;
+    this.goodsInventoryRepository = goodsInventoryRepository;
   }
 
   @Override
-  public ResponseMsg addList(GoodsShelvesGoodsRqDto dto){
+  public ResponseMsg addList(GoodsShelvesGoodsRqDto dto) {
     List<GoodsOrderEntity> entities = new ArrayList<>();
     for (int i = 0; i < dto.getNum(); i++) {
       Assert.notNull(dto.getInventoryId(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
@@ -76,15 +83,15 @@ public class GoodsOrderServiceImpl extends
    * @date: 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg page(GoodsOrderRqDto dto){
-    if(StringUtilLocal.isNotEmpty(dto.getStatusList())){
+  public ResponseMsg page(GoodsOrderRqDto dto) {
+    if (StringUtilLocal.isNotEmpty(dto.getStatusList())) {
       List<String> list = Arrays.asList(dto.getStatusList().split(","));
       dto.setStatusArray(list);
     }
-    if (StringUtilLocal.isNotEmpty(dto.getKeyword())){
+    if (StringUtilLocal.isNotEmpty(dto.getKeyword())) {
       dto.setKeyword(dto.getKeyword().toUpperCase());
     }
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
+    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -94,19 +101,32 @@ public class GoodsOrderServiceImpl extends
    * @date: 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg sellGoods(GoodsOrderDto dto){
+  public ResponseMsg sellGoods(GoodsOrderDto dto) {
     // 修改订单状态
-    this.statusOrder(dto.getId(),dto.getStatus());
     if (OrderStatusEnum.WAITDELIVER.getOderStatus().equals(dto.getStatus())) {
       dto.setSellTime(LocalDateTime.now());
     }
     if (OrderStatusEnum.SUCCESSFUL.getOderStatus().equals(dto.getStatus())) {
       dto.setSuccessTime(LocalDateTime.now());
+      this.successOrder(dto);
     }
+    this.statusOrder(dto.getId(), dto.getStatus());
     return this.update(dto);
   }
 
-  private void statusOrder(Long id , Integer status){
+  private void successOrder(GoodsOrderDto dto) {
+    GoodsOrderEntity entity = repository.selectById(dto.getId());
+    if (!OrderStatusEnum.SUCCESSFUL.getOderStatus().equals(entity.getStatus())) {
+      GoodsInventoryEntity goodsInventoryEntity = goodsInventoryRepository
+          .selectById(entity.getInventoryId());
+      if (goodsInventoryEntity !=null && goodsInventoryEntity.getInventory() > 0) {
+        goodsInventoryEntity.setInventory(goodsInventoryEntity.getInventory() - 1);
+        goodsInventoryRepository.updateById(goodsInventoryEntity);
+      }
+    }
+  }
+
+  private void statusOrder(Long id, Integer status) {
     if (id == null || status == null) {
       return;
     }
@@ -119,7 +139,7 @@ public class GoodsOrderServiceImpl extends
   }
 
   @Override
-  public ResponseMsg add(GoodsOrderDto dto){
+  public ResponseMsg add(GoodsOrderDto dto) {
     Long id = createId();
     GoodsOrderEntity entity = new GoodsOrderEntity();
     BeanUtils.copyProperties(dto, entity);
@@ -128,7 +148,7 @@ public class GoodsOrderServiceImpl extends
     try {
       repository.insert(entity);
     } catch (Exception e) {
-      log.error("新增失败 ",e);
+      log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
           "新增失败");
     }
@@ -141,14 +161,14 @@ public class GoodsOrderServiceImpl extends
    * @date: 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg update(GoodsOrderDto dto){
+  public ResponseMsg update(GoodsOrderDto dto) {
     GoodsOrderEntity entity = new GoodsOrderEntity();
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
     try {
       repository.updateById(entity);
     } catch (Exception e) {
-      log.error("更新失败 ",e);
+      log.error("更新失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
           "更新失败");
     }
@@ -161,7 +181,7 @@ public class GoodsOrderServiceImpl extends
    * @date: 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg detail(Long id){
+  public ResponseMsg detail(Long id) {
     GoodsOrderEntity entity = repository.selectById(id);
     if (entity != null) {
       GoodsOrderDto dto = new GoodsOrderDto();
@@ -178,7 +198,7 @@ public class GoodsOrderServiceImpl extends
    * @date: 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg remove(Long id){
+  public ResponseMsg remove(Long id) {
     LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GoodsOrderEntity::getId, id)
         .between(GoodsOrderEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
@@ -199,7 +219,7 @@ public class GoodsOrderServiceImpl extends
    * @date: 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg batchRemove(List<Long> ids){
+  public ResponseMsg batchRemove(List<Long> ids) {
     LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.in(GoodsOrderEntity::getId, ids)
         .between(GoodsOrderEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
@@ -219,7 +239,7 @@ public class GoodsOrderServiceImpl extends
    * @date 2022-11-15 17:39:00
    */
   @Override
-  public ResponseMsg status(StatusDto dto){
+  public ResponseMsg status(StatusDto dto) {
     LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GoodsOrderEntity::getId, dto.getId())
         .between(GoodsOrderEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),

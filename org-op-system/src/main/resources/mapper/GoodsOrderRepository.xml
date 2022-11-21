@@ -108,7 +108,7 @@
         AND #{dto.successTimeTo} >= DATE_FORMAT(a.`success_time`,'%Y-%m-%d')
       </if>
     </where>
-    ORDER BY a.update_time DESC
+    ORDER BY  a.update_time DESC ,a.id desc
   </select>
 
 </mapper>
