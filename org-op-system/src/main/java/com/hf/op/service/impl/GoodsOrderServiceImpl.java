@@ -110,7 +110,7 @@ public class GoodsOrderServiceImpl extends
       dto.setSuccessTime(LocalDateTime.now());
       this.successOrder(dto);
     }
-    this.statusOrder(dto.getId(), dto.getStatus());
+//    this.statusOrder(dto.getId(), dto.getStatus());
     return this.update(dto);
   }
 
