@@ -27,12 +27,8 @@ import com.hf.common.infrastructure.resp.BaseResponse;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.common.infrastructure.resp.ServerErrorConst;
-import com.hf.common.infrastructure.util.AESUtil;
-import com.hf.common.infrastructure.util.HttpClientUtil;
-import com.hf.common.infrastructure.util.MD5Utils;
 import com.hf.common.infrastructure.util.PasswordUtils;
 import com.hf.common.infrastructure.util.StringUtilLocal;
-import com.hf.common.infrastructure.util.ThreadPoolUtils;
 import com.hf.common.service.CrudService;
 import com.hf.op.domain.model.auth.AuthLoginLogEntity;
 import com.hf.op.domain.model.auth.AuthLoginLogRepository;
@@ -52,11 +48,9 @@ import com.hf.op.infrastructure.resp.OpRespCodeEnum;
 import com.hf.op.service.inf.OpSysUserService;
 import com.hf.op.service.inf.auth.AuthService;
 import com.open.api.dto.FunctionDto;
-import com.open.api.req.ApiDataRequestMsg;
 import com.xxl.sso.core.login.SsoTokenLoginHelper;
 import com.xxl.sso.core.store.SsoSessionIdHelper;
 import com.xxl.sso.core.user.XxlSsoUser;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -119,26 +113,26 @@ public class AuthServiceImpl extends CrudService implements AuthService {
   @Value("${refreshExpire}")
   private int refreshExpire;
 
-  @Value("${plateFormUrl}")
-  private String plateFormUrl;
-
-  @Value("${portalUrl}")
-  private String portalUrl;
-
-  @Value("${plateFormAccountId}")
-  private String plateFormAccountId;
-
-  @Value("${plateFormKey}")
-  private String plateFormKey;
-
-  @Value("${miniFormUrl}")
-  private String miniFormUrl;
-
-  @Value("${miniFormUser}")
-  private String miniFormUser;
-
-  @Value("${miniFormPass}")
-  private String miniFormPass;
+//  @Value("${plateFormUrl}")
+//  private String plateFormUrl;
+//
+//  @Value("${portalUrl}")
+//  private String portalUrl;
+//
+//  @Value("${plateFormAccountId}")
+//  private String plateFormAccountId;
+//
+//  @Value("${plateFormKey}")
+//  private String plateFormKey;
+//
+//  @Value("${miniFormUrl}")
+//  private String miniFormUrl;
+//
+//  @Value("${miniFormUser}")
+//  private String miniFormUser;
+//
+//  @Value("${miniFormPass}")
+//  private String miniFormPass;
 
   @Value("${xxl.sso.redis.expire.minute}")
   private int redisExpireMinute;
@@ -610,146 +604,146 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     authUnifiedUserEntity.setSsoUserNo(UUID.randomUUID().toString().replace("-", ""));
     setCreateUser(authUnifiedUserEntity);
     authLoginRepository.insert(authUnifiedUserEntity);
-    this.addThirdSSoUser(authUnifiedUserEntity);
+//    this.addThirdSSoUser(authUnifiedUserEntity);
     return new ResponseMsg(authUnifiedUserEntity);
   }
 
   /**
    * 异步将用户同步到业务系统
    */
-  private void addThirdSSoUser(AuthUnifiedUserEntity authUnifiedUserEntity) {
-    this.addPlatUserSynchronous(authUnifiedUserEntity);
-    this.addPortalUserSynchronous(authUnifiedUserEntity);
-    this.addMiniUserSynchronous(authUnifiedUserEntity, CommonConstant.MINI_SAVE_SSO_USER);
-  }
+//  private void addThirdSSoUser(AuthUnifiedUserEntity authUnifiedUserEntity) {
+//    this.addPlatUserSynchronous(authUnifiedUserEntity);
+//    this.addPortalUserSynchronous(authUnifiedUserEntity);
+//    this.addMiniUserSynchronous(authUnifiedUserEntity, CommonConstant.MINI_SAVE_SSO_USER);
+//  }
 
+
+//  /**
+//   * 同步到小程序平台
+//   */
+//  private void addMiniUserSynchronous(AuthUnifiedUserEntity authUnifiedUserEntity, String path) {
+//    log.error(" AuthServiceImpl.addMiniUserSynchronous  ");
+//    ThreadPoolUtils.getPool().execute(() -> {
+//      try {
+//        this.saveMiniUser(authUnifiedUserEntity, path);
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//        log.error("AuthServiceImpl.addMiniUserSynchronous 异常 " + e);
+//      }
+//    });
+//  }
+//
+//  /**
+//   * 同步到运营平台
+//   */
+//  private void addPlatUserSynchronous(AuthUnifiedUserEntity authUnifiedUserEntity) {
+//    log.error(" AuthServiceImpl.addPlatUserSynchronous  ");
+//    ThreadPoolUtils.getPool().execute(() -> {
+//      try {
+//        this.addPlatUser(authUnifiedUserEntity);
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//        log.error("AuthServiceImpl.addPlatUserSynchronous 异常 " + e);
+//      }
+//    });
+//  }
+//
+//  /**
+//   * 同步到运营平台
+//   */
+//  private void addPortalUserSynchronous(AuthUnifiedUserEntity authUnifiedUserEntity) {
+//    log.error(" AuthServiceImpl.addPortalUserSynchronous  ");
+//    ThreadPoolUtils.getPool().execute(() -> {
+//      try {
+//        this.addPortalUser(authUnifiedUserEntity);
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//        log.error("AuthServiceImpl.addPortalUserSynchronous 异常 " + e);
+//      }
+//    });
+//  }
 
   /**
    * 同步到小程序平台
    */
-  private void addMiniUserSynchronous(AuthUnifiedUserEntity authUnifiedUserEntity, String path) {
-    log.error(" AuthServiceImpl.addMiniUserSynchronous  ");
-    ThreadPoolUtils.getPool().execute(() -> {
-      try {
-        this.saveMiniUser(authUnifiedUserEntity, path);
-      } catch (Exception e) {
-        e.printStackTrace();
-        log.error("AuthServiceImpl.addMiniUserSynchronous 异常 " + e);
-      }
-    });
-  }
-
-  /**
-   * 同步到运营平台
-   */
-  private void addPlatUserSynchronous(AuthUnifiedUserEntity authUnifiedUserEntity) {
-    log.error(" AuthServiceImpl.addPlatUserSynchronous  ");
-    ThreadPoolUtils.getPool().execute(() -> {
-      try {
-        this.addPlatUser(authUnifiedUserEntity);
-      } catch (Exception e) {
-        e.printStackTrace();
-        log.error("AuthServiceImpl.addPlatUserSynchronous 异常 " + e);
-      }
-    });
-  }
-
-  /**
-   * 同步到运营平台
-   */
-  private void addPortalUserSynchronous(AuthUnifiedUserEntity authUnifiedUserEntity) {
-    log.error(" AuthServiceImpl.addPortalUserSynchronous  ");
-    ThreadPoolUtils.getPool().execute(() -> {
-      try {
-        this.addPortalUser(authUnifiedUserEntity);
-      } catch (Exception e) {
-        e.printStackTrace();
-        log.error("AuthServiceImpl.addPortalUserSynchronous 异常 " + e);
-      }
-    });
-  }
-
-  /**
-   * 同步到小程序平台
-   */
-  private void saveMiniUser(AuthUnifiedUserEntity authUnifiedUserEntity, String path)
-      throws IOException {
-    Map<String, String> headers = HttpClientUtil.reqHeader(miniFormUser, miniFormPass);
-    String url = miniFormUrl;
-    Map<String, Object> param = this.addMiniUserData(authUnifiedUserEntity);
-    HttpClientUtil.postByMap(url + path, param, headers);
-  }
+//  private void saveMiniUser(AuthUnifiedUserEntity authUnifiedUserEntity, String path)
+//      throws IOException {
+//    Map<String, String> headers = HttpClientUtil.reqHeader(miniFormUser, miniFormPass);
+//    String url = miniFormUrl;
+//    Map<String, Object> param = this.addMiniUserData(authUnifiedUserEntity);
+//    HttpClientUtil.postByMap(url + path, param, headers);
+//  }
 
   /**
    * 同步到运营系统
    */
-  private void addPlatUser(AuthUnifiedUserEntity authUnifiedUserEntity) throws IOException {
-    String sendData = this.addPlatUserData(authUnifiedUserEntity);
-    String path = CommonConstant.PLAT_SAVE_SSO_USER;
-    // 运营平台
-    HttpClientUtil.postByJson(plateFormUrl + path, sendData, plateFormKey);
-  }
+//  private void addPlatUser(AuthUnifiedUserEntity authUnifiedUserEntity) throws IOException {
+//    String sendData = this.addPlatUserData(authUnifiedUserEntity);
+//    String path = CommonConstant.PLAT_SAVE_SSO_USER;
+//    // 运营平台
+//    HttpClientUtil.postByJson(plateFormUrl + path, sendData, plateFormKey);
+//  }
 
   /**
    * 同步到门户后台
    */
-  private void addPortalUser(AuthUnifiedUserEntity authUnifiedUserEntity) throws IOException {
-    String sendData = this.addPlatUserData(authUnifiedUserEntity);
-    String path = CommonConstant.PORTAL_SAVE_SSO_USER;
-    // 门户后台
-    HttpClientUtil.postByJsonPortal(portalUrl + path, sendData, plateFormKey);
-  }
+//  private void addPortalUser(AuthUnifiedUserEntity authUnifiedUserEntity) throws IOException {
+//    String sendData = this.addPlatUserData(authUnifiedUserEntity);
+//    String path = CommonConstant.PORTAL_SAVE_SSO_USER;
+//    // 门户后台
+//    HttpClientUtil.postByJsonPortal(portalUrl + path, sendData, plateFormKey);
+//  }
 
-  private Map<String, Object> addMiniUserData(AuthUnifiedUserEntity authUnifiedUserEntity) {
-    Map<String, Object> userTherapist = new HashMap<>();
-    userTherapist.put("recom", 0);
-    userTherapist.put("type", "1");
-    userTherapist.put("userId", authUnifiedUserEntity.getUserAccount());
-    userTherapist.put("name", authUnifiedUserEntity.getUserRealName());
-    userTherapist.put("phone", authUnifiedUserEntity.getUserMobile());
-    userTherapist.put("ssoUserNo", authUnifiedUserEntity.getSsoUserNo());
-    Map<String, Object> param = new HashMap<>();
-    param.put("userTherapist", userTherapist);
-    return param;
-  }
-
-  private String addPlatUserData(AuthUnifiedUserEntity authUnifiedUserEntity) {
-    ApiDataRequestMsg apiDataRequestMsg = new ApiDataRequestMsg();
-    apiDataRequestMsg.setRequestId(UUID.randomUUID().toString().replace("-", ""));
-    apiDataRequestMsg.setTimestamp(System.currentTimeMillis());
-    apiDataRequestMsg.setAccountId(plateFormAccountId);
-    String key = plateFormKey;
-    Map dataMap = new HashMap();
-    dataMap.put("userAccount", authUnifiedUserEntity.getUserAccount());
-    dataMap.put("userRealName", authUnifiedUserEntity.getUserRealName());
-    dataMap.put("userEmail", authUnifiedUserEntity.getUserEmail());
-    dataMap.put("userMobile", authUnifiedUserEntity.getUserMobile());
-    dataMap.put("userType", AuthUserComDto.USER_TYPE_SSO);
-    dataMap.put("ssoUserNo", authUnifiedUserEntity.getSsoUserNo());
-    dataMap.put("id", authUnifiedUserEntity.getId());
-    String dataContent = null;
-    ObjectMapper jacksonObjectMapper = new ObjectMapper();
-    try {
-      dataContent = jacksonObjectMapper.writeValueAsString(dataMap);
-    } catch (Exception e) {
-      log.error("dataContent parse error:", e);
-    }
-    log.info("dataContent ===  " + dataContent);
-    String data = AESUtil.encryptWithKey(dataContent, key);
-    apiDataRequestMsg.setData(data);
-    String str =
-        "account_id=" + apiDataRequestMsg.getAccountId() + "&request_id=" + apiDataRequestMsg
-            .getRequestId() + "&data=" + data + "&timestamp=" + apiDataRequestMsg.getTimestamp();
-    String sign = MD5Utils.getMD5(str + "&key=" + key, "UTF-8");
-    apiDataRequestMsg.setSign(sign);
-    String sendData = null;
-    try {
-      sendData = jacksonObjectMapper.writeValueAsString(apiDataRequestMsg);
-    } catch (Exception e) {
-      log.error("sendData parse error:", e);
-    }
-    return sendData;
-  }
+//  private Map<String, Object> addMiniUserData(AuthUnifiedUserEntity authUnifiedUserEntity) {
+//    Map<String, Object> userTherapist = new HashMap<>();
+//    userTherapist.put("recom", 0);
+//    userTherapist.put("type", "1");
+//    userTherapist.put("userId", authUnifiedUserEntity.getUserAccount());
+//    userTherapist.put("name", authUnifiedUserEntity.getUserRealName());
+//    userTherapist.put("phone", authUnifiedUserEntity.getUserMobile());
+//    userTherapist.put("ssoUserNo", authUnifiedUserEntity.getSsoUserNo());
+//    Map<String, Object> param = new HashMap<>();
+//    param.put("userTherapist", userTherapist);
+//    return param;
+//  }
+//
+//  private String addPlatUserData(AuthUnifiedUserEntity authUnifiedUserEntity) {
+//    ApiDataRequestMsg apiDataRequestMsg = new ApiDataRequestMsg();
+//    apiDataRequestMsg.setRequestId(UUID.randomUUID().toString().replace("-", ""));
+//    apiDataRequestMsg.setTimestamp(System.currentTimeMillis());
+//    apiDataRequestMsg.setAccountId(plateFormAccountId);
+//    String key = plateFormKey;
+//    Map dataMap = new HashMap();
+//    dataMap.put("userAccount", authUnifiedUserEntity.getUserAccount());
+//    dataMap.put("userRealName", authUnifiedUserEntity.getUserRealName());
+//    dataMap.put("userEmail", authUnifiedUserEntity.getUserEmail());
+//    dataMap.put("userMobile", authUnifiedUserEntity.getUserMobile());
+//    dataMap.put("userType", AuthUserComDto.USER_TYPE_SSO);
+//    dataMap.put("ssoUserNo", authUnifiedUserEntity.getSsoUserNo());
+//    dataMap.put("id", authUnifiedUserEntity.getId());
+//    String dataContent = null;
+//    ObjectMapper jacksonObjectMapper = new ObjectMapper();
+//    try {
+//      dataContent = jacksonObjectMapper.writeValueAsString(dataMap);
+//    } catch (Exception e) {
+//      log.error("dataContent parse error:", e);
+//    }
+//    log.info("dataContent ===  " + dataContent);
+//    String data = AESUtil.encryptWithKey(dataContent, key);
+//    apiDataRequestMsg.setData(data);
+//    String str =
+//        "account_id=" + apiDataRequestMsg.getAccountId() + "&request_id=" + apiDataRequestMsg
+//            .getRequestId() + "&data=" + data + "&timestamp=" + apiDataRequestMsg.getTimestamp();
+//    String sign = MD5Utils.getMD5(str + "&key=" + key, "UTF-8");
+//    apiDataRequestMsg.setSign(sign);
+//    String sendData = null;
+//    try {
+//      sendData = jacksonObjectMapper.writeValueAsString(apiDataRequestMsg);
+//    } catch (Exception e) {
+//      log.error("sendData parse error:", e);
+//    }
+//    return sendData;
+//  }
 
 
   @Override
@@ -771,7 +765,7 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     authUnifiedUserEntity.setIdCardNo(authUserComDto.getIdCardNo());
     setUpdateUser(authUnifiedUserEntity);
     authLoginRepository.updateById(authUnifiedUserEntity);
-    this.updateThirdSSoUser(authUnifiedUserEntity);
+//    this.updateThirdSSoUser(authUnifiedUserEntity);
 
     return new ResponseMsg(authUnifiedUserEntity.getId());
   }
@@ -779,11 +773,11 @@ public class AuthServiceImpl extends CrudService implements AuthService {
   /**
    * 异步将用户同步到业务系统
    */
-  private void updateThirdSSoUser(AuthUnifiedUserEntity authUnifiedUserEntity) {
-    this.addPlatUserSynchronous(authUnifiedUserEntity);
-    this.addPortalUserSynchronous(authUnifiedUserEntity);
-    this.addMiniUserSynchronous(authUnifiedUserEntity, CommonConstant.MINI_UPDATE_SSO_USER);
-  }
+//  private void updateThirdSSoUser(AuthUnifiedUserEntity authUnifiedUserEntity) {
+//    this.addPlatUserSynchronous(authUnifiedUserEntity);
+//    this.addPortalUserSynchronous(authUnifiedUserEntity);
+//    this.addMiniUserSynchronous(authUnifiedUserEntity, CommonConstant.MINI_UPDATE_SSO_USER);
+//  }
 
   /**
    * @description
