@@ -16,7 +16,11 @@
     <if test="dto.inventoryTo != null and dto.inventoryTo == 1 ">
          and a.inventory > 0
     </if>
-
+    <if test="dto.inventoryTo != null and dto.inventoryTo == 2 ">
+      AND id not in (
+        SELECT inventory_id from goods_order
+      )
+    </if>
          GROUP BY goods_id
       ) a
       LEFT JOIN
@@ -24,16 +28,7 @@
     <where>
          1=1
       <if test="dto.keyword != null and dto.keyword != ''">
-        AND (
-            b.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
-          or
-            a.goods_id in
-            (
-            SELECT goods_id from goods_inventory t1
-            LEFT JOIN goods_size t2 on t1.size_id =t2.id
-            where t2.size like  CONCAT( '%', #{dto.keyword},'%')
-            )
-         )
+        AND b.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
       </if>
     </where>
     ORDER BY b.update_time DESC , id desc
@@ -87,6 +82,9 @@
       </if>
       <if test="dto.inventoryTo != null">
         AND #{dto.inventoryTo} >= a.inventory
+      </if>
+      <if test="dto.inventory != null and dto.inventory == 2">
+        and d.success_count is null and e.gallery_count is null
       </if>
       <if test="dto.createTimeFrom != null and dto.createTimeFrom != '' ">
         AND DATE_FORMAT(a.`create_time`,'%Y-%m-%d') >= #{dto.createTimeFrom}

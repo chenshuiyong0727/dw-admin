@@ -43,6 +43,11 @@ public class GoodsInventoryRqDto extends BaseDto implements Serializable {
   */
   private Integer inventoryTo;
 
+ /**
+  * 库存 结束
+  */
+  private Integer inventory;
+
   /**
   * 创建时间 开始
   */
