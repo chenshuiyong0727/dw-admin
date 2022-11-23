@@ -67,6 +67,9 @@ public class GoodsInventoryRqDto extends BaseDto implements Serializable {
   */
   private String keyword;
 
+  private String actNo;
+
+  private String size;
 
 	/**
 	 * 编号集合

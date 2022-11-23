@@ -44,9 +44,12 @@
     c.size,
     IFNULL(d.success_count,0) success_count,
     IFNULL(e.gallery_count,0) gallery_count,
+    f.act_no,
+    f.img_url,
     a.*
     FROM goods_inventory a
     LEFT JOIN goods_size c on a.size_id = c.id
+    LEFT JOIN goods_base f on a.goods_id = f.id
     LEFT JOIN (
     select inventory_id ,count(1) success_count from goods_order where
     `status` = 7 group BY inventory_id
@@ -64,6 +67,12 @@
           #{item}
         </foreach>
       </if>
+      <if test="dto.size != null and dto.size != ''">
+        AND c.size LIKE CONCAT( '%', #{dto.size},'%')
+      </if>
+      <if test="dto.actNo != null and dto.actNo != ''">
+        AND f.act_no LIKE CONCAT( '%', #{dto.actNo},'%')
+      </if>
       <if test="dto.id != null and dto.id != ''">
         AND a.id = #{dto.id}
       </if>
@@ -73,13 +82,12 @@
       <if test="dto.sizeId != null and dto.sizeId != ''">
         AND a.size_id  = #{dto.sizeId}
       </if>
-      <if test="dto.inventoryFrom != null and dto.inventoryFrom != '' ">
+      <if test="dto.inventoryFrom != null ">
         AND a.inventory >= #{dto.inventoryFrom}
       </if>
-      <if test="dto.inventoryTo != null and dto.inventoryTo != '' ">
+      <if test="dto.inventoryTo != null">
         AND #{dto.inventoryTo} >= a.inventory
       </if>
-
       <if test="dto.createTimeFrom != null and dto.createTimeFrom != '' ">
         AND DATE_FORMAT(a.`create_time`,'%Y-%m-%d') >= #{dto.createTimeFrom}
       </if>
@@ -93,7 +101,7 @@
         AND #{dto.updateTimeTo} >= DATE_FORMAT(a.`update_time`,'%Y-%m-%d')
       </if>
     </where>
-    ORDER BY a.update_time DESC
+    ORDER BY a.update_time DESC  ,id desc
   </select>
   <select id="list1" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
     SELECT
