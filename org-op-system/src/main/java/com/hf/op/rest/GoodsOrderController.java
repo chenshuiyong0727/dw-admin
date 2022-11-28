@@ -160,4 +160,9 @@ public class  GoodsOrderController {
     }
   }
 
+  @GetMapping("/indexData")
+  public ResponseMsg indexData(){
+    return service.indexData();
+  }
+
 }

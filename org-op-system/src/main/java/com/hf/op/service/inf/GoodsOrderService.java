@@ -45,6 +45,7 @@ public interface GoodsOrderService {
    * @date: 2022-11-15 17:39:00
    */
   ResponseMsg detail(Long id);
+  ResponseMsg indexData();
 
   /**
    * @description 移除数据

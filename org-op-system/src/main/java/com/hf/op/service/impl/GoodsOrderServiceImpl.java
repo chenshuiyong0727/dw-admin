@@ -19,12 +19,16 @@ import com.hf.op.domain.model.dict.GoodsInventoryEntity;
 import com.hf.op.domain.model.dict.GoodsInventoryRepository;
 import com.hf.op.domain.model.dict.GoodsOrderEntity;
 import com.hf.op.domain.model.dict.GoodsOrderRepository;
+import com.hf.op.infrastructure.dto.department.GoodsOrderCommonDto;
+import com.hf.op.infrastructure.dto.department.GoodsOrderCountDto;
+import com.hf.op.infrastructure.dto.department.GoodsOrderDataDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsOrderPageVo;
 import com.hf.op.service.inf.GoodsOrderService;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 商品订单信息 服务接口实现
@@ -190,6 +195,94 @@ public class GoodsOrderServiceImpl extends
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "查询失败");
+  }
+  //  下架	1
+//  已上架	2
+//  待发货	3
+//  已发货	4
+//  已揽件	5
+//  已收货	6
+//  成功	7
+//  瑕疵	8
+//  取消	9
+//  发货后取消	10
+  @Override
+  public ResponseMsg indexData() {
+    GoodsOrderDataDto dto = new GoodsOrderDataDto();
+    Integer count2 = this.getCount(OrderStatusEnum.GALLERY.getOderStatus());
+    Integer count3 = this.getCount(OrderStatusEnum.WAITDELIVER.getOderStatus());
+    Integer count4 = this.getCount(OrderStatusEnum.SHIPPED.getOderStatus());
+    Integer count5 = this.getCount(OrderStatusEnum.ALREADY_TOOK_A.getOderStatus());
+    Integer count6 = this.getCount(OrderStatusEnum.RECEIVED.getOderStatus());
+    Integer count8 = this.getCount(OrderStatusEnum.DEFECTS.getOderStatus());
+    GoodsOrderCountDto countDto = new GoodsOrderCountDto();
+    countDto.setCount2(count2);
+    countDto.setCount3(count3);
+    countDto.setCount4(count4);
+    countDto.setCount5(count5);
+    countDto.setCount6(count6);
+    countDto.setCount8(count8);
+    dto.setCountDto(countDto);
+    GoodsOrderCommonDto  commonDto = new GoodsOrderCommonDto();
+//    Integer count7 = this.getCount(OrderStatusEnum.SUCCESSFUL.getOderStatus());
+//    commonDto.setSuccessNum(count7);
+    List<GoodsOrderPageVo> list1 = repository.indexData();
+    for (GoodsOrderPageVo vo : list1) {
+      switch (vo.getSize()) {
+        case "goodsNum": {
+          commonDto.setGoodsNum(vo.getPrice().intValue());
+        }
+        case "inventoryNum": {
+          commonDto.setInventoryNum(vo.getPrice().intValue());
+        }
+        case "inventoryCost": {
+          commonDto.setInventoryCost(vo.getPrice());
+        }
+        case "marketValue": {
+          commonDto.setMarketValue(vo.getPrice());
+        }
+        default:
+          break;
+      }
+    }
+    this.converSuccessOrder(commonDto);
+    dto.setCommonDto(commonDto);
+    return new ResponseMsg().setData(dto);
+
+  }
+
+  private void converSuccessOrder(GoodsOrderCommonDto  commonDto) {
+    LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
+    queryWrapper.eq(GoodsOrderEntity::getStatus, OrderStatusEnum.SUCCESSFUL.getOderStatus());
+    List<GoodsOrderEntity>  list = repository.selectList(queryWrapper);
+    if (CollectionUtils.isEmpty(list)) {
+      return;
+    }
+    commonDto.setSuccessNum(list.size());
+    // 订单总额
+     BigDecimal orderAmount=BigDecimal.ZERO;
+    // 利润总额
+     BigDecimal profitsAmount=BigDecimal.ZERO;
+    // 手续费
+     BigDecimal poundage=BigDecimal.ZERO;
+    // 运费
+     BigDecimal freight=BigDecimal.ZERO;
+    for (GoodsOrderEntity goodsOrderEntity :list) {
+      orderAmount = orderAmount.add(goodsOrderEntity.getTheirPrice());
+      profitsAmount = profitsAmount.add(goodsOrderEntity.getProfits());
+      poundage = poundage.add(goodsOrderEntity.getPoundage());
+      freight = freight.add(goodsOrderEntity.getFreight());
+    }
+    commonDto.setOrderAmount(orderAmount);
+    commonDto.setPoundage(poundage);
+    commonDto.setFreight(freight);
+    commonDto.setProfitsAmount(profitsAmount);
+  }
+
+  private Integer getCount(Integer oderStatus) {
+    LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
+    queryWrapper.eq(GoodsOrderEntity::getStatus, oderStatus);
+    return  repository.selectCount(queryWrapper);
   }
 
   /**

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.op.infrastructure.dto.department.GoodsOrderRqDto;
 import com.hf.op.infrastructure.vo.GoodsOrderPageVo;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +24,7 @@ public interface GoodsOrderRepository  extends BaseMapper<GoodsOrderEntity> {
    * @date:  2022-11-15 17:39:00
    */
   IPage<GoodsOrderPageVo> page(Page page, @Param("dto") GoodsOrderRqDto dto);
+
+  List<GoodsOrderPageVo> indexData();
 
 }
