@@ -241,6 +241,9 @@ public class GoodsOrderServiceImpl extends
         case "marketValue": {
           commonDto.setMarketValue(vo.getPrice());
         }
+        case "otherRevenue": {
+          commonDto.setOtherRevenue(vo.getPrice());
+        }
         default:
           break;
       }

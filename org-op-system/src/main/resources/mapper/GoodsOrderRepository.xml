@@ -10,6 +10,8 @@
     SELECT sum(inventory * price )  price,'inventoryCost'  size from goods_inventory
     union all
     SELECT sum(inventory * dw_price )  price,'marketValue'  size from goods_inventory
+    union all
+    SELECT sum(price) price,'otherRevenue'  size from goods_other where data_status = 1
   </select>
 
   <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsOrderPageVo">
