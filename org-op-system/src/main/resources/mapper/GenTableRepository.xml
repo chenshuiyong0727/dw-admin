@@ -29,7 +29,8 @@
         FROM
         INFORMATION_SCHEMA.TABLES TB
         where  TB.TABLE_SCHEMA  = 'orgunit_op'
-       AND not  EXISTS ( SELECT  * from orgunit_op.gen_table op WHERE op . table_name = TB.TABLE_NAME)
+       AND not  EXISTS ( SELECT  * from orgunit_op.gen_table op WHERE op . table_name = TB.TABLE_NAME )
+       AND not  EXISTS ( SELECT  * from gen_table_ex ex WHERE ex . table_name = TB.TABLE_NAME)
     ORDER BY TB.TABLE_SCHEMA
 
   </select>
