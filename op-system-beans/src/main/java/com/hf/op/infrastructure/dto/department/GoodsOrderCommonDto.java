@@ -20,8 +20,8 @@ public class GoodsOrderCommonDto extends BaseDto implements Serializable {
 
   // 商品总数
   private Integer goodsNum =0;
-//  // 入库商品总数
-//  private Integer goodsPutInNum =0;
+//  日期
+  private String months;
   // 库存总数
   private Integer inventoryNum=0;
   // 库存成本
@@ -42,6 +42,13 @@ public class GoodsOrderCommonDto extends BaseDto implements Serializable {
   private BigDecimal freight=BigDecimal.ZERO;
   // 其他收支
   private BigDecimal otherRevenue=BigDecimal.ZERO;
+
+  // 交易成功数
+  private Integer successNumLast=0;
+  // 订单总额
+  private BigDecimal orderAmountLast=BigDecimal.ZERO;
+  // 利润总额
+  private BigDecimal profitsAmountLast=BigDecimal.ZERO;
   // 入库均价
 //  private BigDecimal inboundAverage=BigDecimal.ZERO;
   // 运费均价

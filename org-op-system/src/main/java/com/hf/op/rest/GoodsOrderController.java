@@ -164,5 +164,10 @@ public class  GoodsOrderController {
   public ResponseMsg indexData(){
     return service.indexData();
   }
+  @GetMapping("/indexOrderData")
+  public ResponseMsg indexOrderData(HttpServletRequest request){
+    GoodsOrderRqDto dto = HfBeanUtil.populate(new GoodsOrderRqDto(),request);
+    return service.indexOrderData(dto);
+  }
 
 }

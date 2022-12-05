@@ -14,6 +14,64 @@
     SELECT sum(price) price,'otherRevenue'  size from goods_other where data_status = 1
   </select>
 
+  <select id="indexOrderData1" resultType="com.hf.op.infrastructure.dto.department.GoodsOrderLineVo">
+    -- 上月
+    SELECT
+    a.success_num success_num_last,
+    a.order_amount order_amount_last,
+    a.profits_amount profits_amount_last,
+    b.*
+     from (
+    SELECT
+    1 type,
+    count(1) success_num,
+    sum(their_price) order_amount,
+    sum(profits) profits_amount
+     from goods_order where `status` =7
+    and  DATE_FORMAT(success_time, '%Y-%m') = DATE_FORMAT( DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m')
+    )a LEFT JOIN (
+    -- 本月
+    SELECT
+    1 type,
+    count(1) success_num,
+    sum(their_price) order_amount,
+    sum(profits) profits_amount
+     from goods_order where `status` =7
+    and  DATE_FORMAT(success_time, '%Y-%m') = DATE_FORMAT( DATE_SUB(CURDATE(), INTERVAL 0 MONTH), '%Y-%m')
+    )b on a.type = b.type
+  </select>
+
+  <select id="indexOrderData" resultType="com.hf.op.infrastructure.dto.department.GoodsOrderCommonDto">
+    SELECT
+    date_table.months AS months,
+    IFNULL( temp.num, 0 ) AS success_num,
+    IFNULL( temp.their_price, 0 ) AS order_amount,
+    IFNULL( temp.profits, 0 ) AS profits_amount
+    FROM
+    (
+    with RECURSIVE months(months,num) as (
+    SELECT DATE_FORMAT((CURDATE() - INTERVAL 0 MONTH), '%Y-%m') AS 'months' , 0 as num
+    union all
+    SELECT DATE_FORMAT((CURDATE() - INTERVAL num+1 MONTH), '%Y-%m') AS 'months', num+1 as num from months where 11 > num
+    )
+    select months from months
+    ) date_table
+    LEFT JOIN (
+    SELECT DATE_FORMAT(success_time,'%Y-%m') date,sum(their_price) their_price, sum(profits) profits, count(1) num from goods_order
+    where `status` = 7
+    GROUP BY DATE_FORMAT(success_time,'%Y-%m')
+    ORDER BY DATE_FORMAT(success_time,'%Y-%m')
+    ) temp ON date_table.months = temp.date
+    where months >= '2022-03'
+    <if test="dto.createTimeFrom != null and dto.createTimeFrom != '' ">
+      AND months >= #{dto.createTimeFrom}
+    </if>
+    <if test="dto.createTimeTo != null and dto.createTimeTo != '' ">
+      AND #{dto.createTimeTo} >= months
+    </if>
+    ORDER BY months asc
+  </select>
+
   <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsOrderPageVo">
     SELECT
     c.act_no,

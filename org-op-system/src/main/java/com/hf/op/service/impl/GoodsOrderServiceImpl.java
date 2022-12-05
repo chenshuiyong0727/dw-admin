@@ -24,6 +24,7 @@ import com.hf.op.infrastructure.dto.department.GoodsOrderCountDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDataDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderExportDto;
+import com.hf.op.infrastructure.dto.department.GoodsOrderLineVo;
 import com.hf.op.infrastructure.dto.department.GoodsOrderRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsOrderPageVo;
@@ -253,6 +254,18 @@ public class GoodsOrderServiceImpl extends
     return new ResponseMsg().setData(dto);
 
   }
+
+  @Override
+  public ResponseMsg indexOrderData(GoodsOrderRqDto dto) {
+    GoodsOrderLineVo lineVo = repository.indexOrderData1();
+    if (lineVo == null ) {
+      return new ResponseMsg().setData(dto);
+    }
+    List<GoodsOrderCommonDto> list = repository.indexOrderData(dto);
+    lineVo.setRows(list);
+    return new ResponseMsg().setData(lineVo);
+  }
+
 
   private void converSuccessOrder(GoodsOrderCommonDto  commonDto) {
     LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();

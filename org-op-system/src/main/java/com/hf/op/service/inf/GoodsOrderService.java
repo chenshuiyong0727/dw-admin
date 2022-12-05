@@ -46,6 +46,7 @@ public interface GoodsOrderService {
    */
   ResponseMsg detail(Long id);
   ResponseMsg indexData();
+  ResponseMsg indexOrderData(GoodsOrderRqDto dto);
 
   /**
    * @description 移除数据
