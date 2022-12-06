@@ -23,7 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -132,27 +131,29 @@ public abstract class BaseGateWayFilterFactory extends AbstractGatewayFilterFact
       }
 
       //不需要权限校验则继续,一般管理平台都需要做权限校验
-      if (!needCheckPermission) {
-        return chain.filter(exchange.mutate().request(request).build());
-      }
-      Mono<ResponseMsg> checkPermissionInfoMono = webClientBuilder.build().
-          get().uri(checkUriPrefix + requestUri, user.getUserId(), requestMethod).retrieve()
-          .bodyToMono(ResponseMsg.class);
-      final ServerHttpRequest requestTidy = request;
-      return checkPermissionInfoMono.flatMap(responseMsg -> {
-        if (ResponseMsg.isSuccess(responseMsg) && !"0".equals(responseMsg.getData())) {
-          return chain.filter(exchange.mutate().request(requestTidy).build());
-        } else {
-          return getVoidMono(exchange,
-              ResponseMsg.createSysErrorResp(ApiRespCodeEnum.NOT_HAVE_RIGHT.getCode(),
-                  ApiRespCodeEnum.NOT_HAVE_RIGHT.getMsg()),
-              HttpStatus.FORBIDDEN);
-        }
-      }).onErrorResume(
-          (Function<Throwable, Mono<Void>>) throwable -> getVoidMono(exchange,
-              ResponseMsg.createSysErrorResp(ApiRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
-                  ApiRespCodeEnum.RESULT_SYSTEM_ERROR.getMsg()),
-              HttpStatus.FORBIDDEN));
+      return chain.filter(exchange.mutate().request(request).build());
+
+//      if (!needCheckPermission) {
+//        return chain.filter(exchange.mutate().request(request).build());
+//      }
+//      Mono<ResponseMsg> checkPermissionInfoMono = webClientBuilder.build().
+//          get().uri(checkUriPrefix + requestUri, user.getUserId(), requestMethod).retrieve()
+//          .bodyToMono(ResponseMsg.class);
+//      final ServerHttpRequest requestTidy = request;
+//      return checkPermissionInfoMono.flatMap(responseMsg -> {
+//        if (ResponseMsg.isSuccess(responseMsg) && !"0".equals(responseMsg.getData())) {
+//          return chain.filter(exchange.mutate().request(requestTidy).build());
+//        } else {
+//          return getVoidMono(exchange,
+//              ResponseMsg.createSysErrorResp(ApiRespCodeEnum.NOT_HAVE_RIGHT.getCode(),
+//                  ApiRespCodeEnum.NOT_HAVE_RIGHT.getMsg()),
+//              HttpStatus.FORBIDDEN);
+//        }
+//      }).onErrorResume(
+//          (Function<Throwable, Mono<Void>>) throwable -> getVoidMono(exchange,
+//              ResponseMsg.createSysErrorResp(ApiRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
+//                  ApiRespCodeEnum.RESULT_SYSTEM_ERROR.getMsg()),
+//              HttpStatus.FORBIDDEN));
     };
   }
 
