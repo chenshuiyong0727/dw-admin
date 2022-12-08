@@ -34,23 +34,25 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * 商品库存 服务接口实现
+ *
  * @author chensy
  * @date 2022-11-12 20:10:34
  */
 @Slf4j
 @Service
 public class GoodsInventoryServiceImpl extends
-	BatchCrudService<GoodsInventoryRepository, GoodsInventoryEntity> implements
+    BatchCrudService<GoodsInventoryRepository, GoodsInventoryEntity> implements
     GoodsInventoryService {
 
   private GoodsInventoryRepository repository;
 
   private GoodsOrderServiceImpl goodsOrderServiceImpl;
 
-	public GoodsInventoryServiceImpl(GoodsInventoryRepository repository,GoodsOrderServiceImpl goodsOrderServiceImpl){
-	    this.goodsOrderServiceImpl = goodsOrderServiceImpl;
-	    this.repository = repository;
-	}
+  public GoodsInventoryServiceImpl(
+      GoodsInventoryRepository repository, GoodsOrderServiceImpl goodsOrderServiceImpl) {
+    this.goodsOrderServiceImpl = goodsOrderServiceImpl;
+    this.repository = repository;
+  }
 
 
   /**
@@ -59,16 +61,17 @@ public class GoodsInventoryServiceImpl extends
    * @date: 2022-11-12 20:10:34
    */
   @Override
-  public ResponseMsg page(GoodsInventoryRqDto dto){
-    if (StringUtilLocal.isNotEmpty(dto.getKeyword())){
+  public ResponseMsg page(GoodsInventoryRqDto dto) {
+    if (StringUtilLocal.isNotEmpty(dto.getKeyword())) {
       dto.setKeyword(dto.getKeyword().toUpperCase());
     }
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
+    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
+
   @Override
-  public ResponseMsg pageGoods(GoodsInventoryRqDto dto){
-    IPage ipage = repository.pageGoods(new Page(dto.getPageNum(), dto.getPageSize()),dto);
+  public ResponseMsg pageGoods(GoodsInventoryRqDto dto) {
+    IPage ipage = repository.pageGoods(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -76,8 +79,8 @@ public class GoodsInventoryServiceImpl extends
   @SneakyThrows
   @Override
   public void t3() {
-    List<GoodsInventoryPageVo> list  = repository.list1();
-    if (!CollectionUtils.isEmpty(list)){
+    List<GoodsInventoryPageVo> list = repository.list1();
+    if (!CollectionUtils.isEmpty(list)) {
       for (GoodsInventoryPageVo vo : list) {
         GoodsInventoryEntity entity = new GoodsInventoryEntity();
         entity.setId(vo.getId());
@@ -94,28 +97,16 @@ public class GoodsInventoryServiceImpl extends
    * @date: 2022-11-12 20:10:34
    */
   @Override
-  public ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto){
-    if (CommonConstant.DEFAULT_YES.equals(dto.getType())){
+  public ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto) {
+    if (CommonConstant.DEFAULT_YES.equals(dto.getType())) {
       return goodsOrderServiceImpl.addList(dto);
     }
     return new ResponseMsg();
   }
 
   @Override
-  public ResponseMsg add(GoodsInventoryDto dto){
-//    Long id = createId();
-//    GoodsInventoryEntity entity = new GoodsInventoryEntity();
-//    BeanUtils.copyProperties(dto, entity);
-//    entity.setId(id);
-//    setCreateUser(entity);
-//    try {
-//      repository.insert(entity);
-//    } catch (Exception e) {
-//      log.error("新增失败 ",e);
-//      return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
-//          "新增失败");
-//    }
-    List<GoodsInventorySizeDto>  list =  dto.getSizeDtos();
+  public ResponseMsg add(GoodsInventoryDto dto) {
+    List<GoodsInventorySizeDto> list = dto.getSizeDtos();
     List<GoodsInventoryEntity> entities = new ArrayList<>();
     for (GoodsInventorySizeDto inventorySizeDto : list) {
       Assert.notNull(inventorySizeDto.getSizeId(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
@@ -124,6 +115,7 @@ public class GoodsInventoryServiceImpl extends
       GoodsInventoryEntity entity = new GoodsInventoryEntity();
       BeanUtils.copyProperties(inventorySizeDto, entity);
       entity.setId(id);
+      entity.setOldInventory(inventorySizeDto.getInventory());
       setCreateUser(entity);
       entities.add(entity);
     }
@@ -137,18 +129,18 @@ public class GoodsInventoryServiceImpl extends
    * @date: 2022-11-12 20:10:34
    */
   @Override
-  public ResponseMsg update(GoodsInventorySizeDto dto){
+  public ResponseMsg update(GoodsInventorySizeDto dto) {
     GoodsInventoryEntity entity = new GoodsInventoryEntity();
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
-      try {
-        repository.updateById(entity);
-      } catch (Exception e) {
-        log.error("更新失败 ",e);
-        return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
-            "更新失败");
-      }
-      return new ResponseMsg().setData(dto.getId());
+    try {
+      repository.updateById(entity);
+    } catch (Exception e) {
+      log.error("更新失败 ", e);
+      return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
+          "更新失败");
+    }
+    return new ResponseMsg().setData(dto.getId());
   }
 
   /**
@@ -157,7 +149,7 @@ public class GoodsInventoryServiceImpl extends
    * @date: 2022-11-12 20:10:34
    */
   @Override
-  public ResponseMsg detail(Long id){
+  public ResponseMsg detail(Long id) {
     GoodsInventoryEntity entity = repository.selectById(id);
     if (entity != null) {
       GoodsInventoryDto dto = new GoodsInventoryDto();
@@ -168,14 +160,14 @@ public class GoodsInventoryServiceImpl extends
         "查询失败");
   }
 
-   /**
+  /**
    * @description 移除数据
    * @method remove
    * @date: 2022-11-12 20:10:34
    */
-   @Override
-   public ResponseMsg remove(Long id){
-   LambdaQueryWrapper<GoodsInventoryEntity> queryWrapper = new LambdaQueryWrapper();
+  @Override
+  public ResponseMsg remove(Long id) {
+    LambdaQueryWrapper<GoodsInventoryEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GoodsInventoryEntity::getId, id)
         .between(GoodsInventoryEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
             DataStatusEnum.ENABLE.getCode());
@@ -183,20 +175,20 @@ public class GoodsInventoryServiceImpl extends
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
     if (repository.update(entity, queryWrapper) > 0) {
-       return new ResponseMsg().setData(id);
+      return new ResponseMsg().setData(id);
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "删除失败");
   }
 
-   /**
+  /**
    * @description 批量移除数据
    * @method batchRemove
    * @date: 2022-11-12 20:10:34
    */
-   @Override
-   public ResponseMsg batchRemove(List<Long> ids){
-   LambdaQueryWrapper<GoodsInventoryEntity> queryWrapper = new LambdaQueryWrapper();
+  @Override
+  public ResponseMsg batchRemove(List<Long> ids) {
+    LambdaQueryWrapper<GoodsInventoryEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.in(GoodsInventoryEntity::getId, ids)
         .between(GoodsInventoryEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
             DataStatusEnum.ENABLE.getCode());
@@ -204,7 +196,7 @@ public class GoodsInventoryServiceImpl extends
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
     if (repository.update(entity, queryWrapper) > 0) {
-       return new ResponseMsg().setData(ids);
+      return new ResponseMsg().setData(ids);
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "删除失败");
@@ -214,23 +206,23 @@ public class GoodsInventoryServiceImpl extends
    * @description 变更状态
    * @date 2022-11-12 20:10:34
    */
-   @Override
-   public ResponseMsg status(StatusDto dto){
-   LambdaQueryWrapper<GoodsInventoryEntity> queryWrapper = new LambdaQueryWrapper();
-      queryWrapper.eq(GoodsInventoryEntity::getId, dto.getId())
-          .between(GoodsInventoryEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
-              DataStatusEnum.ENABLE.getCode());
-      GoodsInventoryEntity entity = new GoodsInventoryEntity();
-      entity.setDataStatus(dto.getDataStatus());
-      setUpdateUser(entity);
-      if (repository.update(entity, queryWrapper) > 0) {
-        return new ResponseMsg().setData(dto.getId());
-      }
-      return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
-          "变更失败");
+  @Override
+  public ResponseMsg status(StatusDto dto) {
+    LambdaQueryWrapper<GoodsInventoryEntity> queryWrapper = new LambdaQueryWrapper();
+    queryWrapper.eq(GoodsInventoryEntity::getId, dto.getId())
+        .between(GoodsInventoryEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
+            DataStatusEnum.ENABLE.getCode());
+    GoodsInventoryEntity entity = new GoodsInventoryEntity();
+    entity.setDataStatus(dto.getDataStatus());
+    setUpdateUser(entity);
+    if (repository.update(entity, queryWrapper) > 0) {
+      return new ResponseMsg().setData(dto.getId());
+    }
+    return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
+        "变更失败");
   }
 
- /**
+  /**
    * @description 导出excel列表
    * @date: 2022-11-12 20:10:34
    */

@@ -236,6 +236,9 @@ public class GoodsOrderServiceImpl extends
         case "inventoryNum": {
           commonDto.setInventoryNum(vo.getPrice().intValue());
         }
+        case "goodsPutInNum": {
+          commonDto.setGoodsPutInNum(vo.getPrice().intValue());
+        }
         case "inventoryCost": {
           commonDto.setInventoryCost(vo.getPrice());
         }

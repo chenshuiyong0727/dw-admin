@@ -99,7 +99,7 @@
         AND #{dto.updateTimeTo} >= DATE_FORMAT(a.`update_time`,'%Y-%m-%d')
       </if>
     </where>
-    ORDER BY a.update_time DESC  ,id desc
+    ORDER BY a.update_time DESC  ,a.goods_id desc, c.size asc
   </select>
   <select id="list1" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
     SELECT

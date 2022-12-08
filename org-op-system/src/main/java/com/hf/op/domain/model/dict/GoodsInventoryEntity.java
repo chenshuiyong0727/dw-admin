@@ -33,6 +33,12 @@ public class GoodsInventoryEntity extends BaseEntity implements Serializable {
     * 库存
     */
     private Integer inventory;
+
+    /**
+     * 原始库存
+     */
+    private Integer oldInventory;
+
     /**
      * 库存
      */

@@ -7,6 +7,8 @@
     union all
     SELECT sum(inventory) price, 'inventoryNum' size from goods_inventory
     union all
+    SELECT sum(old_inventory) price, 'goodsPutInNum' size from goods_inventory
+    union all
     SELECT sum(inventory * price )  price,'inventoryCost'  size from goods_inventory
     union all
     SELECT sum(inventory * dw_price )  price,'marketValue'  size from goods_inventory

@@ -39,6 +39,11 @@ public class GoodsInventoryPageVo extends BaseDto implements Serializable {
     private Integer inventory;
 
     /**
+     * 原始库存
+     */
+    private Integer oldInventory;
+
+    /**
     * 成功数
     */
     private Integer successCount;

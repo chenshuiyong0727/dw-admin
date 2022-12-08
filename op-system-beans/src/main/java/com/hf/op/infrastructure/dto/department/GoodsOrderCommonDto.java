@@ -22,6 +22,8 @@ public class GoodsOrderCommonDto extends BaseDto implements Serializable {
   private Integer goodsNum =0;
 //  日期
   private String months;
+  // 入库商品总数
+  private Integer goodsPutInNum=0;
   // 库存总数
   private Integer inventoryNum=0;
   // 库存成本
