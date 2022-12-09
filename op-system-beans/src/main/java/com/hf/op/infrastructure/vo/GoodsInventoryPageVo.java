@@ -66,4 +66,6 @@ public class GoodsInventoryPageVo extends BaseDto implements Serializable {
      * 库存
      */
     private BigDecimal dwPrice;
+    private BigDecimal profits;
+    private BigDecimal inputPrice;
 }

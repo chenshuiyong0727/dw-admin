@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
 import com.hf.common.infrastructure.constant.CommonConstant;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
 import com.hf.common.infrastructure.dto.StatusDto;
@@ -13,6 +14,7 @@ import com.hf.common.infrastructure.resp.ServerErrorConst;
 import com.hf.common.infrastructure.util.ListBeanUtil;
 import com.hf.common.infrastructure.util.PageUtil;
 import com.hf.common.infrastructure.util.StringUtilLocal;
+import com.hf.common.infrastructure.vo.HumpPageInfo;
 import com.hf.common.service.BatchCrudService;
 import com.hf.op.domain.model.dict.GoodsInventoryEntity;
 import com.hf.op.domain.model.dict.GoodsInventoryRepository;
@@ -22,6 +24,7 @@ import com.hf.op.infrastructure.dto.department.GoodsInventoryRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsInventorySizeDto;
 import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsInventoryPageVo;
+import com.hf.op.infrastructure.vo.HumpInventoryPageVo;
 import com.hf.op.service.inf.GoodsInventoryService;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,9 +75,36 @@ public class GoodsInventoryServiceImpl extends
   @Override
   public ResponseMsg pageGoods(GoodsInventoryRqDto dto) {
     IPage ipage = repository.pageGoods(new Page(dto.getPageNum(), dto.getPageSize()), dto);
-    return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
+    if (dto.getGoodsId() != null) {
+      GoodsInventoryPageVo vo = repository.inventoryData(dto.getGoodsId());
+      return new ResponseMsg().setData(this.getHumpPage(ipage, vo));
+    } else {
+      return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
+    }
   }
 
+  private HumpInventoryPageVo getHumpPage(IPage page, GoodsInventoryPageVo vo) {
+    if (null == page || CollectionUtils.isEmpty(page.getRecords())) {
+      HumpInventoryPageVo humpPageVo = new HumpInventoryPageVo();
+      humpPageVo.setList(Lists.newArrayList());
+      humpPageVo.setGoodsInventoryPageVo(null);
+      HumpPageInfo humpPageInfo = new HumpPageInfo();
+      humpPageInfo.setTotalCount(0);
+      humpPageInfo.setPageSize(0);
+      humpPageInfo.setPageNum(0);
+      humpPageVo.setPageInfo(humpPageInfo);
+      return null;
+    }
+    HumpInventoryPageVo humpPageVo = new HumpInventoryPageVo();
+    humpPageVo.setList(page.getRecords());
+    humpPageVo.setGoodsInventoryPageVo(vo);
+    HumpPageInfo humpPageInfo = new HumpPageInfo();
+    humpPageInfo.setTotalCount(page.getTotal());
+    humpPageInfo.setPageSize(page.getSize());
+    humpPageInfo.setPageNum(page.getCurrent());
+    humpPageVo.setPageInfo(humpPageInfo);
+    return humpPageVo;
+  }
 
   @SneakyThrows
   @Override

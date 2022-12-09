@@ -112,4 +112,27 @@
     ) a
     LEFT JOIN goods_inventory b on a.id =b.id
   </select>
+
+  <select id="inventoryData" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
+    SELECT
+    IFNULL(sum(t2.profits ),0)  profits , -- 实际利润
+    IFNULL(sum(t1.inventory ),0)  inventory , -- 库存
+    IFNULL(sum(t1.old_inventory ),0)  old_inventory , -- 原始库存
+    IFNULL(sum(inventory * price),0)  price , -- 库存成本
+    IFNULL(sum(old_inventory * dw_price),0)  dw_price , -- 总市值
+    IFNULL(sum(old_inventory * price),0)  input_price  -- 入库金额
+    from goods_inventory t1
+    LEFT JOIN
+    (
+    SELECT inventory_id , sum(profits) profits from
+    goods_order
+    where `status` = 7
+    GROUP BY inventory_id
+    ) t2 on t1.id = t2.inventory_id
+    where 1=1
+    and  t1.goods_id =  #{goodsId}
+    GROUP BY t1.goods_id
+  </select>
+
+
 </mapper>

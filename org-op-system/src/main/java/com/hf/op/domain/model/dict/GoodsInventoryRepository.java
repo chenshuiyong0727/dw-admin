@@ -27,5 +27,6 @@ public interface GoodsInventoryRepository  extends BaseMapper<GoodsInventoryEnti
   IPage<GoodsBasePageVo> page(Page page, @Param("dto") GoodsInventoryRqDto dto);
   IPage<GoodsInventoryPageVo> pageGoods(Page page, @Param("dto") GoodsInventoryRqDto dto);
   List<GoodsInventoryPageVo> list1();
+  GoodsInventoryPageVo inventoryData(@Param("goodsId") Long goodsId);
 
 }
