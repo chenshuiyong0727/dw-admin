@@ -51,6 +51,8 @@ public class GoodsOrderCommonDto extends BaseDto implements Serializable {
   private BigDecimal orderAmountLast=BigDecimal.ZERO;
   // 利润总额
   private BigDecimal profitsAmountLast=BigDecimal.ZERO;
+  // 入库总额
+  private BigDecimal inventoryAmount=BigDecimal.ZERO;
   // 入库均价
 //  private BigDecimal inboundAverage=BigDecimal.ZERO;
   // 运费均价

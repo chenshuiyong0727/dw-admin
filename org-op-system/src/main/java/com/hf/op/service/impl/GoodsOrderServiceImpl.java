@@ -249,6 +249,9 @@ public class GoodsOrderServiceImpl extends
         case "otherRevenue": {
           commonDto.setOtherRevenue(vo.getPrice());
         }
+        case "inventoryAmount": {
+          commonDto.setInventoryAmount(vo.getPrice());
+        }
         default:
           break;
       }
@@ -389,9 +392,38 @@ public class GoodsOrderServiceImpl extends
 
 
   @Override
-  public ResponseMsg putInStorage(GoodsOrderRqDto dto) {
+  public ResponseMsg sellList(GoodsOrderRqDto dto) {
     dto.setOrderBy("months desc");
     List<GoodsOrderCommonDto> list = repository.indexOrderData(dto);
+    if (!CollectionUtils.isEmpty(list)) {
+      List<GoodsOrderCommonDto> res = new ArrayList<>();
+      GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();
+      orderCommonDto.setMonths("合计");
+      Integer successNum = 0;
+      BigDecimal orderAmount = BigDecimal.ZERO;
+      BigDecimal profitsAmount = BigDecimal.ZERO;
+      for (GoodsOrderCommonDto commonDto : list) {
+        successNum = commonDto.getSuccessNum() + successNum;
+        orderAmount = orderAmount.add(commonDto.getOrderAmount());
+        profitsAmount = profitsAmount.add(commonDto.getProfitsAmount());
+      }
+      orderCommonDto.setSuccessNum(successNum);
+      orderCommonDto.setOrderAmount(orderAmount);
+      orderCommonDto.setProfitsAmount(profitsAmount);
+      res.add(orderCommonDto);
+      for (GoodsOrderCommonDto commonDto : list) {
+        res.add(commonDto);
+      }
+      return new ResponseMsg().setData(res);
+    }
+    return new ResponseMsg().setData(list);
+  }
+
+
+  @Override
+  public ResponseMsg putInStorage(GoodsOrderRqDto dto) {
+    dto.setOrderBy("months desc");
+    List<GoodsOrderCommonDto> list = repository.putInStorage(dto);
     if (!CollectionUtils.isEmpty(list)) {
       List<GoodsOrderCommonDto> res = new ArrayList<>();
       GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();

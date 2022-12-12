@@ -30,6 +30,7 @@ public interface GoodsOrderRepository  extends BaseMapper<GoodsOrderEntity> {
   List<GoodsOrderPageVo> indexData();
 
   List<GoodsOrderCommonDto> indexOrderData(@Param("dto") GoodsOrderRqDto dto);
+  List<GoodsOrderCommonDto> putInStorage(@Param("dto") GoodsOrderRqDto dto);
 
   GoodsOrderLineVo indexOrderData1();
 

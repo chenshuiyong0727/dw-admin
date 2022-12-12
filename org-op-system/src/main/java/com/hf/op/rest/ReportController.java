@@ -28,6 +28,15 @@ public class ReportController {
   }
 
   /**
+   * 销售报表列表
+   */
+  @GetMapping("/sellList")
+  public ResponseMsg sellList(HttpServletRequest request) {
+    GoodsOrderRqDto dto = HfBeanUtil.populate(new GoodsOrderRqDto(), request);
+    return service.sellList(dto);
+  }
+
+  /**
    * 入库报表列表
    */
   @GetMapping("/putInStorage")
