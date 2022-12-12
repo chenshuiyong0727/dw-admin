@@ -148,4 +148,7 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
    * 当前页码,不填默认首页
    */
   private Integer pageNum;
+
+ private String orderBy;
+
 }

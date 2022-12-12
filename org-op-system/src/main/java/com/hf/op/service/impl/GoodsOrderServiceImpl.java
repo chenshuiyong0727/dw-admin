@@ -125,7 +125,7 @@ public class GoodsOrderServiceImpl extends
     if (!OrderStatusEnum.SUCCESSFUL.getOderStatus().equals(entity.getStatus())) {
       GoodsInventoryEntity goodsInventoryEntity = goodsInventoryRepository
           .selectById(entity.getInventoryId());
-      if (goodsInventoryEntity !=null && goodsInventoryEntity.getInventory() > 0) {
+      if (goodsInventoryEntity != null && goodsInventoryEntity.getInventory() > 0) {
         goodsInventoryEntity.setInventory(goodsInventoryEntity.getInventory() - 1);
         goodsInventoryRepository.updateById(goodsInventoryEntity);
       }
@@ -197,6 +197,7 @@ public class GoodsOrderServiceImpl extends
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "查询失败");
   }
+
   //  下架	1
 //  已上架	2
 //  待发货	3
@@ -224,7 +225,7 @@ public class GoodsOrderServiceImpl extends
     countDto.setCount6(count6);
     countDto.setCount8(count8);
     dto.setCountDto(countDto);
-    GoodsOrderCommonDto  commonDto = new GoodsOrderCommonDto();
+    GoodsOrderCommonDto commonDto = new GoodsOrderCommonDto();
 //    Integer count7 = this.getCount(OrderStatusEnum.SUCCESSFUL.getOderStatus());
 //    commonDto.setSuccessNum(count7);
     List<GoodsOrderPageVo> list1 = repository.indexData();
@@ -261,7 +262,7 @@ public class GoodsOrderServiceImpl extends
   @Override
   public ResponseMsg indexOrderData(GoodsOrderRqDto dto) {
     GoodsOrderLineVo lineVo = repository.indexOrderData1();
-    if (lineVo == null ) {
+    if (lineVo == null) {
       return new ResponseMsg().setData(dto);
     }
     List<GoodsOrderCommonDto> list = repository.indexOrderData(dto);
@@ -270,23 +271,23 @@ public class GoodsOrderServiceImpl extends
   }
 
 
-  private void converSuccessOrder(GoodsOrderCommonDto  commonDto) {
+  private void converSuccessOrder(GoodsOrderCommonDto commonDto) {
     LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GoodsOrderEntity::getStatus, OrderStatusEnum.SUCCESSFUL.getOderStatus());
-    List<GoodsOrderEntity>  list = repository.selectList(queryWrapper);
+    List<GoodsOrderEntity> list = repository.selectList(queryWrapper);
     if (CollectionUtils.isEmpty(list)) {
       return;
     }
     commonDto.setSuccessNum(list.size());
     // 订单总额
-     BigDecimal orderAmount=BigDecimal.ZERO;
+    BigDecimal orderAmount = BigDecimal.ZERO;
     // 利润总额
-     BigDecimal profitsAmount=BigDecimal.ZERO;
+    BigDecimal profitsAmount = BigDecimal.ZERO;
     // 手续费
-     BigDecimal poundage=BigDecimal.ZERO;
+    BigDecimal poundage = BigDecimal.ZERO;
     // 运费
-     BigDecimal freight=BigDecimal.ZERO;
-    for (GoodsOrderEntity goodsOrderEntity :list) {
+    BigDecimal freight = BigDecimal.ZERO;
+    for (GoodsOrderEntity goodsOrderEntity : list) {
       orderAmount = orderAmount.add(goodsOrderEntity.getTheirPrice());
       profitsAmount = profitsAmount.add(goodsOrderEntity.getProfits());
       poundage = poundage.add(goodsOrderEntity.getPoundage());
@@ -301,7 +302,7 @@ public class GoodsOrderServiceImpl extends
   private Integer getCount(Integer oderStatus) {
     LambdaQueryWrapper<GoodsOrderEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GoodsOrderEntity::getStatus, oderStatus);
-    return  repository.selectCount(queryWrapper);
+    return repository.selectCount(queryWrapper);
   }
 
   /**
@@ -385,4 +386,34 @@ public class GoodsOrderServiceImpl extends
     List<GoodsOrderExportDto> dtos = ListBeanUtil.listCopy(list, GoodsOrderExportDto.class);
     return dtos;
   }
+
+
+  @Override
+  public ResponseMsg putInStorage(GoodsOrderRqDto dto) {
+    dto.setOrderBy("months desc");
+    List<GoodsOrderCommonDto> list = repository.indexOrderData(dto);
+    if (!CollectionUtils.isEmpty(list)) {
+      List<GoodsOrderCommonDto> res = new ArrayList<>();
+      GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();
+      orderCommonDto.setMonths("合计");
+      Integer successNum = 0;
+      BigDecimal orderAmount = BigDecimal.ZERO;
+      BigDecimal profitsAmount = BigDecimal.ZERO;
+      for (GoodsOrderCommonDto commonDto : list) {
+        successNum = commonDto.getSuccessNum() + successNum;
+        orderAmount = orderAmount.add(commonDto.getOrderAmount());
+        profitsAmount = profitsAmount.add(commonDto.getProfitsAmount());
+      }
+      orderCommonDto.setSuccessNum(successNum);
+      orderCommonDto.setOrderAmount(orderAmount);
+      orderCommonDto.setProfitsAmount(profitsAmount);
+      res.add(orderCommonDto);
+      for (GoodsOrderCommonDto commonDto : list) {
+        res.add(commonDto);
+      }
+      return new ResponseMsg().setData(res);
+    }
+    return new ResponseMsg().setData(list);
+  }
+
 }

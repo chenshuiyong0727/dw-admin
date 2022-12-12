@@ -71,7 +71,12 @@
     <if test="dto.createTimeTo != null and dto.createTimeTo != '' ">
       AND #{dto.createTimeTo} >= months
     </if>
-    ORDER BY months asc
+    <if test="dto.orderBy != null and dto.orderBy != '' ">
+      ORDER BY  #{dto.orderBy}
+    </if>
+    <if test="dto.orderBy == null or dto.orderBy == '' ">
+      ORDER BY months asc
+    </if>
   </select>
 
   <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsOrderPageVo">

@@ -20,6 +20,7 @@ public interface GoodsOrderService {
    * @method page
    * @date: 2022-11-15 17:39:00
    */
+  ResponseMsg putInStorage(GoodsOrderRqDto dto);
   ResponseMsg page(GoodsOrderRqDto dto);
 
   ResponseMsg addList(GoodsShelvesGoodsRqDto dto);
