@@ -10,17 +10,18 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 商品尺码关系 Repository
+ *
  * @author chensy
  * @date 2022-11-12 16:48:45
  */
 @Repository
-public interface GoodsBaseSizeRepository  extends BaseMapper<GoodsBaseSizeEntity> {
+public interface GoodsBaseSizeRepository extends BaseMapper<GoodsBaseSizeEntity> {
 
 
   /**
    * @description 查询商品尺码关系列表
    * @method page
-   * @date:  2022-11-12 16:48:45
+   * @date: 2022-11-12 16:48:45
    */
   IPage<GoodsBaseSizePageVo> page(Page page, @Param("dto") GoodsBaseSizeRqDto dto);
 

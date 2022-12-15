@@ -10,6 +10,7 @@ import lombok.ToString;
 
 /**
  * 其他收支 请求参数Dto
+ *
  * @author chensy
  * @date 2022-11-29 17:04:31
  */
@@ -17,67 +18,67 @@ import lombok.ToString;
 @ToString
 public class GoodsOtherRqDto extends BaseDto implements Serializable {
 
-	private static final long serialVersionUID = 5149618644802141270L;
+  private static final long serialVersionUID = 5149618644802141270L;
 
- /**
-  * 类型
-  */
+  /**
+   * 类型
+   */
   private Integer type;
 
- /**
-  * 货号
-  */
+  /**
+   * 货号
+   */
   private String actNo;
 
- /**
-  * 商品名称
-  */
+  /**
+   * 商品名称
+   */
   private String name;
 
- /**
-  * 品牌
-  */
+  /**
+   * 品牌
+   */
   private String brand;
 
- /**
-  * 备注
-  */
+  /**
+   * 备注
+   */
   private String remark;
 
   /**
-  * 金额 开始
-  */
+   * 金额 开始
+   */
   private BigDecimal priceFrom;
 
- /**
-  * 金额 结束
-  */
+  /**
+   * 金额 结束
+   */
   private BigDecimal priceTo;
 
   /**
-  * 创建时间 开始
-  */
+   * 创建时间 开始
+   */
   private String createTimeFrom;
 
- /**
-  * 创建时间 结束
-  */
+  /**
+   * 创建时间 结束
+   */
   private String createTimeTo;
 
   /**
-  * 更新时间 开始
-  */
+   * 更新时间 开始
+   */
   private String updateTimeFrom;
 
- /**
-  * 更新时间 结束
-  */
+  /**
+   * 更新时间 结束
+   */
   private String updateTimeTo;
 
 
-	/**
-	 * 编号集合
-	 */
+  /**
+   * 编号集合
+   */
   private List<Long> ids;
 
   /**

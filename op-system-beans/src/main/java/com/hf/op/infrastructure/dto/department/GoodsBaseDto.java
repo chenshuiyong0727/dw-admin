@@ -72,9 +72,11 @@ public class GoodsBaseDto extends BaseDto implements Serializable {
   @ValidatorLenMax(512)
   private String remark;
   /**
+   *
    */
   private List<Long> sizeList;
   /**
+   *
    */
   private List<List<String>> sizeListList;
   private List<ListGoodsSizeVo> sizeVoList;

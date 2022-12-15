@@ -86,6 +86,7 @@ public class MinioFSClient {
     return MinioFSClient
         .uploadFile(DFSConst.Bucket.STATIC, DFSConst.Path.DEFAULT, fileName, stream, null);
   }
+
   public static String uploadFileNormal(String fileName, InputStream stream) throws Exception {
     return MinioFSClient
         .uploadFile(DFSConst.Bucket.STATIC, DFSConst.Path.DEFAULT, fileName, stream, null);
@@ -129,14 +130,14 @@ public class MinioFSClient {
   public static String getFileNameExtension(String fileName) {
     return fileName.substring(fileName.lastIndexOf(".") + 1);
   }
+
   /**
    * 以流的形式获取一个文件对象（断点下载）
    *
    * @param bucketName 存储桶名称
    * @param objectName 存储桶里的对象名称
-   * @param offset     起始字节的位置
-   * @param length     要读取的长度 (可选，如果无值则代表读到文件结尾)
-   * @return
+   * @param offset 起始字节的位置
+   * @param length 要读取的长度 (可选，如果无值则代表读到文件结尾)
    */
   public static InputStream getObject(String bucketName, String objectName, Long offset,
       Long length)

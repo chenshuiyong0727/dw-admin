@@ -191,7 +191,7 @@ public class GoodsBaseServiceImpl extends
           continue;
         }
         List<String> types = Arrays.asList(vo.getType().split(","));
-        for (String type :types) {
+        for (String type : types) {
           List<String> list = new ArrayList<>();
           list.add(type);
           list.add(vo.getId().toString());
@@ -305,8 +305,8 @@ public class GoodsBaseServiceImpl extends
   @SneakyThrows
   @Override
   public void t2() {
-    List<GoodsBaseEntity> list  = repository.selectList(null);
-    for (GoodsBaseEntity entity :list) {
+    List<GoodsBaseEntity> list = repository.selectList(null);
+    for (GoodsBaseEntity entity : list) {
       List<Long> sizeIds = repository.list1(entity.getActNo());
       goodsBaseSizeServiceImpl.addList(entity.getId(), sizeIds);
     }
@@ -315,21 +315,21 @@ public class GoodsBaseServiceImpl extends
   @SneakyThrows
   @Override
   public void init() {
-    List<GoodsBaseEntity> list  = repository.selectList(null);
+    List<GoodsBaseEntity> list = repository.selectList(null);
     for (int i = 0; i < list.size(); i++) {
       GoodsBaseEntity entity = list.get(i);
       String url = HttpClientUtilDw.getData(entity.getActNo());
       if (StringUtilLocal.isEmpty(url)) {
         continue;
       }
-      String path = downloadAndUpdate(url,entity.getActNo());
+      String path = downloadAndUpdate(url, entity.getActNo());
       entity.setImgUrl(path);
       Thread.sleep(300L);
     }
     this.saveOrUpdateBatch(list);
   }
 
-  public String downloadAndUpdate(String urlStringObj,String  actNo) {
+  public String downloadAndUpdate(String urlStringObj, String actNo) {
     String path = null;
     OutputStream os = null;
     InputStream is = null;

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * 商品库存 服务接口
+ *
  * @author chensy
  * @date 2022-11-12 20:10:34
  */
@@ -22,15 +23,18 @@ public interface GoodsInventoryService {
    * @date: 2022-11-12 20:10:34
    */
   ResponseMsg page(GoodsInventoryRqDto dto);
+
   ResponseMsg pageGoods(GoodsInventoryRqDto dto);
 
-    /**
+  /**
    * @description 新增
    * @method add
    * @date: 2022-11-12 20:10:34
    */
   ResponseMsg add(GoodsInventoryDto dto);
+
   ResponseMsg shelvesGoods(GoodsShelvesGoodsRqDto dto);
+
   void t3();
 
   /**

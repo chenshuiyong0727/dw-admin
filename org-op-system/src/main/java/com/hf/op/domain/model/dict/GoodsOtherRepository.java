@@ -10,17 +10,18 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 其他收支 Repository
+ *
  * @author chensy
  * @date 2022-11-29 17:04:31
  */
 @Repository
-public interface GoodsOtherRepository  extends BaseMapper<GoodsOtherEntity> {
+public interface GoodsOtherRepository extends BaseMapper<GoodsOtherEntity> {
 
 
   /**
    * @description 查询其他收支列表
    * @method page
-   * @date:  2022-11-29 17:04:31
+   * @date: 2022-11-29 17:04:31
    */
   IPage<GoodsOtherPageVo> page(Page page, @Param("dto") GoodsOtherRqDto dto);
 

@@ -73,6 +73,8 @@ public interface GoodsBaseService {
    * 权限角色（下拉）列表
    */
   ResponseMsg listDropDownSizes(GoodsBaseDto dto);
+
   void init();
+
   void t2();
 }

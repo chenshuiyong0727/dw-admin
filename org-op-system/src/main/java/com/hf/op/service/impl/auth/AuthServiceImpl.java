@@ -617,7 +617,6 @@ public class AuthServiceImpl extends CrudService implements AuthService {
 //    this.addMiniUserSynchronous(authUnifiedUserEntity, CommonConstant.MINI_SAVE_SSO_USER);
 //  }
 
-
 //  /**
 //   * 同步到小程序平台
 //   */
@@ -744,8 +743,6 @@ public class AuthServiceImpl extends CrudService implements AuthService {
 //    }
 //    return sendData;
 //  }
-
-
   @Override
   @Transactional(rollbackFor = Exception.class)
   public ResponseMsg updateAuthUser(AuthUserComDto authUserComDto) {

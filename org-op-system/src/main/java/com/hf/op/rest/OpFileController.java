@@ -58,8 +58,10 @@ public class OpFileController {
 
   private GoodsBaseServiceImpl service;
 
-  private GoodsInventoryServiceImpl  goodsInventoryServiceImpl;
-  public OpFileController(GoodsBaseServiceImpl service,GoodsInventoryServiceImpl  goodsInventoryServiceImpl) {
+  private GoodsInventoryServiceImpl goodsInventoryServiceImpl;
+
+  public OpFileController(GoodsBaseServiceImpl service,
+      GoodsInventoryServiceImpl goodsInventoryServiceImpl) {
     this.goodsInventoryServiceImpl = goodsInventoryServiceImpl;
     this.service = service;
   }
@@ -134,7 +136,7 @@ public class OpFileController {
       String filename = urlString.substring(urlString.lastIndexOf("/"));
       SimpleDateFormat sdf = new SimpleDateFormat("/yyyy.MM.dd/");
 //      String format = sdf.format(new Date());
-      String realPath = fileSavePath ;
+      String realPath = fileSavePath;
       System.out.println("realPath:" + realPath);
       // 输出的文件流
       File sf = new File(realPath);
@@ -179,7 +181,7 @@ public class OpFileController {
       throw new ServerErrorException(999, "未找到图片,请手动上传");
     }
 //    String path = download(url);
-    String path = downloadAndUpdate(url,actNo);
+    String path = downloadAndUpdate(url, actNo);
     String url1 = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + path;
     System.out.println("url:" + url1);
     Map<String, Object> map = new HashMap<>();
@@ -206,11 +208,11 @@ public class OpFileController {
   @ResponseBody
   public Integer t3() {
     goodsInventoryServiceImpl.t3();
-    return 1 ;
+    return 1;
   }
 
 
-  public String downloadAndUpdate(String urlStringObj,String  actNo) {
+  public String downloadAndUpdate(String urlStringObj, String actNo) {
     String path = null;
     OutputStream os = null;
     InputStream is = null;
@@ -225,7 +227,7 @@ public class OpFileController {
 //      String filename = urlString.substring(urlString.lastIndexOf("/"));
       // 输入流
 //      is = con.getInputStream();
-       path = MinioFSClient.uploadFileNormal(actNo + fileType, con.getInputStream());
+      path = MinioFSClient.uploadFileNormal(actNo + fileType, con.getInputStream());
 
 //      // 1K的数据缓冲
 //      byte[] bs = new byte[1024];
@@ -272,13 +274,14 @@ public class OpFileController {
 
   @ApiOperation(value = "文件上传", notes = "无")
   @PostMapping(value = "/uploadFileMinio")
-  public ResponseMsg uploadFileMinio( MultipartFile file,
+  public ResponseMsg uploadFileMinio(MultipartFile file,
       @ApiParam(value = "类型：GUNI全局唯一，CUST自定义静态资源")
       @RequestParam(name = "actNo", required = false) String actNo)
 //      ,@RequestParam(name = "fileName", required = false) String fileName)
   {
     try {
-      String fileName = StringUtilLocal.isNotEmpty(actNo) ? actNo + fileType : System.currentTimeMillis() + fileType;
+      String fileName = StringUtilLocal.isNotEmpty(actNo) ? actNo + fileType
+          : System.currentTimeMillis() + fileType;
       String filePath = MinioFSClient.uploadFileNormal(fileName, file.getInputStream());
       String url = fileUrl + filePath;
       log.info(filePath);

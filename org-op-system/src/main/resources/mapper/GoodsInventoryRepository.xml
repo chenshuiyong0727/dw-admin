@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hf.op.domain.model.dict.GoodsInventoryRepository">
 
   <select id="page" resultType="com.hf.op.infrastructure.vo.GoodsBasePageVo">
     SELECT b.* from
-      (
-      SELECT
-      goods_id ,
-      count(inventory)  inventory
-      FROM goods_inventory a
-       where 1=1
+    (
+    SELECT
+    goods_id ,
+    count(inventory) inventory
+    FROM goods_inventory a
+    where 1=1
     <if test="dto.inventoryTo != null and dto.inventoryTo == 0 ">
-         and a.inventory = 0
+      and a.inventory = 0
     </if>
     <if test="dto.inventoryTo != null and dto.inventoryTo == 1 ">
-         and a.inventory > 0
+      and a.inventory > 0
     </if>
     <if test="dto.inventoryTo != null and dto.inventoryTo == 2 ">
       AND id not in (
-        SELECT inventory_id from goods_order
+      SELECT inventory_id from goods_order
       )
     </if>
-         GROUP BY goods_id
-      ) a
-      LEFT JOIN
+    GROUP BY goods_id
+    ) a
+    LEFT JOIN
     goods_base b on a.goods_id = b.id
     <where>
-         1=1
+      1=1
       <if test="dto.keyword != null and dto.keyword != ''">
         AND b.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
       </if>
@@ -56,7 +57,7 @@
     ) e on e.inventory_id = a.id
     <where>
       a.data_status > -1
-       <if test="dto.ids != null and dto.ids.size() > 0">
+      <if test="dto.ids != null and dto.ids.size() > 0">
         AND a.id IN
         <foreach collection="dto.ids" item="item" open="(" separator="," close=")">
           #{item}
@@ -72,10 +73,10 @@
         AND a.id = #{dto.id}
       </if>
       <if test="dto.goodsId != null and dto.goodsId != ''">
-        AND a.goods_id  = #{dto.goodsId}
+        AND a.goods_id = #{dto.goodsId}
       </if>
       <if test="dto.sizeId != null and dto.sizeId != ''">
-        AND a.size_id  = #{dto.sizeId}
+        AND a.size_id = #{dto.sizeId}
       </if>
       <if test="dto.inventoryFrom != null ">
         AND a.inventory >= #{dto.inventoryFrom}
@@ -99,7 +100,7 @@
         AND #{dto.updateTimeTo} >= DATE_FORMAT(a.`update_time`,'%Y-%m-%d')
       </if>
     </where>
-    ORDER BY a.update_time DESC  ,a.goods_id desc, c.size asc
+    ORDER BY a.update_time DESC ,a.goods_id desc, c.size asc
   </select>
   <select id="list1" resultType="com.hf.op.infrastructure.vo.GoodsInventoryPageVo">
     SELECT

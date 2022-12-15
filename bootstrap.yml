@@ -11,8 +11,8 @@ spring:
 nacos:
   address: 114.132.243.79:8848
   orgnamespace: org-csy
-#  address: 127.0.0.1:8848
-#  orgnamespace: org-csy
+  #  address: 127.0.0.1:8848
+  #  orgnamespace: org-csy
   user: nacos
   pwd: nacos
 logging:

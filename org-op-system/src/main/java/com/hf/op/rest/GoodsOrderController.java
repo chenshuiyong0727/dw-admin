@@ -32,27 +32,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 商品订单信息 控制器
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
 @Slf4j
 @RestController
 @RequestMapping(value = "v1/goodsOrder")
-public class  GoodsOrderController {
+public class GoodsOrderController {
 
   private GoodsOrderServiceImpl service;
 
-  public GoodsOrderController(GoodsOrderServiceImpl service){
+  public GoodsOrderController(GoodsOrderServiceImpl service) {
     this.service = service;
   }
 
   /**
    * 出售
-   * @param dto
-   * @return
    */
-	@PostMapping("/sellGoods")
-  public ResponseMsg sellGoods(@RequestBody GoodsOrderDto dto){
+  @PostMapping("/sellGoods")
+  public ResponseMsg sellGoods(@RequestBody GoodsOrderDto dto) {
     Assert.notNull(dto, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
     Assert.notNull(dto.getId(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
     Assert.notNull(dto.getStatus(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
@@ -61,60 +60,50 @@ public class  GoodsOrderController {
 
   /**
    * 新增数据
-   * @param dto
-   * @return
    */
-	@PostMapping("")
-  public ResponseMsg add(@RequestBody GoodsOrderDto dto){
+  @PostMapping("")
+  public ResponseMsg add(@RequestBody GoodsOrderDto dto) {
     return service.add(dto);
   }
 
   /**
    * 修改数据
-   * @param dto
-   * @return
    */
-	@PutMapping("")
-  public ResponseMsg update(@RequestBody GoodsOrderDto dto){
+  @PutMapping("")
+  public ResponseMsg update(@RequestBody GoodsOrderDto dto) {
     return service.update(dto);
   }
 
   /**
    * 修改状态
-   * @param dto
-   * @return
    */
-	@PutMapping("/status")
-  public ResponseMsg status(@RequestBody StatusDto dto){
+  @PutMapping("/status")
+  public ResponseMsg status(@RequestBody StatusDto dto) {
     return service.status(dto);
   }
 
   /**
    * 获取数据列表
-   * @param request
-   * @return
    */
-	@GetMapping("")
-  public ResponseMsg page(HttpServletRequest request){
-    GoodsOrderRqDto dto = HfBeanUtil.populate(new GoodsOrderRqDto(),request);
+  @GetMapping("")
+  public ResponseMsg page(HttpServletRequest request) {
+    GoodsOrderRqDto dto = HfBeanUtil.populate(new GoodsOrderRqDto(), request);
     return service.page(dto);
   }
 
   /**
    * 获取数据
-   * @return
    */
-	@GetMapping("/{id}")
-  public ResponseMsg detail(@PathVariable(value="id") Long id){
+  @GetMapping("/{id}")
+  public ResponseMsg detail(@PathVariable(value = "id") Long id) {
     return service.detail(id);
   }
 
   /**
    * 移除数据
-   * @return
    */
-	@DeleteMapping("/{id}")
-  public ResponseMsg remove(@PathVariable(value="id") Long id){
+  @DeleteMapping("/{id}")
+  public ResponseMsg remove(@PathVariable(value = "id") Long id) {
     return service.remove(id);
   }
 
@@ -128,45 +117,45 @@ public class  GoodsOrderController {
 
   /**
    * 导出数据
-   * @return
    */
-	@PostMapping("/export")
+  @PostMapping("/export")
   public void export(HttpServletResponse response, HttpServletRequest request) {
     String res = HfBeanUtil.getJsonRequest(request);
     GoodsOrderRqDto dto = JSON.parseObject(res, GoodsOrderRqDto.class);
     List<GoodsOrderExportDto> list = service.queryExportPage(dto);
     if (CollUtil.isNotEmpty(list)) {
       Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(),
-        GoodsOrderExportDto.class, list);
+          GoodsOrderExportDto.class, list);
       try {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("content-Type", "application/vnd.ms-excel");
         response.setHeader("Content-Disposition",
-          "attachment;filename*=utf-8'zh_cn'" + URLEncoder
-          .encode("商品订单信息列表_" + DateUtil.today() + ".xlsx", "UTF-8"));
+            "attachment;filename*=utf-8'zh_cn'" + URLEncoder
+                .encode("商品订单信息列表_" + DateUtil.today() + ".xlsx", "UTF-8"));
         workbook.write(response.getOutputStream());
       } catch (IOException e) {
         e.printStackTrace();
-        log.error("export" , e);
+        log.error("export", e);
       } finally {
         try {
           workbook.close();
           response.getOutputStream().close();
         } catch (IOException e) {
           e.printStackTrace();
-          log.error("export" , e);
+          log.error("export", e);
         }
       }
     }
   }
 
   @GetMapping("/indexData")
-  public ResponseMsg indexData(){
+  public ResponseMsg indexData() {
     return service.indexData();
   }
+
   @GetMapping("/indexOrderData")
-  public ResponseMsg indexOrderData(HttpServletRequest request){
-    GoodsOrderRqDto dto = HfBeanUtil.populate(new GoodsOrderRqDto(),request);
+  public ResponseMsg indexOrderData(HttpServletRequest request) {
+    GoodsOrderRqDto dto = HfBeanUtil.populate(new GoodsOrderRqDto(), request);
     return service.indexOrderData(dto);
   }
 

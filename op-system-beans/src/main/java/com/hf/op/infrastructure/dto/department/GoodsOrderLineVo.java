@@ -20,19 +20,19 @@ public class GoodsOrderLineVo extends BaseDto implements Serializable {
   private static final long serialVersionUID = 3572114745267816227L;
 
   // 交易成功数
-  private Integer successNum=0;
+  private Integer successNum = 0;
   // 订单总额
-  private BigDecimal orderAmount=BigDecimal.ZERO;
+  private BigDecimal orderAmount = BigDecimal.ZERO;
   // 利润总额
-  private BigDecimal profitsAmount=BigDecimal.ZERO;
+  private BigDecimal profitsAmount = BigDecimal.ZERO;
 
   // 交易成功数
-  private Integer successNumLast=0;
+  private Integer successNumLast = 0;
   // 订单总额
-  private BigDecimal orderAmountLast=BigDecimal.ZERO;
+  private BigDecimal orderAmountLast = BigDecimal.ZERO;
   // 利润总额
-  private BigDecimal profitsAmountLast=BigDecimal.ZERO;
-//  // 利润比例
-  private List<GoodsOrderCommonDto> rows ;
+  private BigDecimal profitsAmountLast = BigDecimal.ZERO;
+  //  // 利润比例
+  private List<GoodsOrderCommonDto> rows;
 
 }

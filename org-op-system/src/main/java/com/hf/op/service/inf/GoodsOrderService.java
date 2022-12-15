@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 商品订单信息 服务接口
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
@@ -21,17 +22,20 @@ public interface GoodsOrderService {
    * @date: 2022-11-15 17:39:00
    */
   ResponseMsg sellList(GoodsOrderRqDto dto);
+
   ResponseMsg putInStorage(GoodsOrderRqDto dto);
+
   ResponseMsg page(GoodsOrderRqDto dto);
 
   ResponseMsg addList(GoodsShelvesGoodsRqDto dto);
 
-    /**
+  /**
    * @description 新增
    * @method add
    * @date: 2022-11-15 17:39:00
    */
   ResponseMsg add(GoodsOrderDto dto);
+
   ResponseMsg sellGoods(GoodsOrderDto dto);
 
   /**
@@ -47,7 +51,9 @@ public interface GoodsOrderService {
    * @date: 2022-11-15 17:39:00
    */
   ResponseMsg detail(Long id);
+
   ResponseMsg indexData();
+
   ResponseMsg indexOrderData(GoodsOrderRqDto dto);
 
   /**

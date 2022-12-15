@@ -2,7 +2,6 @@ package com.hf.op.service.inf;
 
 import com.hf.common.infrastructure.dto.StatusDto;
 import com.hf.common.infrastructure.resp.ResponseMsg;
-import com.hf.op.domain.model.user.OpSysUserEntity;
 import com.hf.op.infrastructure.dto.department.GoodsBaseSizeDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseSizeExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsBaseSizeRqDto;
@@ -10,6 +9,7 @@ import java.util.List;
 
 /**
  * 商品尺码关系 服务接口
+ *
  * @author chensy
  * @date 2022-11-12 16:48:45
  */
@@ -22,7 +22,7 @@ public interface GoodsBaseSizeService {
    */
   ResponseMsg page(GoodsBaseSizeRqDto dto);
 
-    /**
+  /**
    * @description 新增
    * @method add
    * @date: 2022-11-12 16:48:45
@@ -73,5 +73,5 @@ public interface GoodsBaseSizeService {
   /**
    * 用户绑定角色
    */
-  void addList(  Long id , List<Long> sizeList);
+  void addList(Long id, List<Long> sizeList);
 }

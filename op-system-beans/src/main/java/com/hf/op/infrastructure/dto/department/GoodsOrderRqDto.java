@@ -10,6 +10,7 @@ import lombok.ToString;
 
 /**
  * 商品订单信息 请求参数Dto
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
@@ -17,101 +18,101 @@ import lombok.ToString;
 @ToString
 public class GoodsOrderRqDto extends BaseDto implements Serializable {
 
-	private static final long serialVersionUID = 5158114711655177619L;
+  private static final long serialVersionUID = 5158114711655177619L;
 
- /**
-  * 订单主键
-  */
+  /**
+   * 订单主键
+   */
   private Long id;
 
- /**
-  * 订单号
-  */
+  /**
+   * 订单号
+   */
   private String keyword;
 
- /**
-  * 订单号
-  */
+  /**
+   * 订单号
+   */
   private String orderNo;
 
- /**
-  * 库存编号
-  */
+  /**
+   * 库存编号
+   */
   private Long inventoryId;
 
- /**
-  * 状态
-  */
+  /**
+   * 状态
+   */
   private Integer status;
 
   /**
-  * 原售价 开始
-  */
+   * 原售价 开始
+   */
   private BigDecimal shelvesPriceFrom;
 
- /**
-  * 原售价 结束
-  */
+  /**
+   * 原售价 结束
+   */
   private BigDecimal shelvesPriceTo;
 
   /**
-  * 运费 开始
-  */
+   * 运费 开始
+   */
   private BigDecimal freightFrom;
 
- /**
-  * 运费 结束
-  */
+  /**
+   * 运费 结束
+   */
   private BigDecimal freightTo;
 
   /**
-  * 手续费 开始
-  */
+   * 手续费 开始
+   */
   private BigDecimal poundageFrom;
 
- /**
-  * 手续费 结束
-  */
+  /**
+   * 手续费 结束
+   */
   private BigDecimal poundageTo;
 
   /**
-  * 到手价 开始
-  */
+   * 到手价 开始
+   */
   private BigDecimal theirPriceFrom;
 
- /**
-  * 到手价 结束
-  */
+  /**
+   * 到手价 结束
+   */
   private BigDecimal theirPriceTo;
 
- /**
-  * 地址编号
-  */
+  /**
+   * 地址编号
+   */
   private Long addressId;
 
- /**
-  * 运单编号
-  */
+  /**
+   * 运单编号
+   */
   private String waybillNo;
   /**
-  * 创建时间 开始
-  */
+   * 创建时间 开始
+   */
   private String createTimeFrom;
   /**
-  * 创建时间 开始
-  */
+   * 创建时间 开始
+   */
   private String sellTimeFrom;
   /**
-  * 创建时间 开始
-  */
+   * 创建时间 开始
+   */
   private String successTimeFrom;
 
- private String sellTimeTo;
- private String successTimeTo;
+  private String sellTimeTo;
+  private String successTimeTo;
 
   /**
-  * 创建时间 开始
-  */
+   * 创建时间 开始
+   */
   private String statusList;
 
   /**
@@ -119,24 +120,24 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
    */
   private List<String> statusArray;
 
- /**
-  * 创建时间 结束
-  */
+  /**
+   * 创建时间 结束
+   */
   private String createTimeTo;
 
   /**
-  * 更新时间 开始
-  */
+   * 更新时间 开始
+   */
   private String updateTimeFrom;
 
- /**
-  * 更新时间 结束
-  */
+  /**
+   * 更新时间 结束
+   */
   private String updateTimeTo;
 
-	/**
-	 * 编号集合
-	 */
+  /**
+   * 编号集合
+   */
   private List<Long> ids;
 
   /**
@@ -149,6 +150,6 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
    */
   private Integer pageNum;
 
- private String orderBy;
+  private String orderBy;
 
 }

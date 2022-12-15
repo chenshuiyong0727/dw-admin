@@ -12,21 +12,25 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 商品库存 Repository
+ *
  * @author chensy
  * @date 2022-11-12 20:10:34
  */
 @Repository
-public interface GoodsInventoryRepository  extends BaseMapper<GoodsInventoryEntity> {
+public interface GoodsInventoryRepository extends BaseMapper<GoodsInventoryEntity> {
 
 
   /**
    * @description 查询商品库存列表
    * @method page
-   * @date:  2022-11-12 20:10:34
+   * @date: 2022-11-12 20:10:34
    */
   IPage<GoodsBasePageVo> page(Page page, @Param("dto") GoodsInventoryRqDto dto);
+
   IPage<GoodsInventoryPageVo> pageGoods(Page page, @Param("dto") GoodsInventoryRqDto dto);
+
   List<GoodsInventoryPageVo> list1();
+
   GoodsInventoryPageVo inventoryData(@Param("goodsId") Long goodsId);
 
 }

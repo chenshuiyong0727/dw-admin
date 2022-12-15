@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hf.common.infrastructure.constant.DataStatusEnum;
-import com.hf.common.infrastructure.constant.SsoConstant;
 import com.hf.common.infrastructure.global.cache.CommCacheConst;
 import com.hf.common.infrastructure.resp.BusinessRespCodeEnum;
 import com.hf.common.infrastructure.resp.ResponseMsg;

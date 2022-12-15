@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hf.op.domain.model.dict.GoodsOrderRepository">
 
   <select id="indexData" resultType="com.hf.op.infrastructure.vo.GoodsOrderPageVo">
@@ -18,7 +19,8 @@
     SELECT sum(old_inventory* price) price, 'inventoryAmount' size from goods_inventory
   </select>
 
-  <select id="indexOrderData1" resultType="com.hf.op.infrastructure.dto.department.GoodsOrderLineVo">
+  <select id="indexOrderData1"
+    resultType="com.hf.op.infrastructure.dto.department.GoodsOrderLineVo">
     -- 上月
     SELECT
     a.success_num success_num_last,
@@ -45,7 +47,8 @@
     )b on a.type = b.type
   </select>
 
-  <select id="indexOrderData" resultType="com.hf.op.infrastructure.dto.department.GoodsOrderCommonDto">
+  <select id="indexOrderData"
+    resultType="com.hf.op.infrastructure.dto.department.GoodsOrderCommonDto">
     SELECT
     date_table.months AS months,
     IFNULL( temp.num, 0 ) AS success_num,
@@ -56,12 +59,14 @@
     with RECURSIVE months(months,num) as (
     SELECT DATE_FORMAT((CURDATE() - INTERVAL 0 MONTH), '%Y-%m') AS 'months' , 0 as num
     union all
-    SELECT DATE_FORMAT((CURDATE() - INTERVAL num+1 MONTH), '%Y-%m') AS 'months', num+1 as num from months where 11 > num
+    SELECT DATE_FORMAT((CURDATE() - INTERVAL num+1 MONTH), '%Y-%m') AS 'months', num+1 as num from
+    months where 11 > num
     )
     select months from months
     ) date_table
     LEFT JOIN (
-    SELECT DATE_FORMAT(success_time,'%Y-%m') date,sum(their_price) their_price, sum(profits) profits, count(1) num from goods_order
+    SELECT DATE_FORMAT(success_time,'%Y-%m') date,sum(their_price) their_price, sum(profits)
+    profits, count(1) num from goods_order
     where `status` = 7
     GROUP BY DATE_FORMAT(success_time,'%Y-%m')
     ORDER BY DATE_FORMAT(success_time,'%Y-%m')
@@ -74,14 +79,15 @@
       AND #{dto.createTimeTo} >= months
     </if>
     <if test="dto.orderBy != null and dto.orderBy != '' ">
-      ORDER BY  #{dto.orderBy}
+      ORDER BY #{dto.orderBy}
     </if>
     <if test="dto.orderBy == null or dto.orderBy == '' ">
       ORDER BY months asc
     </if>
   </select>
 
-  <select id="putInStorage" resultType="com.hf.op.infrastructure.dto.department.GoodsOrderCommonDto">
+  <select id="putInStorage"
+    resultType="com.hf.op.infrastructure.dto.department.GoodsOrderCommonDto">
     SELECT
     date_table.months AS months,
     IFNULL( temp.num, 0 ) AS success_num,
@@ -92,7 +98,8 @@
     with RECURSIVE months(months,num) as (
     SELECT DATE_FORMAT((CURDATE() - INTERVAL 0 MONTH), '%Y-%m') AS 'months' , 0 as num
     union all
-    SELECT DATE_FORMAT((CURDATE() - INTERVAL num+1 MONTH), '%Y-%m') AS 'months', num+1 as num from months where 11 > num
+    SELECT DATE_FORMAT((CURDATE() - INTERVAL num+1 MONTH), '%Y-%m') AS 'months', num+1 as num from
+    months where 11 > num
     )
     select months from months
     ) date_table
@@ -114,7 +121,7 @@
       AND #{dto.createTimeTo} >= months
     </if>
     <if test="dto.orderBy != null and dto.orderBy != '' ">
-      ORDER BY  #{dto.orderBy}
+      ORDER BY #{dto.orderBy}
     </if>
     <if test="dto.orderBy == null or dto.orderBy == '' ">
       ORDER BY months asc
@@ -136,13 +143,13 @@
     LEFT JOIN goods_address e on a.address_id = e.id
     <where>
       a.data_status > -1
-       <if test="dto.ids != null and dto.ids.size() > 0">
+      <if test="dto.ids != null and dto.ids.size() > 0">
         AND a.id IN
         <foreach collection="dto.ids" item="item" open="(" separator="," close=")">
           #{item}
         </foreach>
       </if>
-       <if test="dto.statusArray != null and dto.statusArray.size() > 0">
+      <if test="dto.statusArray != null and dto.statusArray.size() > 0">
         AND a.status IN
         <foreach collection="dto.statusArray" item="item" open="(" separator="," close=")">
           #{item}
@@ -153,9 +160,9 @@
       </if>
       <if test="dto.keyword != null and dto.keyword != ''">
         AND (
-            c.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
-          or
-            d.size LIKE CONCAT( '%', #{dto.keyword},'%')
+        c.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
+        or
+        d.size LIKE CONCAT( '%', #{dto.keyword},'%')
         )
       </if>
       <if test="dto.orderNo != null and dto.orderNo != ''">
@@ -227,7 +234,7 @@
         AND #{dto.successTimeTo} >= DATE_FORMAT(a.`success_time`,'%Y-%m-%d')
       </if>
     </where>
-    ORDER BY  a.update_time DESC ,a.id desc
+    ORDER BY a.update_time DESC ,a.id desc
   </select>
 
 </mapper>

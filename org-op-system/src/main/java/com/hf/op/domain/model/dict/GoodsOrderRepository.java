@@ -13,23 +13,25 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 商品订单信息 Repository
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
 @Repository
-public interface GoodsOrderRepository  extends BaseMapper<GoodsOrderEntity> {
+public interface GoodsOrderRepository extends BaseMapper<GoodsOrderEntity> {
 
 
   /**
    * @description 查询商品订单信息列表
    * @method page
-   * @date:  2022-11-15 17:39:00
+   * @date: 2022-11-15 17:39:00
    */
   IPage<GoodsOrderPageVo> page(Page page, @Param("dto") GoodsOrderRqDto dto);
 
   List<GoodsOrderPageVo> indexData();
 
   List<GoodsOrderCommonDto> indexOrderData(@Param("dto") GoodsOrderRqDto dto);
+
   List<GoodsOrderCommonDto> putInStorage(@Param("dto") GoodsOrderRqDto dto);
 
   GoodsOrderLineVo indexOrderData1();

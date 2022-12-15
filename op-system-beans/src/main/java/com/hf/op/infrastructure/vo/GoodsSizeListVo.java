@@ -1,6 +1,5 @@
 package com.hf.op.infrastructure.vo;
 
-import com.hf.common.infrastructure.dto.BaseDto;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.ToString;

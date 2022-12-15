@@ -10,6 +10,7 @@ import lombok.ToString;
 
 /**
  * 商品订单信息 Entity
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
@@ -18,61 +19,61 @@ import lombok.ToString;
 @TableName("goods_order")
 public class GoodsOrderEntity extends BaseEntity implements Serializable {
 
-		private static final long serialVersionUID = 2506428064257655669L;
+  private static final long serialVersionUID = 2506428064257655669L;
 
-    /**
-    * 订单号
-    */
-    private String orderNo;
+  /**
+   * 订单号
+   */
+  private String orderNo;
 
-    /**
-    * 库存编号
-    */
-    private Long inventoryId;
+  /**
+   * 库存编号
+   */
+  private Long inventoryId;
 
-    /**
-    * 状态
-    */
-    private Integer status;
+  /**
+   * 状态
+   */
+  private Integer status;
 
-    /**
-    * 原售价
-    */
-    private BigDecimal shelvesPrice;
+  /**
+   * 原售价
+   */
+  private BigDecimal shelvesPrice;
 
-    /**
-    * 运费
-    */
-    private BigDecimal freight;
+  /**
+   * 运费
+   */
+  private BigDecimal freight;
 
-    /**
-    * 利润
-    */
-    private BigDecimal profits;
-    /**
-     * 补贴价
-     */
-    private BigDecimal subsidiesPrice;
-    /**
-    * 手续费
-    */
-    private BigDecimal poundage;
+  /**
+   * 利润
+   */
+  private BigDecimal profits;
+  /**
+   * 补贴价
+   */
+  private BigDecimal subsidiesPrice;
+  /**
+   * 手续费
+   */
+  private BigDecimal poundage;
 
-    /**
-    * 到手价
-    */
-    private BigDecimal theirPrice;
+  /**
+   * 到手价
+   */
+  private BigDecimal theirPrice;
 
-    /**
-    * 地址编号
-    */
-    private Long addressId;
+  /**
+   * 地址编号
+   */
+  private Long addressId;
 
-    /**
-    * 运单编号
-    */
-    private String waybillNo;
+  /**
+   * 运单编号
+   */
+  private String waybillNo;
 
-    public LocalDateTime sellTime ;
-    public LocalDateTime successTime ;
+  public LocalDateTime sellTime;
+  public LocalDateTime successTime;
 }

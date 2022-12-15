@@ -26,20 +26,21 @@ import org.springframework.stereotype.Service;
 
 /**
  * 其他收支 服务接口实现
+ *
  * @author chensy
  * @date 2022-11-29 17:04:31
  */
 @Slf4j
 @Service
 public class GoodsOtherServiceImpl extends
-	BatchCrudService<GoodsOtherRepository, GoodsOtherEntity> implements
+    BatchCrudService<GoodsOtherRepository, GoodsOtherEntity> implements
     GoodsOtherService {
 
   private GoodsOtherRepository repository;
 
-	public GoodsOtherServiceImpl(GoodsOtherRepository repository){
-	    this.repository = repository;
-	}
+  public GoodsOtherServiceImpl(GoodsOtherRepository repository) {
+    this.repository = repository;
+  }
 
 
   /**
@@ -48,8 +49,8 @@ public class GoodsOtherServiceImpl extends
    * @date: 2022-11-29 17:04:31
    */
   @Override
-  public ResponseMsg page(GoodsOtherRqDto dto){
-    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()),dto);
+  public ResponseMsg page(GoodsOtherRqDto dto) {
+    IPage ipage = repository.page(new Page(dto.getPageNum(), dto.getPageSize()), dto);
     return new ResponseMsg().setData(PageUtil.getHumpPage(ipage));
   }
 
@@ -59,7 +60,7 @@ public class GoodsOtherServiceImpl extends
    * @date: 2022-11-29 17:04:31
    */
   @Override
-  public ResponseMsg add(GoodsOtherDto dto){
+  public ResponseMsg add(GoodsOtherDto dto) {
     Long id = createId();
     GoodsOtherEntity entity = new GoodsOtherEntity();
     BeanUtils.copyProperties(dto, entity);
@@ -68,7 +69,7 @@ public class GoodsOtherServiceImpl extends
     try {
       repository.insert(entity);
     } catch (Exception e) {
-      log.error("新增失败 ",e);
+      log.error("新增失败 ", e);
       return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
           "新增失败");
     }
@@ -81,18 +82,18 @@ public class GoodsOtherServiceImpl extends
    * @date: 2022-11-29 17:04:31
    */
   @Override
-  public ResponseMsg update(GoodsOtherDto dto){
+  public ResponseMsg update(GoodsOtherDto dto) {
     GoodsOtherEntity entity = new GoodsOtherEntity();
     BeanUtils.copyProperties(dto, entity);
     setUpdateUser(entity);
-      try {
-        repository.updateById(entity);
-      } catch (Exception e) {
-        log.error("更新失败 ",e);
-        return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
-            "更新失败");
-      }
-      return new ResponseMsg().setData(dto.getId());
+    try {
+      repository.updateById(entity);
+    } catch (Exception e) {
+      log.error("更新失败 ", e);
+      return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
+          "更新失败");
+    }
+    return new ResponseMsg().setData(dto.getId());
   }
 
   /**
@@ -101,7 +102,7 @@ public class GoodsOtherServiceImpl extends
    * @date: 2022-11-29 17:04:31
    */
   @Override
-  public ResponseMsg detail(Long id){
+  public ResponseMsg detail(Long id) {
     GoodsOtherEntity entity = repository.selectById(id);
     if (entity != null) {
       GoodsOtherDto dto = new GoodsOtherDto();
@@ -112,14 +113,14 @@ public class GoodsOtherServiceImpl extends
         "查询失败");
   }
 
-   /**
+  /**
    * @description 移除数据
    * @method remove
    * @date: 2022-11-29 17:04:31
    */
-   @Override
-   public ResponseMsg remove(Long id){
-   LambdaQueryWrapper<GoodsOtherEntity> queryWrapper = new LambdaQueryWrapper();
+  @Override
+  public ResponseMsg remove(Long id) {
+    LambdaQueryWrapper<GoodsOtherEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.eq(GoodsOtherEntity::getId, id)
         .between(GoodsOtherEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
             DataStatusEnum.ENABLE.getCode());
@@ -127,20 +128,20 @@ public class GoodsOtherServiceImpl extends
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
     if (repository.update(entity, queryWrapper) > 0) {
-       return new ResponseMsg().setData(id);
+      return new ResponseMsg().setData(id);
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "删除失败");
   }
 
-   /**
+  /**
    * @description 批量移除数据
    * @method batchRemove
    * @date: 2022-11-29 17:04:31
    */
-   @Override
-   public ResponseMsg batchRemove(List<Long> ids){
-   LambdaQueryWrapper<GoodsOtherEntity> queryWrapper = new LambdaQueryWrapper();
+  @Override
+  public ResponseMsg batchRemove(List<Long> ids) {
+    LambdaQueryWrapper<GoodsOtherEntity> queryWrapper = new LambdaQueryWrapper();
     queryWrapper.in(GoodsOtherEntity::getId, ids)
         .between(GoodsOtherEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
             DataStatusEnum.ENABLE.getCode());
@@ -148,7 +149,7 @@ public class GoodsOtherServiceImpl extends
     entity.setDataStatus(DataStatusEnum.DELETE.getCode());
     setUpdateUser(entity);
     if (repository.update(entity, queryWrapper) > 0) {
-       return new ResponseMsg().setData(ids);
+      return new ResponseMsg().setData(ids);
     }
     return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
         "删除失败");
@@ -158,23 +159,23 @@ public class GoodsOtherServiceImpl extends
    * @description 变更状态
    * @date 2022-11-29 17:04:31
    */
-   @Override
-   public ResponseMsg status(StatusDto dto){
-   LambdaQueryWrapper<GoodsOtherEntity> queryWrapper = new LambdaQueryWrapper();
-      queryWrapper.eq(GoodsOtherEntity::getId, dto.getId())
-          .between(GoodsOtherEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
-              DataStatusEnum.ENABLE.getCode());
-      GoodsOtherEntity entity = new GoodsOtherEntity();
-      entity.setDataStatus(dto.getDataStatus());
-      setUpdateUser(entity);
-      if (repository.update(entity, queryWrapper) > 0) {
-        return new ResponseMsg().setData(dto.getId());
-      }
-      return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
-          "变更失败");
+  @Override
+  public ResponseMsg status(StatusDto dto) {
+    LambdaQueryWrapper<GoodsOtherEntity> queryWrapper = new LambdaQueryWrapper();
+    queryWrapper.eq(GoodsOtherEntity::getId, dto.getId())
+        .between(GoodsOtherEntity::getDataStatus, DataStatusEnum.FORBIDDEN.getCode(),
+            DataStatusEnum.ENABLE.getCode());
+    GoodsOtherEntity entity = new GoodsOtherEntity();
+    entity.setDataStatus(dto.getDataStatus());
+    setUpdateUser(entity);
+    if (repository.update(entity, queryWrapper) > 0) {
+      return new ResponseMsg().setData(dto.getId());
+    }
+    return ResponseMsg.createBusinessErrorResp(BusinessRespCodeEnum.RESULT_SYSTEM_ERROR.getCode(),
+        "变更失败");
   }
 
- /**
+  /**
    * @description 导出excel列表
    * @date: 2022-11-29 17:04:31
    */

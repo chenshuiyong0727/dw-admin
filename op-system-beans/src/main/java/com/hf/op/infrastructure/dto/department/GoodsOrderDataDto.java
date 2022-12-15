@@ -7,6 +7,7 @@ import lombok.ToString;
 
 /**
  * 商品订单信息 Dto
+ *
  * @author chensy
  * @date 2022-11-15 17:39:00
  */
@@ -14,9 +15,9 @@ import lombok.ToString;
 @ToString
 public class GoodsOrderDataDto extends BaseDto implements Serializable {
 
-		private static final long serialVersionUID = 3572114745267816227L;
+  private static final long serialVersionUID = 3572114745267816227L;
 
-	  private GoodsOrderCountDto countDto;
-	  private GoodsOrderCommonDto commonDto;
+  private GoodsOrderCountDto countDto;
+  private GoodsOrderCommonDto commonDto;
 
 }

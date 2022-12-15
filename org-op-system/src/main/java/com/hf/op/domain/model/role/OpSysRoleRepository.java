@@ -25,7 +25,8 @@ public interface OpSysRoleRepository extends BaseMapper<OpSysRoleEntity> {
    */
   IPage<QueryOpRoleListDto> pageListOpRole(Page<QueryOpRoleListDto> page,
       @Param("query") QueryOpRoleListDto queryOpPostListDto);
-//
+
+  //
 //  /**
 //   * 通过角色编号获取角色权限列表
 //   */
