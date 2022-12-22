@@ -18,7 +18,7 @@
       <if test="dto.id != null and dto.id != ''">
         AND a.id LIKE CONCAT( '%', #{dto.id},'%')
       </if>
-      <if test="dto.type != null">
+      <if test="dto.type != null and dto.type != ''">
         AND a.`type` = #{dto.type}
       </if>
       <if test="dto.actNo != null and dto.actNo != ''">

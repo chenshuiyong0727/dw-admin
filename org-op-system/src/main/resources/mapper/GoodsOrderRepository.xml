@@ -53,7 +53,9 @@
     date_table.months AS months,
     IFNULL( temp.num, 0 ) AS success_num,
     IFNULL( temp.their_price, 0 ) AS order_amount,
-    IFNULL( temp.profits, 0 ) AS profits_amount
+    IFNULL( temp.profits, 0 ) AS profits_amount,
+    ROUND( IFNULL( temp.their_price/temp.num, 0 ),2 ) AS order_amount_avg,
+    ROUND( IFNULL( temp.profits/temp.num, 0 ),2 )AS profits_amount_avg
     FROM
     (
     with RECURSIVE months(months,num) as (
@@ -92,7 +94,9 @@
     date_table.months AS months,
     IFNULL( temp.num, 0 ) AS success_num,
     IFNULL( temp.price, 0 ) AS order_amount,
-    IFNULL( temp.dw_price, 0 ) AS profits_amount
+    IFNULL( temp.dw_price, 0 ) AS profits_amount,
+    ROUND( IFNULL( temp.price/temp.num, 0 ),2 ) AS order_amount_avg,
+    ROUND( IFNULL( temp.dw_price/temp.num, 0 ),2 )AS profits_amount_avg
     FROM
     (
     with RECURSIVE months(months,num) as (

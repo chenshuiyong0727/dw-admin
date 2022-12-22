@@ -16,12 +16,6 @@ public class GoodsBaseExportDto implements Serializable {
   private static final long serialVersionUID = 1791779083083367547L;
 
   /**
-   * 商品基本信息编号
-   */
-  @Excel(name = "商品基本信息编号")
-  private Long id;
-
-  /**
    * 货号
    */
   @Excel(name = "货号")
@@ -32,12 +26,6 @@ public class GoodsBaseExportDto implements Serializable {
    */
   @Excel(name = "商品名称")
   private String name;
-
-  /**
-   * 图片地址
-   */
-  @Excel(name = "图片地址")
-  private String imgUrl;
 
   /**
    * 品牌

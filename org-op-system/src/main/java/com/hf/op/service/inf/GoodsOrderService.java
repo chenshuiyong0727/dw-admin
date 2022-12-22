@@ -4,6 +4,8 @@ import com.hf.common.infrastructure.dto.StatusDto;
 import com.hf.common.infrastructure.resp.ResponseMsg;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderExportDto;
+import com.hf.op.infrastructure.dto.department.GoodsOrderInExportDto;
+import com.hf.op.infrastructure.dto.department.GoodsOrderOutExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import java.util.List;
@@ -81,4 +83,6 @@ public interface GoodsOrderService {
    * @date: 2022-11-15 17:39:00
    */
   List<GoodsOrderExportDto> queryExportPage(GoodsOrderRqDto dto);
+  List<GoodsOrderInExportDto> exportPutInStorage(GoodsOrderRqDto dto);
+  List<GoodsOrderOutExportDto> exportPutOutStorage(GoodsOrderRqDto dto);
 }

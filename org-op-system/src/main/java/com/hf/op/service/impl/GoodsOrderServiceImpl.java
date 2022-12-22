@@ -24,12 +24,15 @@ import com.hf.op.infrastructure.dto.department.GoodsOrderCountDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDataDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderExportDto;
+import com.hf.op.infrastructure.dto.department.GoodsOrderInExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderLineVo;
+import com.hf.op.infrastructure.dto.department.GoodsOrderOutExportDto;
 import com.hf.op.infrastructure.dto.department.GoodsOrderRqDto;
 import com.hf.op.infrastructure.dto.department.GoodsShelvesGoodsRqDto;
 import com.hf.op.infrastructure.vo.GoodsOrderPageVo;
 import com.hf.op.service.inf.GoodsOrderService;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -390,62 +393,103 @@ public class GoodsOrderServiceImpl extends
     return dtos;
   }
 
-
   @Override
   public ResponseMsg sellList(GoodsOrderRqDto dto) {
     dto.setOrderBy("months desc");
     List<GoodsOrderCommonDto> list = repository.indexOrderData(dto);
     if (!CollectionUtils.isEmpty(list)) {
-      List<GoodsOrderCommonDto> res = new ArrayList<>();
-      GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();
-      orderCommonDto.setMonths("合计");
-      Integer successNum = 0;
-      BigDecimal orderAmount = BigDecimal.ZERO;
-      BigDecimal profitsAmount = BigDecimal.ZERO;
-      for (GoodsOrderCommonDto commonDto : list) {
-        successNum = commonDto.getSuccessNum() + successNum;
-        orderAmount = orderAmount.add(commonDto.getOrderAmount());
-        profitsAmount = profitsAmount.add(commonDto.getProfitsAmount());
-      }
-      orderCommonDto.setSuccessNum(successNum);
-      orderCommonDto.setOrderAmount(orderAmount);
-      orderCommonDto.setProfitsAmount(profitsAmount);
-      res.add(orderCommonDto);
-      for (GoodsOrderCommonDto commonDto : list) {
-        res.add(commonDto);
-      }
+      List<GoodsOrderCommonDto> res = this.sellList(list);
       return new ResponseMsg().setData(res);
     }
     return new ResponseMsg().setData(list);
   }
 
+  private List<GoodsOrderCommonDto> sellList(List<GoodsOrderCommonDto> list) {
+    List<GoodsOrderCommonDto> res = new ArrayList<>();
+    GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();
+    orderCommonDto.setMonths("合计");
+    Integer successNum = 0;
+    BigDecimal orderAmount = BigDecimal.ZERO;
+    BigDecimal profitsAmount = BigDecimal.ZERO;
+    for (GoodsOrderCommonDto commonDto : list) {
+      successNum = commonDto.getSuccessNum() + successNum;
+      orderAmount = orderAmount.add(commonDto.getOrderAmount());
+      profitsAmount = profitsAmount.add(commonDto.getProfitsAmount());
+    }
+    orderCommonDto.setSuccessNum(successNum);
+    orderCommonDto.setOrderAmount(orderAmount);
+    orderCommonDto.setProfitsAmount(profitsAmount);
+    orderCommonDto.setProfitsAmountAvg(ConvertNumber(profitsAmount, successNum, 2));
+    orderCommonDto.setOrderAmountAvg(ConvertNumber(orderAmount, successNum, 2));
+    res.add(orderCommonDto);
+    for (GoodsOrderCommonDto commonDto : list) {
+      res.add(commonDto);
+    }
+    return res;
+  }
 
   @Override
   public ResponseMsg putInStorage(GoodsOrderRqDto dto) {
     dto.setOrderBy("months desc");
     List<GoodsOrderCommonDto> list = repository.putInStorage(dto);
     if (!CollectionUtils.isEmpty(list)) {
-      List<GoodsOrderCommonDto> res = new ArrayList<>();
-      GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();
-      orderCommonDto.setMonths("合计");
-      Integer successNum = 0;
-      BigDecimal orderAmount = BigDecimal.ZERO;
-      BigDecimal profitsAmount = BigDecimal.ZERO;
-      for (GoodsOrderCommonDto commonDto : list) {
-        successNum = commonDto.getSuccessNum() + successNum;
-        orderAmount = orderAmount.add(commonDto.getOrderAmount());
-        profitsAmount = profitsAmount.add(commonDto.getProfitsAmount());
-      }
-      orderCommonDto.setSuccessNum(successNum);
-      orderCommonDto.setOrderAmount(orderAmount);
-      orderCommonDto.setProfitsAmount(profitsAmount);
-      res.add(orderCommonDto);
-      for (GoodsOrderCommonDto commonDto : list) {
-        res.add(commonDto);
-      }
+      List<GoodsOrderCommonDto> res = this.putInStorageList(list);
       return new ResponseMsg().setData(res);
     }
     return new ResponseMsg().setData(list);
   }
 
+  private List<GoodsOrderCommonDto> putInStorageList(List<GoodsOrderCommonDto> list) {
+    List<GoodsOrderCommonDto> res = new ArrayList<>();
+    GoodsOrderCommonDto orderCommonDto = new GoodsOrderCommonDto();
+    orderCommonDto.setMonths("合计");
+    Integer successNum = 0;
+    BigDecimal orderAmount = BigDecimal.ZERO;
+    BigDecimal profitsAmount = BigDecimal.ZERO;
+    for (GoodsOrderCommonDto commonDto : list) {
+      successNum = commonDto.getSuccessNum() + successNum;
+      orderAmount = orderAmount.add(commonDto.getOrderAmount());
+      profitsAmount = profitsAmount.add(commonDto.getProfitsAmount());
+    }
+    orderCommonDto.setSuccessNum(successNum);
+    orderCommonDto.setOrderAmount(orderAmount);
+    orderCommonDto.setProfitsAmount(profitsAmount);
+    orderCommonDto.setProfitsAmountAvg(ConvertNumber(profitsAmount, successNum, 2));
+    orderCommonDto.setOrderAmountAvg(ConvertNumber(orderAmount, successNum, 2));
+    res.add(orderCommonDto);
+    for (GoodsOrderCommonDto commonDto : list) {
+      res.add(commonDto);
+    }
+    return res;
+  }
+
+  //BigDecimal 截取小数位，四舍五入
+  public BigDecimal ConvertNumber(BigDecimal bigDecimal, int divnum, int num) {
+    double a = bigDecimal.doubleValue();
+    a = a / divnum;
+    String numString = "0.";
+    for (int i = 0; i < num; i++) {
+      numString += "0";
+    }
+    DecimalFormat df = new DecimalFormat(numString);
+    return new BigDecimal(df.format(a).toString());
+  }
+
+  @Override
+  public List<GoodsOrderInExportDto> exportPutInStorage(GoodsOrderRqDto dto) {
+    dto.setOrderBy("months desc");
+    List<GoodsOrderCommonDto> list = repository.putInStorage(dto);
+    List<GoodsOrderCommonDto> res = this.putInStorageList(list);
+    List<GoodsOrderInExportDto> dtos = ListBeanUtil.listCopy(res, GoodsOrderInExportDto.class);
+    return dtos;
+  }
+
+  @Override
+  public List<GoodsOrderOutExportDto> exportPutOutStorage(GoodsOrderRqDto dto) {
+    dto.setOrderBy("months desc");
+    List<GoodsOrderCommonDto> list = repository.indexOrderData(dto);
+    List<GoodsOrderCommonDto> res = this.putInStorageList(list);
+    List<GoodsOrderOutExportDto> dtos = ListBeanUtil.listCopy(res, GoodsOrderOutExportDto.class);
+    return dtos;
+  }
 }
