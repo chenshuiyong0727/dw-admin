@@ -13,6 +13,7 @@ import com.hf.op.infrastructure.dto.auth.AuthUserComDto;
 public interface AuthService {
 
   ResponseMsg login(AuthLoginComDto authLoginComDto) throws Exception;
+  ResponseMsg loginH5(AuthLoginComDto authLoginComDto) throws Exception;
 
   ResponseMsg refreshToken(AuthRefreshTokenDto authRefreshTokenDto) throws Exception;
 

@@ -56,6 +56,21 @@ public class OpSysAuthController extends BaseController {
     }
     return null;
   }
+  @RequestMapping(value = "/loginH5", method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseMsg loginH5(@RequestBody AuthLoginComDto authLoginComDto) throws Exception {
+    try {
+      Assert.notNull(authLoginComDto, ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+      Assert.hasText(authLoginComDto.getLoginAccount(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+      Assert.hasText(authLoginComDto.getLoginPassword(), ServerErrorConst.ERR_PARAM_EMPTY_MSG);
+      authLoginComDto.setLoginPassword(decryptParam(authLoginComDto.getLoginPassword()));
+      log.info("AuthController.createToken.begin:" + authLoginComDto.getLoginAccount());
+      return authServiceImpl.loginH5(authLoginComDto);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
   @RequestMapping(value = "/token/refresh", method = RequestMethod.POST)
   @ResponseBody

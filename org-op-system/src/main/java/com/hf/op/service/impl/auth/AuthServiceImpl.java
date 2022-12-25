@@ -205,7 +205,64 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     resp.put("id", opUserEntity.getId());
     resp.put("userId", userId);
     resp.put("userAccount", userAccount);
-    resp.put("responsibleDepartment", opUserEntity.getDepartmentId());
+//    resp.put("responsibleDepartment", opUserEntity.getDepartmentId());
+    resp.put("token", token);
+    resp.put("refreshToken", result.getRefreshToken());
+    resp.put("tokenExpireTime", exp);
+//    List<FunctionDto> functionList = null;
+//    try {
+//      functionList = this
+//          .getOrgunitFunctions(opFunctions, sessionId, opUserEntity.getId(), systemList);
+//    } catch (BusinessException e) {
+//      return new ResponseMsg(OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getCode(),
+//          OpRespCodeEnum.USER_FUNCTIONS_NOT_EXIST.getMsg());
+//    }
+    resp.put("functionList", opFunctions);
+    resp.put("systemList", systemList);
+    /*统一登录标识*/
+//    resp.put("sessionId", sessionId);
+    loginResult = this.setData(loginResult, resp);
+    //记录登录日志
+    this.insertLoginLog(userId, authLoginComDto.getLoginAccount());
+    doRoleCache(userId, opFunctions);
+    return loginResult;
+  }
+
+  @Override
+  public ResponseMsg loginH5(AuthLoginComDto authLoginComDto) throws Exception {
+    ResponseMsg loginResult = remoteLoginH5(authLoginComDto);
+    if (ResponseMsg.isNotSuccess(loginResult)) {
+      return loginResult;
+    }
+    AuthResp result = (AuthResp) loginResult.getData();
+    Long userId = result.getUserId();
+    OpSysUserEntity opUserEntity = opSysUserServiceImpl.getUserByUserId(userId);
+    if (null == opUserEntity) {
+      return new ResponseMsg(OpRespCodeEnum.USER_NOT_EXIST.getCode(),
+          OpRespCodeEnum.USER_NOT_EXIST.getMsg());
+    }
+    SsoUserInfoResp ssoUserInfoResp = new SsoUserInfoResp();
+    BeanUtils.copyProperties(opUserEntity, ssoUserInfoResp);
+    List<FunctionDto> opFunctions = opSysUserServiceImpl
+        .getUserFunctionsBySysUserId(opUserEntity.getId());
+    List<ListSystemVo> systemList = opSysUserServiceImpl
+        .getCurListSystemVo(opUserEntity.getId());
+    if (CollectionUtils.isEmpty(systemList)) {
+      return new ResponseMsg(OpRespCodeEnum.SYSTEM_LIST_NOT_EXIST.getCode(),
+          OpRespCodeEnum.SYSTEM_LIST_NOT_EXIST.getMsg());
+    }
+    String token = result.getAccessToken();
+    String userAccount = result.getUserAccount();
+    String userExp = result.getExp();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String exp = sdf.format(new Date(Long.parseLong(userExp.concat("000"))));      // 时间戳转换成时间
+    // SSO 统一用户登录
+//    String sessionId = this.getSessionId(result.getSsoUserNo(), userAccount, ssoUserInfoResp);
+    Map<String, Object> resp = new HashMap<>();
+    resp.put("id", opUserEntity.getId());
+    resp.put("userId", userId);
+    resp.put("userAccount", userAccount);
+//    resp.put("responsibleDepartment", opUserEntity.getDepartmentId());
     resp.put("token", token);
     resp.put("refreshToken", result.getRefreshToken());
     resp.put("tokenExpireTime", exp);
@@ -479,6 +536,27 @@ public class AuthServiceImpl extends CrudService implements AuthService {
     ResponseMsg responseMsg = AuthUnifiedUserEntity
         .loginCheck(authLoginDto.getLoginAccount(), authLoginDto.getLoginPassword(),
             authLoginDto.getVerifyCode(), authLoginDto.getAccountType());
+    if (BaseResponse.isNotSuccess(responseMsg)) {
+      return responseMsg;
+    }
+    return loginWithoutMobile(authLoginDto);
+
+    //return authLoginComService.login(authLoginDto);
+  }
+  private ResponseMsg remoteLoginH5(AuthLoginComDto authLoginDto) throws Exception {
+    assert authLoginDto != null;
+    if (null == authLoginDto) {
+      return new ResponseMsg(BusinessRespCodeEnum.PARAM_IS_EMPTY.getCode(),
+          BusinessRespCodeEnum.PARAM_IS_EMPTY.getMsg());
+    }
+    LoginValueObject loginValueObject = new LoginValueObject();
+    BeanUtils.copyProperties(authLoginDto, loginValueObject);
+    ResponseMsg loginResult = LoginService.remoteLoginCheckH5(loginValueObject);
+    if (ResponseMsg.isNotSuccess(loginResult)) {
+      return loginResult;
+    }
+    ResponseMsg responseMsg = AuthUnifiedUserEntity
+        .loginCheckH5(authLoginDto.getLoginAccount(), authLoginDto.getLoginPassword(), authLoginDto.getAccountType());
     if (BaseResponse.isNotSuccess(responseMsg)) {
       return responseMsg;
     }

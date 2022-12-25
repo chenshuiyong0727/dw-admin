@@ -128,6 +128,36 @@ public class AuthUnifiedUserEntity extends BaseBusinessEntity implements Seriali
   }
 
   /**
+   * 登录校验
+   */
+  public static ResponseMsg loginCheckH5(String loginAccount, String pwd,
+      Integer accountType) {
+    assert StringUtilLocal.isNotEmpty(loginAccount) && accountType != null;
+    if (accountType == LoginAccountTypeEnum.USER_NAME.getCode()) {
+      if (StringUtilLocal.isEmpty(loginAccount) || null == accountType) {
+        return new ResponseMsg(BusinessRespCodeEnum.PARAM_IS_EMPTY.getCode(),
+            BusinessRespCodeEnum.PARAM_IS_EMPTY.getMsg());
+      }
+    } else {
+      if (StringUtilLocal.isEmpty(loginAccount) || null == accountType) {
+        return new ResponseMsg(BusinessRespCodeEnum.PARAM_IS_EMPTY.getCode(),
+            BusinessRespCodeEnum.PARAM_IS_EMPTY.getMsg());
+      }
+    }
+    if (accountType.intValue() == LoginAccountTypeEnum.USER_NAME.getCode()
+        || accountType.intValue() == LoginAccountTypeEnum.ID_CARD.getCode()) {
+      if (StringUtilLocal.isEmpty(pwd)) {
+        return new ResponseMsg(BusinessRespCodeEnum.PARAM_IS_EMPTY.getCode(),
+            BusinessRespCodeEnum.PARAM_IS_EMPTY.getMsg());
+      }
+    } else if (accountType.intValue() != LoginAccountTypeEnum.MOBILE.getCode()) {
+      return new ResponseMsg(AuthRespCodeEnum.LOGIN_TYPE_NOT_SUPPORT.getCode(),
+          AuthRespCodeEnum.LOGIN_TYPE_NOT_SUPPORT.getMsg());
+    }
+    return new ResponseMsg(1000, "验证成功");
+  }
+
+  /**
    * 注册设值
    */
   public void registerSet(AuthUnifiedUserEntity authUnifiedUserEntity,
