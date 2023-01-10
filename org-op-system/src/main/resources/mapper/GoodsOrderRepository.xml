@@ -163,11 +163,10 @@
         AND a.id LIKE CONCAT( '%', #{dto.id},'%')
       </if>
       <if test="dto.keyword != null and dto.keyword != ''">
-        AND (
-        c.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
-        or
-        d.size LIKE CONCAT( '%', #{dto.keyword},'%')
-        )
+        AND c.act_no LIKE CONCAT( '%', #{dto.keyword},'%')
+      </if>
+      <if test="dto.size != null and dto.size != ''">
+        AND d.size LIKE CONCAT( '%', #{dto.size},'%')
       </if>
       <if test="dto.orderNo != null and dto.orderNo != ''">
         AND a.order_no LIKE CONCAT( '%', #{dto.orderNo},'%')

@@ -320,7 +320,8 @@
 
 
     <!--打包-->
-    <jdk.image.path>192.168.8.92:5000/hlw/openjdk:11.0.9</jdk.image.path>
+<!--    <jdk.image.path>192.168.8.92:5000/hlw/openjdk:11.0.9</jdk.image.path>-->
+    <jdk.image.path>114.132.243.79:5000/openjdk:11</jdk.image.path>
     <!--    <warehouse.path>swr.cn-north-1.myhuaweicloud.com/hjjn-hlw</warehouse.path>
         <warehouse.name>cn-north-1@85TW39BONRM35H5A5ZJ7</warehouse.name>
         <warehouse.pwd>814319e0f196fb18f1e0f048f27e23b822106a41bf7ce162b6dd762d718c9872</warehouse.pwd>

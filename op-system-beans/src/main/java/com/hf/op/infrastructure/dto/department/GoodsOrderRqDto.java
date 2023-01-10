@@ -29,6 +29,7 @@ public class GoodsOrderRqDto extends BaseDto implements Serializable {
    * 订单号
    */
   private String keyword;
+  private String size;
 
   /**
    * 订单号
